@@ -1,38 +1,57 @@
+# platcon-server
+
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+  <img src="https://img.shields.io/badge/Node.js-FFFFDD?logo=node.js&" alt="Node.js" />
+  <img src="https://img.shields.io/badge/TypeScript-D5F3FE?logo=typescript&" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/NestJS-FFCCCB?logo=nestjs&logoColor=red" alt="NestJS" />
+  <img src="https://img.shields.io/badge/TypeORM-FFFFDB?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAARCAYAAAA/mJfHAAAACXBIWXMAAAETAAABEwGpfUaAAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAkNJREFUOI2Nkjtok2EUhp/z/WnTVKExg1iEDlWKi0ulgqLiKF28IaW4xEkMVFJwr128QIUsUnCoi4iLFkFwcCkiCg51ES9Lijg12jRaG/vb/N/rkPxprIH2wFm+95znOzckoUsc1U0W9QCvLMOS2NKzDOsh8jco6TInJOEAVLNpwHjJCEvMsR1bYo7nnDJD6uY+gElCmeCTHeIRL6LrAJOTk4menp5jkXMrcW7gvfL5/Px/0IvBHb3mtC1E+x0Aa3Twyr7EeiaT6ZYkk/pjl+TaVvjE3rOIASQaT0lAm8JWzfuSmXXQRmwxD3S1wrqAqDXCzDokpb1ZZ2MelUKh0C/pcDKZfJbL5X5thjnMDOjGWG+FSVoHKk5adtIyQD6fLzrnPkRRtNFyPS+FmTm6gmydHDVnVi6X/wC9CoJEM8dsZ/suoyKQoivIOplmBNNU9SaWJyYm1oB55/0CUASKYRi+a8uq6q1gWqYZZ9g5gxwpOx7rU1NTOyQNRM7tij2RSh1sC0vZSYMrZnbGUa3NAlUs2BvryWQycM79CLxvXeLvtjALeoEqq7WnrhkoOlpjvPcR9U01rVAo9HvvD4RhuLF5kYg/ige8BvxzlM65bkmdgff1O5Mq+fHxIvUZtlrQyG8Cws2wxmlsx6yRXwdYH2JUg7E6Nja2AoRm9rVRSbGWSCy3RY1qkP4GVRK6ah/pY4995hrfecysKlvWc9bS7GaEAW5Rosxt7atXVuGCValwhHukGdpWc2mGGOIuP/lGifMAfwEjcxQRk2A5YgAAAABJRU5ErkJggg==" alt="TypeORM" />
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## docs
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
+- [Swagger](https://swagger.io/) - route `/docs`
+
+## code quality
+
+- [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
+- Hooks: [Husky](https://typicode.github.io/husky/#/)
+- Lint: [ESLint](https://eslint.org/)
+- Formatter: [Prettier](https://prettier.io/)
+- Unit Test: [Jest](https://jestjs.io/)
+- E2E Test: [Jest](https://jestjs.io/) + [Supertest](https://npmjs.com/supertest)
+- Coverage: [Istanbul](https://istanbul.js.org/)
+- [SonarCloud](https://sonarcloud.io/dashboard?id=jrmsrs_platcon-server) + CI/CD: GitHub Actions
+
+<a href="https://sonarcloud.io/summary/new_code?id=jrmsrs_platcon-server" target="_blank">
+<p align="center">
+  <img alt="Quality Gate Status" src="https://sonarcloud.io/api/project_badges/measure?project=jrmsrs_platcon-server&metric=alert_status" />
+  <img alt="Bugs" src="https://sonarcloud.io/api/project_badges/measure?project=jrmsrs_platcon-server&metric=bugs" />
+  <img alt="Code Smells" src="https://sonarcloud.io/api/project_badges/measure?project=jrmsrs_platcon-server&metric=code_smells" />
+  <img alt="Coverage" src="https://sonarcloud.io/api/project_badges/measure?project=jrmsrs_platcon-server&metric=coverage" />
+  <img alt="Duplicated Lines (%)" src="https://sonarcloud.io/api/project_badges/measure?project=jrmsrs_platcon-server&metric=duplicated_lines_density" />
+  <img alt="Lines of Code" src="https://sonarcloud.io/api/project_badges/measure?project=jrmsrs_platcon-server&metric=ncloc" />
+  <img alt="Reliability Rating" src="https://sonarcloud.io/api/project_badges/measure?project=jrmsrs_platcon-server&metric=reliability_rating" />
+  <img alt="Security Rating" src="https://sonarcloud.io/api/project_badges/measure?project=jrmsrs_platcon-server&metric=security_rating" />
+  <img alt="Technical Debt" src="https://sonarcloud.io/api/project_badges/measure?project=jrmsrs_platcon-server&metric=sqale_index" />
+  <img alt="Maintainability Rating" src="https://sonarcloud.io/api/project_badges/measure?project=jrmsrs_platcon-server&metric=sqale_rating" />
+  <img alt="Vulnerabilities" src="https://sonarcloud.io/api/project_badges/measure?project=jrmsrs_platcon-server&metric=vulnerabilities" />
 </p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+</a>
 
-## Description
+## development
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### prereqs
 
-## Installation
+- [Node.js](https://nodejs.org/)
+- [Yarn](https://yarnpkg.com/)
+
+### installation
 
 ```bash
 $ yarn install
 ```
 
-## Running the app
+### running
 
 ```bash
 # development
@@ -45,7 +64,7 @@ $ yarn run start:dev
 $ yarn run start:prod
 ```
 
-## Test
+### test
 
 ```bash
 # unit tests
@@ -58,16 +77,6 @@ $ yarn run test:e2e
 $ yarn run test:cov
 ```
 
-## Support
+## license
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+[MIT](LICENSE)
