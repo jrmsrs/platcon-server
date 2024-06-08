@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common'
 
 @Injectable()
 export class AppService {
   getRoot(): { message: string } {
     return {
-      message: 'swagger doc at /api'
-    };
+      message: 'swagger doc at /api',
+    }
   }
 }
