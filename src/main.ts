@@ -8,7 +8,7 @@ async function bootstrap() {
     .setTitle('Platcon')
     .setDescription(
       `\
-A description`,
+A description`
     )
     .setVersion('0.0.1')
     //.addTag('Users', 'Rotas Usuários')
