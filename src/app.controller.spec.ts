@@ -17,7 +17,7 @@ describe('AppController', () => {
   describe('root', () => {
     it('should return info', () => {
       expect(appController.getRoot()).toStrictEqual({
-        message: 'swagger doc at /api',
+        message: 'swagger docs at /docs',
       })
     })
   })
