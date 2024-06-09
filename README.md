@@ -22,8 +22,11 @@
 - Coverage: [Istanbul](https://istanbul.js.org/)
 - [SonarCloud](https://sonarcloud.io/dashboard?id=jrmsrs_platcon-server) + CI/CD: GitHub Actions
 
-<a href="https://sonarcloud.io/summary/new_code?id=jrmsrs_platcon-server" target="_blank">
 <p align="center">
+<a href="https://conventionalcommits.org">
+  <img src="https://img.shields.io/badge/conventional%20commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white" alt="Conventional Commits" />
+</a>
+<a href="https://sonarcloud.io/summary/new_code?id=jrmsrs_platcon-server" target="_blank">
   <img alt="Quality Gate Status" src="https://sonarcloud.io/api/project_badges/measure?project=jrmsrs_platcon-server&metric=alert_status" />
   <img alt="Bugs" src="https://sonarcloud.io/api/project_badges/measure?project=jrmsrs_platcon-server&metric=bugs" />
   <img alt="Code Smells" src="https://sonarcloud.io/api/project_badges/measure?project=jrmsrs_platcon-server&metric=code_smells" />
@@ -35,8 +38,8 @@
   <img alt="Technical Debt" src="https://sonarcloud.io/api/project_badges/measure?project=jrmsrs_platcon-server&metric=sqale_index" />
   <img alt="Maintainability Rating" src="https://sonarcloud.io/api/project_badges/measure?project=jrmsrs_platcon-server&metric=sqale_rating" />
   <img alt="Vulnerabilities" src="https://sonarcloud.io/api/project_badges/measure?project=jrmsrs_platcon-server&metric=vulnerabilities" />
-</p>
 </a>
+</p>
 
 ## development
 
