@@ -3,7 +3,7 @@ import { Role } from './role.enum'
 
 export class User {
   @ApiProperty()
-  id: number
+  id: string
 
   @ApiProperty()
   name: string
