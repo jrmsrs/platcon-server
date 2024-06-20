@@ -1,26 +1,41 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
+import { UsersRepository } from './users.repository'
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user: ' + createUserDto
+  constructor(private readonly usersRepository: UsersRepository) {}
+
+  async create(createUserDto: CreateUserDto) {
+    return this.usersRepository.insertUser({ ...createUserDto })
   }
 
-  findAll() {
-    return `This action returns all users`
+  async findAll() {
+    return this.usersRepository.findAll()
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`
+  async findOne(id: string) {
+    const user = await this.usersRepository.findOne(id)
+    if (!user) {
+      throw new NotFoundException(`User id={${id}} not found`)
+    }
+    return user
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user: ${updateUserDto}`
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const updateResult = await this.usersRepository.updateUser(id, updateUserDto)
+    if (!updateResult.affected) {
+      throw new NotFoundException(`User id={${id}} not found`)
+    }
+    return `User id={${id}} updated successfully, where: ${JSON.stringify(updateUserDto)}`
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`
+  async remove(id: string) {
+    const deleteResult = await this.usersRepository.removeUser(id)
+    if (!deleteResult.affected) {
+      throw new NotFoundException(`User id={${id}} not found`)
+    }
+    return `User id={${id}} deleted successfully`
   }
 }
