@@ -1,30 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { UsersController } from './users.controller'
-import { UsersService } from './users.service'
-import { UsersRepository } from './users.repository'
-import { CreateUserDto } from './dto/create-user.dto'
-import { createUserMock, userMock } from './entities/user.mock'
-import { User } from './entities/user.entity'
-import { Role } from './entities/role.enum'
+import { UsersController } from '../users.controller'
+import { UsersService } from '../users.service'
+import { UsersRepository } from '../users.repository'
+import { CreateUserDto } from '../dto/create-user.dto'
+import { User } from '../entities/user.entity'
+import { Role } from '../entities/role.enum'
 import { Response } from 'express'
 import { HttpStatus } from '@nestjs/common'
+import { userMock } from '../__mocks__/user.mock'
+import { createUserMock } from '../__mocks__/createUser.mock'
 
 describe('UsersController', () => {
   let controller: UsersController
   let usersService: UsersService
-
-  // beforeEach(async () => {
-  //   const module: TestingModule = await Test.createTestingModule({
-  //     controllers: [UsersController],
-  //     providers: [UsersService, { provide: UsersRepository, useValue: {} }],
-  //   }).compile()
-
-  //   controller = module.get<UsersController>(UsersController)
-  // })
-
-  // it('should be defined', () => {
-  //   expect(controller).toBeDefined()
-  // })
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
