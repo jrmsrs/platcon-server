@@ -1,12 +1,21 @@
 import { Module } from '@nestjs/common'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
-import { DbModule } from './db/db.module'
-import { ConfigModule } from '@nestjs/config'
+import { ConfigModule, ConfigService } from '@nestjs/config'
 import { UsersModule } from './users/users.module'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { DbConfig } from './db.config'
 
 @Module({
-  imports: [DbModule, ConfigModule.forRoot({ isGlobal: true }), UsersModule],
+  imports: [
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => DbConfig.createConnection(configService),
+      inject: [ConfigService],
+    }),
+    ConfigModule.forRoot({ isGlobal: true }),
+    UsersModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
