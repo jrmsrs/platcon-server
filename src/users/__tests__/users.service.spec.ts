@@ -3,6 +3,7 @@ import { UsersService } from '../users.service'
 import { UsersRepository } from '../users.repository'
 import { userMock } from '../__mocks__/user.mock'
 import { createUserMock } from '../__mocks__/createUser.mock'
+import { faker } from '@faker-js/faker'
 
 describe('UsersService', () => {
   let service: UsersService
@@ -50,11 +51,12 @@ describe('UsersService', () => {
   })
 
   it('should throw error on retrieval if user not found', async () => {
+    const invalidId = faker.string.uuid()
     repository.findOne = jest.fn().mockResolvedValue(null)
     try {
-      await service.findOne('invalid-id')
+      await service.findOne(invalidId)
     } catch (error) {
-      expect(error.message).toEqual('User id={invalid-id} not found')
+      expect(error.message).toEqual(`User id={${invalidId}} not found`)
     }
   })
 
@@ -64,11 +66,12 @@ describe('UsersService', () => {
   })
 
   it('should throw error on update if user not found', async () => {
+    const invalidId = faker.string.uuid()
     repository.updateUser = jest.fn().mockResolvedValue({ raw: [], affected: 0 })
     try {
-      await service.update('invalid-id', { name: 'Updated User' })
+      await service.update(invalidId, { name: 'Updated User' })
     } catch (error) {
-      expect(error.message).toEqual('User id={invalid-id} not found')
+      expect(error.message).toEqual(`User id={${invalidId}} not found`)
     }
   })
 
@@ -78,11 +81,12 @@ describe('UsersService', () => {
   })
 
   it('should throw error on remove if user not found', async () => {
+    const invalidId = faker.string.uuid()
     repository.removeUser = jest.fn().mockResolvedValue({ raw: [], affected: 0 })
     try {
-      await service.remove('invalid-id')
+      await service.remove(invalidId)
     } catch (error) {
-      expect(error.message).toEqual('User id={invalid-id} not found')
+      expect(error.message).toEqual(`User id={${invalidId}} not found`)
     }
   })
 })

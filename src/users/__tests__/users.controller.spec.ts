@@ -9,6 +9,7 @@ import { Response } from 'express'
 import { HttpStatus } from '@nestjs/common'
 import { userMock } from '../__mocks__/user.mock'
 import { createUserMock } from '../__mocks__/createUser.mock'
+import { faker } from '@faker-js/faker'
 
 describe('UsersController', () => {
   let controller: UsersController
@@ -35,7 +36,7 @@ describe('UsersController', () => {
       const expectedUser: User = {
         ...createUserMock,
         role: Role.USER,
-        id: '1',
+        id: faker.string.uuid(),
       }
       const apiRes = { status: jest.fn().mockReturnThis(), send: jest.fn() }
 
@@ -66,7 +67,7 @@ describe('UsersController', () => {
 
   describe('findOne', () => {
     it('should return a user by id', async () => {
-      const id = '1'
+      const id = faker.string.uuid()
       const expectedUser: User = userMock
       const apiRes = { status: jest.fn().mockReturnThis(), send: jest.fn() }
 
@@ -82,8 +83,8 @@ describe('UsersController', () => {
 
   describe('update', () => {
     it('should update a user by id', async () => {
-      const id = '1'
-      const updateUserDto = { name: 'Updated User' }
+      const id = faker.string.uuid()
+      const updateUserDto = { password: faker.internet.password() }
       const expectedResponse = `User id={${id}} updated successfully, where: ${JSON.stringify(updateUserDto)}`
       const apiRes = { status: jest.fn().mockReturnThis(), send: jest.fn() }
 
@@ -99,7 +100,7 @@ describe('UsersController', () => {
 
   describe('remove', () => {
     it('should remove a user by id', async () => {
-      const id = '1'
+      const id = faker.string.uuid()
       const expectedResponse = `User id={${id}} deleted successfully`
       const apiRes = { status: jest.fn().mockReturnThis(), send: jest.fn() }
 

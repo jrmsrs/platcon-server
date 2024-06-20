@@ -8,6 +8,7 @@ import { UpdateUserDto } from '../dto/update-user.dto'
 import { Role } from '../entities/role.enum'
 import { userMock } from '../__mocks__/user.mock'
 import { createUserMock } from '../__mocks__/createUser.mock'
+import { faker } from '@faker-js/faker'
 
 describe('UsersRepository', () => {
   let repository: UsersRepository
@@ -41,7 +42,7 @@ describe('UsersRepository', () => {
 
   describe('findOne', () => {
     it('should return a user by id', async () => {
-      const id = 'test-id'
+      const id = faker.string.uuid()
       const user: User = userMock
       jest.spyOn(userRepository, 'findOne').mockResolvedValue(user)
 
@@ -57,7 +58,7 @@ describe('UsersRepository', () => {
       const user: User = {
         ...createUserMock,
         role: Role.USER,
-        id: '1',
+        id: faker.string.uuid(),
       }
       jest.spyOn(userRepository, 'save').mockResolvedValue(user)
 
@@ -69,8 +70,8 @@ describe('UsersRepository', () => {
 
   describe('updateUser', () => {
     it('should update a user by id', async () => {
-      const id = 'test-id'
-      const updateUserDto: UpdateUserDto = { password: 'new-password' }
+      const id = faker.string.uuid()
+      const updateUserDto: UpdateUserDto = { password: faker.internet.password() }
       const updateResult: UpdateResult = { raw: [], affected: 1 } as UpdateResult
       jest.spyOn(userRepository, 'update').mockResolvedValue(updateResult)
 
@@ -82,7 +83,7 @@ describe('UsersRepository', () => {
 
   describe('removeUser', () => {
     it('should delete a user by id', async () => {
-      const id = 'test-id'
+      const id = faker.string.uuid()
       const deleteResult: DeleteResult = { raw: [], affected: 1 } as DeleteResult
       jest.spyOn(userRepository, 'delete').mockResolvedValue(deleteResult)
 
