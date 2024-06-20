@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common'
 import { UsersService } from './users.service'
 import { CreateUserDto } from './dto/create-user.dto'
-import { UpdateUserDto } from './dto/update-user.dto'
+import { UpdateUserDto, FindOneParams } from './dto/update-user.dto'
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -37,8 +37,8 @@ export class UsersController {
   @ApiNotFoundResponse({ description: 'User not found' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id)
+  findOne(@Param() params: FindOneParams) {
+    return this.usersService.findOne(params.id)
   }
 
   @ApiNoContentResponse({ description: 'User updated successfully' })
@@ -46,15 +46,15 @@ export class UsersController {
   @ApiBadRequestResponse({ description: 'Bad request / invalid input' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto)
+  update(@Param() params: FindOneParams, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(params.id, updateUserDto)
   }
 
   @ApiNoContentResponse({ description: 'User deleted successfully' })
   @ApiNotFoundResponse({ description: 'User not found' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id)
+  remove(@Param() params: FindOneParams) {
+    return this.usersService.remove(params.id)
   }
 }
