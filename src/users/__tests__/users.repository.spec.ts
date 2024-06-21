@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing'
 
 import { getRepositoryToken } from '@nestjs/typeorm'
-import { Repository, UpdateResult, DeleteResult } from 'typeorm'
+import { Repository, UpdateResult, DeleteResult, InsertResult } from 'typeorm'
 import { faker } from '@faker-js/faker'
 
 import { UsersRepository } from '#users/users.repository'
@@ -32,6 +32,22 @@ describe('UsersRepository', () => {
     userRepository = module.get<Repository<User>>(getRepositoryToken(User))
   })
 
+  describe('insertUser', () => {
+    it('should insert a new user', async () => {
+      const createUserDto: CreateUserDto = createUserMock
+      const user: User = {
+        ...createUserMock,
+        role: Role.USER,
+        id: faker.string.uuid(),
+      }
+      jest.spyOn(userRepository, 'insert').mockResolvedValue({ raw: [user] } as InsertResult)
+
+      const result = await repository.create(createUserDto)
+
+      expect(result).toEqual(user)
+    })
+  })
+
   describe('findAll', () => {
     it('should return an array of users', async () => {
       const users: User[] = [userMock]
@@ -55,22 +71,6 @@ describe('UsersRepository', () => {
     })
   })
 
-  describe('insertUser', () => {
-    it('should insert a new user', async () => {
-      const createUserDto: CreateUserDto = createUserMock
-      const user: User = {
-        ...createUserMock,
-        role: Role.USER,
-        id: faker.string.uuid(),
-      }
-      jest.spyOn(userRepository, 'save').mockResolvedValue(user)
-
-      const result = await repository.insertUser(createUserDto)
-
-      expect(result).toEqual(user)
-    })
-  })
-
   describe('updateUser', () => {
     it('should update a user by id', async () => {
       const id = faker.string.uuid()
@@ -78,7 +78,7 @@ describe('UsersRepository', () => {
       const updateResult: UpdateResult = { raw: [], affected: 1 } as UpdateResult
       jest.spyOn(userRepository, 'update').mockResolvedValue(updateResult)
 
-      const result = await repository.updateUser(id, updateUserDto)
+      const result = await repository.update(id, updateUserDto)
 
       expect(result).toEqual(updateResult)
     })
@@ -90,7 +90,7 @@ describe('UsersRepository', () => {
       const deleteResult: DeleteResult = { raw: [], affected: 1 } as DeleteResult
       jest.spyOn(userRepository, 'delete').mockResolvedValue(deleteResult)
 
-      const result = await repository.removeUser(id)
+      const result = await repository.remove(id)
 
       expect(result).toEqual(deleteResult)
     })

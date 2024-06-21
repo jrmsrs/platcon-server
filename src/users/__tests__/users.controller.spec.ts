@@ -13,6 +13,7 @@ import { CreateUserDto } from '#users/dto/create-user.dto'
 
 import { userMock } from '#users/__mocks__/user.mock'
 import { createUserMock } from '#users/__mocks__/createUser.mock'
+import { ResponseBuilder } from '#utils/resBuilder.util'
 
 describe('UsersController', () => {
   let controller: UsersController
@@ -88,7 +89,7 @@ describe('UsersController', () => {
     it('should update a user by id', async () => {
       const id = faker.string.uuid()
       const updateUserDto = { password: faker.internet.password() }
-      const expectedResponse = `User id={${id}} updated successfully, where: ${JSON.stringify(updateUserDto)}`
+      const expectedResponse = new ResponseBuilder().user(id).updated(updateUserDto)
       const apiRes = { status: jest.fn().mockReturnThis(), send: jest.fn() }
 
       jest.spyOn(usersService, 'update').mockResolvedValue(expectedResponse)
@@ -104,7 +105,7 @@ describe('UsersController', () => {
   describe('remove', () => {
     it('should remove a user by id', async () => {
       const id = faker.string.uuid()
-      const expectedResponse = `User id={${id}} deleted successfully`
+      const expectedResponse = new ResponseBuilder().user(id).deleted()
       const apiRes = { status: jest.fn().mockReturnThis(), send: jest.fn() }
 
       jest.spyOn(usersService, 'remove').mockResolvedValue(expectedResponse)

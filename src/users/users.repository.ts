@@ -11,6 +11,10 @@ import { UpdateUserDto } from '#users/dto/update-user.dto'
 export class UsersRepository {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 
+  async create(data: CreateUserDto): Promise<User> {
+    return (await this.userRepository.insert(data)).raw[0]
+  }
+
   async findAll(): Promise<User[]> {
     return this.userRepository.find()
   }
@@ -19,15 +23,11 @@ export class UsersRepository {
     return this.userRepository.findOne({ where: { id } })
   }
 
-  async insertUser(data: CreateUserDto): Promise<User> {
-    return this.userRepository.save(data)
-  }
-
-  async updateUser(id: string, data: UpdateUserDto): Promise<UpdateResult> {
+  async update(id: string, data: UpdateUserDto): Promise<UpdateResult> {
     return await this.userRepository.update(id, data)
   }
 
-  async removeUser(id: string): Promise<DeleteResult> {
+  async remove(id: string): Promise<DeleteResult> {
     return await this.userRepository.delete(id)
   }
 }

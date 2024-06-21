@@ -16,7 +16,7 @@ import { mockRepository, mockRepositoryNotFound } from '#test/__mocks__/usersRep
 describe('UsersModule (e2e)', () => {
   let app: INestApplication
 
-  describe('UsersModule (e2e) / Happy path', () => {
+  describe('UsersModule (e2e) happy path', () => {
     beforeEach(async () => {
       const moduleFixture: TestingModule = await Test.createTestingModule({
         imports: [AppModule],
@@ -34,7 +34,7 @@ describe('UsersModule (e2e)', () => {
       return request(app.getHttpServer()).get('/users').expect(200).expect([userMock])
     })
 
-    it(`/users/${userMock.id} (GET)`, () => {
+    it(`/users/:id (GET)`, () => {
       return request(app.getHttpServer()).get(`/users/${userMock.id}`).expect(200).expect(userMock)
     })
 
@@ -42,24 +42,24 @@ describe('UsersModule (e2e)', () => {
       return request(app.getHttpServer()).post('/users').send(userMock).expect(201).expect(userMock)
     })
 
-    it(`/users/${userMock.id} (PATCH)`, () => {
+    it(`/users/:id (PATCH)`, () => {
       const newName = faker.person.fullName()
       return request(app.getHttpServer())
         .patch(`/users/${userMock.id}`)
         .send({ name: newName })
         .expect(200)
-        .expect(new ResponseBuilder().user(userMock.id).updated({ name: newName }).message)
+        .expect(new ResponseBuilder().user(userMock.id).updated({ name: newName }))
     })
 
-    it(`/users/${userMock.id} (DELETE)`, () => {
+    it(`/users/:id (DELETE)`, () => {
       return request(app.getHttpServer())
         .delete(`/users/${userMock.id}`)
         .expect(200)
-        .expect(new ResponseBuilder().user(userMock.id).deleted().message)
+        .expect(new ResponseBuilder().user(userMock.id).deleted())
     })
   })
 
-  describe('UsersModule (e2e) / Error path', () => {
+  describe('UsersModule (e2e) error path', () => {
     beforeEach(async () => {
       const moduleFixture: TestingModule = await Test.createTestingModule({
         imports: [AppModule],
@@ -73,14 +73,14 @@ describe('UsersModule (e2e)', () => {
       await app.init()
     })
 
-    it(`/users/${userMock.id} (GET) / non uuid`, () => {
+    it(`/users/:id (GET) :: invalid uuid`, () => {
       return request(app.getHttpServer())
         .get(`/users/${faker.lorem.word()}`)
         .expect(HttpStatus.BAD_REQUEST)
         .expect(new ResponseBuilder().mustBe('id', 'a UUID').errorCode(HttpStatus.BAD_REQUEST))
     })
 
-    it(`/users/${userMock.id} (GET) / not found`, () => {
+    it(`/users/:id (GET) :: not found`, () => {
       const id = faker.string.uuid()
       return request(app.getHttpServer())
         .get(`/users/${id}`)
@@ -88,7 +88,7 @@ describe('UsersModule (e2e)', () => {
         .expect(new ResponseBuilder().user(id).notFound().errorCode(HttpStatus.NOT_FOUND))
     })
 
-    it(`/users (POST) / invalid email`, () => {
+    it(`/users (POST) :: invalid field`, () => {
       return request(app.getHttpServer())
         .post('/users')
         .send({ ...userMock, email: faker.lorem.word() })
@@ -96,14 +96,14 @@ describe('UsersModule (e2e)', () => {
         .expect(new ResponseBuilder().mustBe('email', 'an email').errorCode(HttpStatus.BAD_REQUEST))
     })
 
-    it(`/users/${userMock.id} (PATCH) / non uuid`, () => {
+    it(`/users/:id (PATCH) :: non uuid`, () => {
       return request(app.getHttpServer())
         .patch(`/users/${faker.lorem.word()}`)
         .expect(HttpStatus.BAD_REQUEST)
         .expect(new ResponseBuilder().mustBe('id', 'a UUID').errorCode(HttpStatus.BAD_REQUEST))
     })
 
-    it(`/users/${userMock.id} (PATCH) / invalid email`, () => {
+    it(`/users/:id (PATCH) :: invalid field`, () => {
       return request(app.getHttpServer())
         .patch(`/users/${userMock.id}`)
         .send({ email: 'invalid-email' })
@@ -111,7 +111,7 @@ describe('UsersModule (e2e)', () => {
         .expect(new ResponseBuilder().mustBe('email', 'an email').errorCode(HttpStatus.BAD_REQUEST))
     })
 
-    it(`/users/${userMock.id} (PATCH) / not found`, () => {
+    it(`/users/:id (PATCH) :: not found`, () => {
       const id = faker.string.uuid()
       return request(app.getHttpServer())
         .patch(`/users/${id}`)
@@ -120,14 +120,14 @@ describe('UsersModule (e2e)', () => {
         .expect(new ResponseBuilder().user(id).notFound().errorCode(HttpStatus.NOT_FOUND))
     })
 
-    it(`/users/${userMock.id} (DELETE) / non uuid`, () => {
+    it(`/users/:id (DELETE) :: invalid uuid`, () => {
       return request(app.getHttpServer())
         .delete(`/users/${faker.lorem.word()}`)
         .expect(HttpStatus.BAD_REQUEST)
         .expect(new ResponseBuilder().mustBe('id', 'a UUID').errorCode(HttpStatus.BAD_REQUEST))
     })
 
-    it(`/users/${userMock.id} (DELETE) / not found`, () => {
+    it(`/users/:id (DELETE) :: not found`, () => {
       const id = faker.string.uuid()
       return request(app.getHttpServer())
         .delete(`/users/${id}`)
