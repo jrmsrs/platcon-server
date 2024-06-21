@@ -1,28 +1,10 @@
 import { NestFactory } from '@nestjs/core'
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import { AppModule } from './app.module'
-import { ValidationPipe /*, UnprocessableEntityException, ValidationError*/ } from '@nestjs/common'
+import { mainConfig } from './main.config'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
-  app.enableCors()
-  app.useGlobalPipes(
-    new ValidationPipe({
-      transform: true,
-      // exceptionFactory: (errors: ValidationError[]) => new UnprocessableEntityException(errors),
-    })
-  )
-  const config = new DocumentBuilder()
-    .setTitle('Platcon')
-    .setDescription(
-      `\
-A description`
-    )
-    .setVersion('0.0.1')
-    //.addTag('Users', 'Rotas Usuários')
-    .build()
-  const document = SwaggerModule.createDocument(app, config)
-  SwaggerModule.setup('docs', app, document)
+  mainConfig(app)
   await app.listen(3000)
 }
 bootstrap()
