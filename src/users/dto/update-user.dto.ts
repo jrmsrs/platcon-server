@@ -1,6 +1,7 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger'
-import { CreateUserDto } from './create-user.dto'
 import { IsUUID } from 'class-validator'
+
+import { CreateUserDto } from '#users/dto/create-user.dto'
 
 export class FindOneParams {
   @IsUUID()

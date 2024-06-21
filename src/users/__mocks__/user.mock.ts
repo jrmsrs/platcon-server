@@ -1,6 +1,7 @@
-import { Role } from '../entities/role.enum'
-import { User } from '../entities/user.entity'
 import { faker } from '@faker-js/faker'
+
+import { User } from '#users/entities/user.entity'
+import { Role } from '#users/enums/role.enum'
 
 export const userMock: User = {
   id: faker.string.uuid(),

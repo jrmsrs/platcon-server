@@ -1,5 +1,6 @@
-import { CreateUserDto } from '../dto/create-user.dto'
 import { faker } from '@faker-js/faker'
+
+import { CreateUserDto } from '#users/dto/create-user.dto'
 
 export const createUserMock: CreateUserDto = {
   name: faker.person.fullName(),

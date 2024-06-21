@@ -1,14 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing'
+
 import { getRepositoryToken } from '@nestjs/typeorm'
 import { Repository, UpdateResult, DeleteResult } from 'typeorm'
-import { UsersRepository } from '../users.repository'
-import { User } from '../entities/user.entity'
-import { CreateUserDto } from '../dto/create-user.dto'
-import { UpdateUserDto } from '../dto/update-user.dto'
-import { Role } from '../entities/role.enum'
-import { userMock } from '../__mocks__/user.mock'
-import { createUserMock } from '../__mocks__/createUser.mock'
 import { faker } from '@faker-js/faker'
+
+import { UsersRepository } from '#users/users.repository'
+import { User } from '#users/entities/user.entity'
+import { Role } from '#users/enums/role.enum'
+import { CreateUserDto } from '#users/dto/create-user.dto'
+import { UpdateUserDto } from '#users/dto/update-user.dto'
+
+import { userMock } from '#users/__mocks__/user.mock'
+import { createUserMock } from '#users/__mocks__/createUser.mock'
 
 describe('UsersRepository', () => {
   let repository: UsersRepository

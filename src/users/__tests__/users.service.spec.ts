@@ -1,9 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { UsersService } from '../users.service'
-import { UsersRepository } from '../users.repository'
-import { userMock } from '../__mocks__/user.mock'
-import { createUserMock } from '../__mocks__/createUser.mock'
+
 import { faker } from '@faker-js/faker'
+
+import { UsersService } from '#users/users.service'
+import { UsersRepository } from '#users/users.repository'
+import { userMock } from '#users/__mocks__/user.mock'
+import { createUserMock } from '#users/__mocks__/createUser.mock'
 
 describe('UsersService', () => {
   let service: UsersService

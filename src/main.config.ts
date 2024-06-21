@@ -1,4 +1,5 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common'
+
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 
 export function mainConfig(app: INestApplication) {

@@ -1,14 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { HttpStatus, INestApplication } from '@nestjs/common'
 import * as request from 'supertest'
-import { userMock } from '../src/users/__mocks__/user.mock'
+
 import { getRepositoryToken } from '@nestjs/typeorm'
-import { User } from '../src/users/entities/user.entity'
-import { AppModule } from '../src/app.module'
 import { faker } from '@faker-js/faker'
-import { mainConfig } from '../src/main.config'
-import { ResponseBuilder } from '../utils/resBuilder.util'
-import { mockRepository, mockRepositoryNotFound } from './__mocks__/usersRepository.mock'
+
+import { mainConfig } from '#app/main.config'
+import { ResponseBuilder } from '#utils/resBuilder.util'
+import { AppModule } from '#app/app.module'
+import { User } from '#users/entities/user.entity'
+
+import { userMock } from '#users/__mocks__/user.mock'
+import { mockRepository, mockRepositoryNotFound } from '#test/__mocks__/usersRepository.mock'
 
 describe('UsersModule (e2e)', () => {
   let app: INestApplication

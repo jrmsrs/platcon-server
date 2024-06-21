@@ -1,4 +1,4 @@
-import { userMock } from '../../src/users/__mocks__/user.mock'
+import { userMock } from '#users/__mocks__/user.mock'
 
 export const mockRepository = jest.fn(() => ({
   find: jest.fn(() => [userMock]),

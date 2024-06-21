@@ -1,10 +1,12 @@
 import { Controller, Get, Post, Body, Patch, Param, Res, Delete, HttpStatus } from '@nestjs/common'
-import { UsersService } from './users.service'
-import { CreateUserDto } from './dto/create-user.dto'
-import { UpdateUserDto, FindOneParams } from './dto/update-user.dto'
-import { ApiBadRequestResponse, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger'
-import { User } from './entities/user.entity'
 import { Response } from 'express'
+
+import { ApiBadRequestResponse, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger'
+
+import { UsersService } from '#users/users.service'
+import { User } from '#users/entities/user.entity'
+import { CreateUserDto } from '#users/dto/create-user.dto'
+import { UpdateUserDto, FindOneParams } from '#users/dto/update-user.dto'
 
 @ApiTags('Users')
 @Controller('users')

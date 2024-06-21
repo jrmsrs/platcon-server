@@ -4,5 +4,6 @@
   "sonarlint.connectedMode.project": {
     "connectionId": "jrmsrs",
     "projectKey": "jrmsrs_platcon-server"
-  }
+  },
+  "javascript.preferences.importModuleSpecifier": "non-relative"
 }

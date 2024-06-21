@@ -1,6 +1,8 @@
 import { ConfigService } from '@nestjs/config'
-import { User } from './users/entities/user.entity'
+
 import { TypeOrmModuleOptions } from '@nestjs/typeorm'
+
+import { User } from '#users/entities/user.entity'
 
 export class DbConfig {
   static createConnection(configService: ConfigService): TypeOrmModuleOptions | Promise<TypeOrmModuleOptions> {

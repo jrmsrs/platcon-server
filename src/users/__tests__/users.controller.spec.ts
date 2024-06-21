@@ -1,15 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { UsersController } from '../users.controller'
-import { UsersService } from '../users.service'
-import { UsersRepository } from '../users.repository'
-import { CreateUserDto } from '../dto/create-user.dto'
-import { User } from '../entities/user.entity'
-import { Role } from '../entities/role.enum'
-import { Response } from 'express'
 import { HttpStatus } from '@nestjs/common'
-import { userMock } from '../__mocks__/user.mock'
-import { createUserMock } from '../__mocks__/createUser.mock'
+import { Response } from 'express'
+
 import { faker } from '@faker-js/faker'
+
+import { UsersController } from '#users/users.controller'
+import { UsersService } from '#users/users.service'
+import { UsersRepository } from '#users/users.repository'
+import { User } from '#users/entities/user.entity'
+import { Role } from '#users/enums/role.enum'
+import { CreateUserDto } from '#users/dto/create-user.dto'
+
+import { userMock } from '#users/__mocks__/user.mock'
+import { createUserMock } from '#users/__mocks__/createUser.mock'
 
 describe('UsersController', () => {
   let controller: UsersController
