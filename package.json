@@ -68,7 +68,7 @@
       "json",
       "ts"
     ],
-    "rootDir": "./",
+    "rootDir": ".",
     "testRegex": ".*\\.spec\\.ts$",
     "modulePathIgnorePatterns": [
       "<rootDir>/dist"
@@ -82,9 +82,9 @@
       ]
     },
     "collectCoverageFrom": [
-      "**/*.{!(module|config),}.(t|j)s"
+      "**/*.{!(module|config|e2e-spec|util),}.ts"
     ],
-    "coverageDirectory": "../coverage",
+    "coverageDirectory": "./coverage",
     "testEnvironment": "node",
     "moduleNameMapper": {
       "^\\#utils/(.*)$": "<rootDir>/utils/$1",
