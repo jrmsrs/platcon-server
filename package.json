@@ -75,12 +75,7 @@
       "<rootDir>/dist"
     ],
     "transform": {
-      "^.+\\.(t|j)s$": [
-        "ts-jest",
-        {
-          "isolatedModules": true
-        }
-      ]
+      "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
       "**/*.{!(module|config|e2e-spec|util),}.ts"
