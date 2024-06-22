@@ -1,16 +1,32 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common'
+
+import { DeleteResult, UpdateResult } from 'typeorm'
+import { PostgresError as PgError } from 'pg-error-enum'
 
 import { UsersRepository } from '#users/users.repository'
 import { CreateUserDto } from '#users/dto/create-user.dto'
 import { UpdateUserDto } from '#users/dto/update-user.dto'
 import { ResponseBuilder } from '#utils/resBuilder.util'
+import { User } from '#users/entities/user.entity'
 
 @Injectable()
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
   async create(createUserDto: CreateUserDto) {
-    return this.usersRepository.create({ ...createUserDto })
+    let createResult: User
+
+    try {
+      createResult = await this.usersRepository.create(createUserDto)
+    } catch (error) {
+      let msg = new ResponseBuilder().unexpected().msg
+      if (error.code === PgError.UNIQUE_VIOLATION) {
+        msg = new ResponseBuilder().user().conflict('email').msg
+      }
+      throw new UnprocessableEntityException(msg)
+    }
+
+    return createResult
   }
 
   async findAll() {
@@ -22,22 +38,44 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException(new ResponseBuilder().user(id).notFound().msg)
     }
+
     return user
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
-    const updateResult = await this.usersRepository.update(id, updateUserDto)
+    let updateResult: UpdateResult
+
+    try {
+      updateResult = await this.usersRepository.update(id, updateUserDto)
+    } catch (error) {
+      let msg = new ResponseBuilder().unexpected().msg
+      if (error.code === PgError.UNIQUE_VIOLATION) {
+        msg = new ResponseBuilder().user().conflict('email').msg
+      }
+      throw new UnprocessableEntityException(msg)
+    }
     if (!updateResult.affected) {
       throw new NotFoundException(new ResponseBuilder().user(id).notFound().msg)
     }
+
     return new ResponseBuilder().user(id).updated(updateUserDto)
   }
 
   async remove(id: string) {
-    const deleteResult = await this.usersRepository.remove(id)
+    let deleteResult: DeleteResult
+
+    try {
+      deleteResult = await this.usersRepository.remove(id)
+    } catch (error) {
+      if (error.code === PgError.FOREIGN_KEY_VIOLATION) {
+        throw new ConflictException(new ResponseBuilder().user(id).conflict().msg)
+      }
+      throw new UnprocessableEntityException(new ResponseBuilder().unexpected().msg)
+    }
     if (!deleteResult.affected) {
       throw new NotFoundException(new ResponseBuilder().user(id).notFound().msg)
     }
+
     return new ResponseBuilder().user(id).deleted()
   }
 }

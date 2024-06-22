@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing'
 
 import { faker } from '@faker-js/faker'
+import { PostgresError as PgError } from 'pg-error-enum'
 
 import { UsersService } from '#users/users.service'
 import { UsersRepository } from '#users/users.repository'
@@ -43,6 +44,24 @@ describe('UsersService', () => {
       const user = await service.create(createUserMock)
       expect(user).toEqual(userMock)
     })
+
+    it('should throw error on creation if user already exists', async () => {
+      repository.create = jest.fn().mockRejectedValue({ code: PgError.UNIQUE_VIOLATION })
+      try {
+        await service.create(createUserMock)
+      } catch (error) {
+        expect(error.message).toEqual(new ResponseBuilder().user().conflict('email').msg)
+      }
+    })
+
+    it('should throw error on creation if unexpected error occurs', async () => {
+      repository.create = jest.fn().mockRejectedValue(new Error())
+      try {
+        await service.create(createUserMock)
+      } catch (error) {
+        expect(error.message).toEqual(new ResponseBuilder().unexpected().msg)
+      }
+    })
   })
 
   describe('findAll', () => {
@@ -84,6 +103,24 @@ describe('UsersService', () => {
         expect(error.message).toEqual(new ResponseBuilder().user(invalidId).notFound().msg)
       }
     })
+
+    it('should throw error on update if user already exists', async () => {
+      repository.update = jest.fn().mockRejectedValue({ code: PgError.UNIQUE_VIOLATION })
+      try {
+        await service.update(userMock.id, { email: faker.internet.email() })
+      } catch (error) {
+        expect(error.message).toEqual(new ResponseBuilder().user().conflict('email').msg)
+      }
+    })
+
+    it('should throw error on update if unexpected error occurs', async () => {
+      repository.update = jest.fn().mockRejectedValue(new Error())
+      try {
+        await service.update(userMock.id, { name: 'Updated User' })
+      } catch (error) {
+        expect(error.message).toEqual(new ResponseBuilder().unexpected().msg)
+      }
+    })
   })
 
   describe('remove', () => {
@@ -99,6 +136,24 @@ describe('UsersService', () => {
         await service.remove(invalidId)
       } catch (error) {
         expect(error.message).toEqual(new ResponseBuilder().user(invalidId).notFound().msg)
+      }
+    })
+
+    it('should throw error on remove if user has related entities', async () => {
+      repository.remove = jest.fn().mockRejectedValue({ code: PgError.FOREIGN_KEY_VIOLATION })
+      try {
+        await service.remove(userMock.id)
+      } catch (error) {
+        expect(error.message).toEqual(new ResponseBuilder().user(userMock.id).conflict().msg)
+      }
+    })
+
+    it('should throw error on remove if unexpected error occurs', async () => {
+      repository.remove = jest.fn().mockRejectedValue(new Error())
+      try {
+        await service.remove(userMock.id)
+      } catch (error) {
+        expect(error.message).toEqual(new ResponseBuilder().unexpected().msg)
       }
     })
   })
