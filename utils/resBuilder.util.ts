@@ -1,4 +1,3 @@
-import { UpdateUserDto } from '#app/users/dto/update-user.dto'
 import { HttpStatus } from '@nestjs/common'
 
 export class ResponseBuilder {
@@ -16,7 +15,7 @@ export class ResponseBuilder {
   }
 
   // success
-  updated(where?: UpdateUserDto) {
+  updated(where?: any) {
     return { message: this.msg + ` updated successfully, where: ${JSON.stringify(where)}` }
   }
   deleted() {
