@@ -13,15 +13,18 @@ import { Member } from '#members/entities/member.entity'
 export class MembersService {
   constructor(private readonly membersRepository: MembersRepository) {}
 
-  async create(createMemberDto: CreateMemberDto) {
+  async create(member: CreateMemberDto) {
     let createResult: Member
 
     try {
-      createResult = await this.membersRepository.create(createMemberDto)
+      createResult = await this.membersRepository.create(member)
     } catch (error) {
       let msg = new ResponseBuilder().unexpected().msg
       if (error.code === PgError.UNIQUE_VIOLATION) {
         msg = new ResponseBuilder().member().conflict('stage_name').msg
+      }
+      if (error.code === PgError.FOREIGN_KEY_VIOLATION) {
+        msg = new ResponseBuilder().member().fkNotFound('User', member.user_id).msg
       }
       throw new UnprocessableEntityException(msg)
     }
@@ -42,15 +45,18 @@ export class MembersService {
     return member
   }
 
-  async update(id: string, updateMemberDto: UpdateMemberDto) {
+  async update(id: string, member: UpdateMemberDto) {
     let updateResult: UpdateResult
 
     try {
-      updateResult = await this.membersRepository.update(id, updateMemberDto)
+      updateResult = await this.membersRepository.update(id, member)
     } catch (error) {
       let msg = new ResponseBuilder().unexpected().msg
       if (error.code === PgError.UNIQUE_VIOLATION) {
         msg = new ResponseBuilder().member().conflict('stage_name').msg
+      }
+      if (error.code === PgError.FOREIGN_KEY_VIOLATION) {
+        msg = new ResponseBuilder().member().fkNotFound('User', member.user_id).msg
       }
       throw new UnprocessableEntityException(msg)
     }
@@ -58,7 +64,7 @@ export class MembersService {
       throw new NotFoundException(new ResponseBuilder().member(id).notFound().msg)
     }
 
-    return new ResponseBuilder().member(id).updated(updateMemberDto)
+    return new ResponseBuilder().member(id).updated(member)
   }
 
   async remove(id: string) {

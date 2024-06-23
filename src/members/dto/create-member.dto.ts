@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
-import { IsNotEmpty, IsOptional, IsUrl, MaxLength, MinLength } from 'class-validator'
+import { IsArray, IsNotEmpty, IsOptional, IsUUID, IsUrl, MaxLength, MinLength } from 'class-validator'
 
 export class CreateMemberDto {
   @ApiProperty()
@@ -8,7 +8,7 @@ export class CreateMemberDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  desc: string
+  description: string
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -18,6 +18,19 @@ export class CreateMemberDto {
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsUrl()
-  website?: string
+  @IsArray()
+  @IsUrl(
+    {
+      require_protocol: true,
+      require_host: true,
+      require_tld: true,
+    },
+    { each: true }
+  )
+  website?: string[]
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsUUID()
+  user_id?: string
 }

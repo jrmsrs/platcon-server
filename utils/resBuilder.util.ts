@@ -27,6 +27,10 @@ export class ResponseBuilder {
     this.msg += ' not found'
     return this
   }
+  fkNotFound(ref: string, fk: string) {
+    this.msg = `${ref} with id={${fk}} does not exist`
+    return this
+  }
   mustBe(field: string, dataType: string) {
     this.msg += `${field} must be ${dataType}` // x must be a/an y
     return this

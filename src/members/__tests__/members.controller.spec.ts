@@ -86,7 +86,7 @@ describe('MembersController', () => {
   describe('update', () => {
     it('should update a member by id', async () => {
       const id = faker.string.uuid()
-      const updateMemberDto = { website: faker.internet.url() }
+      const updateMemberDto = { website: [faker.internet.url()] }
       const expectedResponse = new ResponseBuilder().member(id).updated(updateMemberDto)
       const apiRes = { status: jest.fn().mockReturnThis(), send: jest.fn() }
 

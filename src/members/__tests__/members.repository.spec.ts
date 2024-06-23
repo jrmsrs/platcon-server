@@ -72,7 +72,7 @@ describe('MembersRepository', () => {
   describe('updateMember', () => {
     it('should update a member by id', async () => {
       const id = faker.string.uuid()
-      const updateMemberDto: UpdateMemberDto = { website: faker.internet.url() }
+      const updateMemberDto: UpdateMemberDto = { website: [faker.internet.url()] }
       const updateResult: UpdateResult = { raw: [], affected: 1 } as UpdateResult
       jest.spyOn(memberRepository, 'update').mockResolvedValue(updateResult)
 

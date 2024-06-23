@@ -54,6 +54,15 @@ describe('MembersService', () => {
       }
     })
 
+    it('should throw error on creation if referenced user does not exist', async () => {
+      repository.create = jest.fn().mockRejectedValue({ code: PgError.FOREIGN_KEY_VIOLATION })
+      try {
+        await service.create(createMemberMock)
+      } catch (error) {
+        expect(error.message).toEqual(new ResponseBuilder().member().fkNotFound('User', createMemberMock.user_id).msg)
+      }
+    })
+
     it('should throw error on creation if unexpected error occurs', async () => {
       repository.create = jest.fn().mockRejectedValue(new Error())
       try {
@@ -111,6 +120,15 @@ describe('MembersService', () => {
         await service.update(memberMock.id, { stage_name: faker.person.firstName() })
       } catch (error) {
         expect(error.message).toEqual(new ResponseBuilder().member().conflict('stage_name').msg)
+      }
+    })
+
+    it('should throw error on update if referenced user does not exist', async () => {
+      repository.update = jest.fn().mockRejectedValue({ code: PgError.FOREIGN_KEY_VIOLATION })
+      try {
+        await service.update(memberMock.id, { stage_name: faker.person.firstName() })
+      } catch (error) {
+        expect(error.message).toEqual(new ResponseBuilder().member().fkNotFound('User', memberMock.user_id).msg)
       }
     })
 

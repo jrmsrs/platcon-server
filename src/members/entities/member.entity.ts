@@ -10,7 +10,7 @@ export class Member {
 
   @ApiPropertyOptional()
   @Column({ type: 'text', nullable: true })
-  member_id?: string
+  user_id?: string
 
   @ApiProperty()
   @Column({ type: 'text', unique: true })
@@ -18,13 +18,13 @@ export class Member {
 
   @ApiProperty()
   @Column({ type: 'text' })
-  desc: string
+  description: string
 
   @ApiProperty()
   @Column({ type: 'text' })
   avatar_uri?: string
 
   @ApiPropertyOptional()
-  @Column({ type: 'text', nullable: true })
-  website?: string
+  @Column({ type: 'text', array: true, nullable: true })
+  website?: string[]
 }

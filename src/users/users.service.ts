@@ -13,11 +13,11 @@ import { User } from '#users/entities/user.entity'
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(user: CreateUserDto) {
     let createResult: User
 
     try {
-      createResult = await this.usersRepository.create(createUserDto)
+      createResult = await this.usersRepository.create(user)
     } catch (error) {
       let msg = new ResponseBuilder().unexpected().msg
       if (error.code === PgError.UNIQUE_VIOLATION) {
@@ -42,11 +42,11 @@ export class UsersService {
     return user
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
+  async update(id: string, user: UpdateUserDto) {
     let updateResult: UpdateResult
 
     try {
-      updateResult = await this.usersRepository.update(id, updateUserDto)
+      updateResult = await this.usersRepository.update(id, user)
     } catch (error) {
       let msg = new ResponseBuilder().unexpected().msg
       if (error.code === PgError.UNIQUE_VIOLATION) {
@@ -58,7 +58,7 @@ export class UsersService {
       throw new NotFoundException(new ResponseBuilder().user(id).notFound().msg)
     }
 
-    return new ResponseBuilder().user(id).updated(updateUserDto)
+    return new ResponseBuilder().user(id).updated(user)
   }
 
   async remove(id: string) {
