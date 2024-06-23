@@ -11,7 +11,7 @@ import { CreateUserDto } from '#users/dto/create-user.dto'
 import { UpdateUserDto } from '#users/dto/update-user.dto'
 
 import { userMock } from '#users/__mocks__/user.mock'
-import { createUserMock } from '#users/__mocks__/createUser.mock'
+import { createUserMock } from '#users/__mocks__/create-user.mock'
 
 describe('UsersRepository', () => {
   let repository: UsersRepository

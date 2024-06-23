@@ -11,7 +11,7 @@ import { AppModule } from '#app/app.module'
 import { Member } from '#members/entities/member.entity'
 
 import { memberMock } from '#members/__mocks__/member.mock'
-import { mockRepository, mockRepositoryNotFound } from '#test/__mocks__/repository.mock'
+import { mockOrmRepository, mockOrmRepositoryNotFound } from '#test/__mocks__/orm-repository.mock'
 
 describe('MembersModule (e2e)', () => {
   let app: INestApplication
@@ -22,7 +22,7 @@ describe('MembersModule (e2e)', () => {
         imports: [AppModule],
       })
         .overrideProvider(getRepositoryToken(Member))
-        .useValue(mockRepository(memberMock))
+        .useValue(mockOrmRepository(memberMock))
         .compile()
 
       app = moduleFixture.createNestApplication()
@@ -65,7 +65,7 @@ describe('MembersModule (e2e)', () => {
         imports: [AppModule],
       })
         .overrideProvider(getRepositoryToken(Member))
-        .useValue(mockRepositoryNotFound())
+        .useValue(mockOrmRepositoryNotFound())
         .compile()
 
       app = moduleFixture.createNestApplication()
@@ -91,9 +91,9 @@ describe('MembersModule (e2e)', () => {
     it(`/members (POST) :: invalid field`, () => {
       return request(app.getHttpServer())
         .post('/members')
-        .send({ ...memberMock, website: faker.lorem.word() })
+        .send({ ...memberMock, website: [faker.lorem.word()] })
         .expect(HttpStatus.BAD_REQUEST)
-        .expect(new ResponseBuilder().mustBe('website', 'a URL address').errorCode(HttpStatus.BAD_REQUEST))
+        .expect(new ResponseBuilder().each().mustBe('website', 'a URL address').errorCode(HttpStatus.BAD_REQUEST))
     })
 
     it(`/members/:id (PATCH) :: non uuid`, () => {
@@ -106,9 +106,9 @@ describe('MembersModule (e2e)', () => {
     it(`/members/:id (PATCH) :: invalid field`, () => {
       return request(app.getHttpServer())
         .patch(`/members/${memberMock.id}`)
-        .send({ website: faker.lorem.word() })
+        .send({ website: [faker.lorem.word()] })
         .expect(HttpStatus.BAD_REQUEST)
-        .expect(new ResponseBuilder().mustBe('website', 'a URL address').errorCode(HttpStatus.BAD_REQUEST))
+        .expect(new ResponseBuilder().each().mustBe('website', 'a URL address').errorCode(HttpStatus.BAD_REQUEST))
     })
 
     it(`/members/:id (PATCH) :: not found`, () => {

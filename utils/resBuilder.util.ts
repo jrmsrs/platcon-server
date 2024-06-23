@@ -14,6 +14,10 @@ export class ResponseBuilder {
     return this
   }
 
+  pre(self: this) {
+    this.msg = self.msg ? `${self.msg} ` : ''
+  }
+
   // success
   updated(where?: any) {
     return { message: this.msg + ` updated successfully, where: ${JSON.stringify(where)}` }
@@ -23,21 +27,30 @@ export class ResponseBuilder {
   }
 
   // errors
+  each() {
+    this.pre(this)
+    this.msg += 'each value in'
+    return this
+  }
   notFound() {
-    this.msg += ' not found'
+    this.pre(this)
+    this.msg += 'not found'
     return this
   }
   fkNotFound(ref: string, fk: string) {
-    this.msg = `${ref} with id={${fk}} does not exist`
+    this.pre(this)
+    this.msg += `${ref} with id={${fk}} does not exist`
     return this
   }
   mustBe(field: string, dataType: string) {
-    this.msg += `${field} must be ${dataType}` // x must be a/an y
+    this.pre(this)
+    this.msg += `${field} must be ${dataType}`
     return this
   }
   conflict(uniqueField?: string) {
     if (uniqueField) {
-      this.msg += ` with ${uniqueField} already exists`
+      this.pre(this)
+      this.msg += `with ${uniqueField} already exists`
     } else {
       this.msg = `Request with ${this.msg} can't be completed due to a conflict with the current state of the resource`
     }

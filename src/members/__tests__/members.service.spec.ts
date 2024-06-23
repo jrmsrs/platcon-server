@@ -8,6 +8,7 @@ import { MembersRepository } from '#members/members.repository'
 import { memberMock } from '#members/__mocks__/member.mock'
 import { createMemberMock } from '#members/__mocks__/create-member.mock'
 import { ResponseBuilder } from '#utils/resBuilder.util'
+import { mockRepository } from '#utils/mock/repository.mock'
 
 describe('MembersService', () => {
   let service: MembersService
@@ -15,19 +16,7 @@ describe('MembersService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        MembersService,
-        {
-          provide: MembersRepository,
-          useValue: {
-            create: jest.fn().mockResolvedValue(memberMock),
-            findAll: jest.fn().mockResolvedValue([memberMock]),
-            findOne: jest.fn().mockResolvedValue(memberMock),
-            update: jest.fn().mockResolvedValue({ raw: [], affected: 1 }),
-            remove: jest.fn().mockResolvedValue({ raw: [], affected: 1 }),
-          },
-        },
-      ],
+      providers: [MembersService, { provide: MembersRepository, useValue: mockRepository(memberMock) }],
     }).compile()
 
     service = module.get<MembersService>(MembersService)

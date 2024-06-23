@@ -16,40 +16,40 @@ export class UsersController {
   @ApiCreatedResponse({ description: 'User created successfully', type: User })
   @ApiBadRequestResponse({ description: 'Bad request / invalid input' })
   @Post()
-  async create(@Body() createUserDto: CreateUserDto, @Res() apiRes: Response) {
-    const response = await this.usersService.create(createUserDto)
-    return apiRes.status(HttpStatus.CREATED).send(response)
+  async create(@Body() createUser: CreateUserDto, @Res() apiRes: Response) {
+    const serviceRes = await this.usersService.create(createUser)
+    return apiRes.status(HttpStatus.CREATED).send(serviceRes)
   }
 
   @ApiOkResponse({ description: 'Users retrieved successfully', type: [User] })
   @Get()
   async findAll(@Res() apiRes: Response) {
-    const response = await this.usersService.findAll()
-    return apiRes.status(HttpStatus.OK).send(response)
+    const serviceRes = await this.usersService.findAll()
+    return apiRes.status(HttpStatus.OK).send(serviceRes)
   }
 
   @ApiOkResponse({ description: 'User retrieved successfully', type: User })
   @ApiNotFoundResponse({ description: 'User not found' })
   @Get(':id')
   async findOne(@Param() params: FindOneParams, @Res() apiRes: Response) {
-    const response = await this.usersService.findOne(params.id)
-    return apiRes.status(HttpStatus.OK).send(response)
+    const serviceRes = await this.usersService.findOne(params.id)
+    return apiRes.status(HttpStatus.OK).send(serviceRes)
   }
 
   @ApiOkResponse({ description: 'User updated successfully' })
   @ApiNotFoundResponse({ description: 'User not found' })
   @ApiBadRequestResponse({ description: 'Bad request / invalid input' })
   @Patch(':id')
-  async update(@Param() params: FindOneParams, @Body() updateUserDto: UpdateUserDto, @Res() apiRes: Response) {
-    const response = await this.usersService.update(params.id, updateUserDto)
-    return apiRes.status(HttpStatus.OK).send(response)
+  async update(@Param() params: FindOneParams, @Body() updateUser: UpdateUserDto, @Res() apiRes: Response) {
+    const serviceRes = await this.usersService.update(params.id, updateUser)
+    return apiRes.status(HttpStatus.OK).send(serviceRes)
   }
 
   @ApiOkResponse({ description: 'User deleted successfully' })
   @ApiNotFoundResponse({ description: 'User not found' })
   @Delete(':id')
   async remove(@Param() params: FindOneParams, @Res() apiRes: Response) {
-    const response = await this.usersService.remove(params.id)
-    return apiRes.status(HttpStatus.OK).send(response)
+    const serviceRes = await this.usersService.remove(params.id)
+    return apiRes.status(HttpStatus.OK).send(serviceRes)
   }
 }

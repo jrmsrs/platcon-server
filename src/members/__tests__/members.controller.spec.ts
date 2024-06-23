@@ -13,6 +13,7 @@ import { CreateMemberDto } from '#members/dto/create-member.dto'
 import { memberMock } from '#members/__mocks__/member.mock'
 import { createMemberMock } from '#members/__mocks__/create-member.mock'
 import { ResponseBuilder } from '#utils/resBuilder.util'
+import { testController } from '#utils/test/testController.util'
 
 describe('MembersController', () => {
   let controller: MembersController
@@ -46,9 +47,7 @@ describe('MembersController', () => {
 
       await controller.create(createMemberDto, apiRes as unknown as Response)
 
-      expect(membersService.create).toHaveBeenCalledWith(createMemberDto)
-      expect(apiRes.status).toHaveBeenCalledWith(HttpStatus.CREATED)
-      expect(apiRes.send).toHaveBeenCalledWith(expectedMember)
+      testController(membersService.create, apiRes, HttpStatus.CREATED, expectedMember)
     })
   })
 
@@ -61,9 +60,7 @@ describe('MembersController', () => {
 
       await controller.findAll(apiRes as unknown as Response)
 
-      expect(membersService.findAll).toHaveBeenCalled()
-      expect(apiRes.status).toHaveBeenCalledWith(HttpStatus.OK)
-      expect(apiRes.send).toHaveBeenCalledWith(expectedMembers)
+      testController(membersService.findAll, apiRes, HttpStatus.OK, expectedMembers)
     })
   })
 
@@ -77,9 +74,7 @@ describe('MembersController', () => {
 
       await controller.findOne({ id }, apiRes as unknown as Response)
 
-      expect(membersService.findOne).toHaveBeenCalledWith(id)
-      expect(apiRes.status).toHaveBeenCalledWith(HttpStatus.OK)
-      expect(apiRes.send).toHaveBeenCalledWith(expectedMember)
+      testController(membersService.findOne, apiRes, HttpStatus.OK, expectedMember, [id])
     })
   })
 
@@ -94,9 +89,7 @@ describe('MembersController', () => {
 
       await controller.update({ id }, updateMemberDto, apiRes as unknown as Response)
 
-      expect(membersService.update).toHaveBeenCalledWith(id, updateMemberDto)
-      expect(apiRes.status).toHaveBeenCalledWith(HttpStatus.OK)
-      expect(apiRes.send).toHaveBeenCalledWith(expectedResponse)
+      testController(membersService.update, apiRes, HttpStatus.OK, expectedResponse, [id, updateMemberDto])
     })
   })
 
@@ -110,9 +103,7 @@ describe('MembersController', () => {
 
       await controller.remove({ id }, apiRes as unknown as Response)
 
-      expect(membersService.remove).toHaveBeenCalledWith(id)
-      expect(apiRes.status).toHaveBeenCalledWith(HttpStatus.OK)
-      expect(apiRes.send).toHaveBeenCalledWith(expectedResponse)
+      testController(membersService.remove, apiRes, HttpStatus.OK, expectedResponse, [id])
     })
   })
 })

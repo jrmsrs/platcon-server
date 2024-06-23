@@ -6,8 +6,9 @@ import { PostgresError as PgError } from 'pg-error-enum'
 import { UsersService } from '#users/users.service'
 import { UsersRepository } from '#users/users.repository'
 import { userMock } from '#users/__mocks__/user.mock'
-import { createUserMock } from '#users/__mocks__/createUser.mock'
+import { createUserMock } from '#users/__mocks__/create-user.mock'
 import { ResponseBuilder } from '#utils/resBuilder.util'
+import { mockRepository } from '#utils/mock/repository.mock'
 
 describe('UsersService', () => {
   let service: UsersService
@@ -15,19 +16,7 @@ describe('UsersService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        UsersService,
-        {
-          provide: UsersRepository,
-          useValue: {
-            create: jest.fn().mockResolvedValue(userMock),
-            findAll: jest.fn().mockResolvedValue([userMock]),
-            findOne: jest.fn().mockResolvedValue(userMock),
-            update: jest.fn().mockResolvedValue({ raw: [], affected: 1 }),
-            remove: jest.fn().mockResolvedValue({ raw: [], affected: 1 }),
-          },
-        },
-      ],
+      providers: [UsersService, { provide: UsersRepository, useValue: mockRepository(userMock) }],
     }).compile()
 
     service = module.get<UsersService>(UsersService)

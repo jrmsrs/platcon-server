@@ -16,40 +16,40 @@ export class MembersController {
   @ApiCreatedResponse({ description: 'Member created successfully', type: Member })
   @ApiBadRequestResponse({ description: 'Bad request / invalid input' })
   @Post()
-  async create(@Body() createMemberDto: CreateMemberDto, @Res() apiRes: Response) {
-    const response = await this.membersService.create(createMemberDto)
-    return apiRes.status(HttpStatus.CREATED).send(response)
+  async create(@Body() createMember: CreateMemberDto, @Res() apiRes: Response) {
+    const serviceRes = await this.membersService.create(createMember)
+    return apiRes.status(HttpStatus.CREATED).send(serviceRes)
   }
 
   @ApiOkResponse({ description: 'Members retrieved successfully', type: [Member] })
   @Get()
   async findAll(@Res() apiRes: Response) {
-    const response = await this.membersService.findAll()
-    return apiRes.status(HttpStatus.OK).send(response)
+    const serviceRes = await this.membersService.findAll()
+    return apiRes.status(HttpStatus.OK).send(serviceRes)
   }
 
   @ApiOkResponse({ description: 'Member retrieved successfully', type: Member })
   @ApiNotFoundResponse({ description: 'Member not found' })
   @Get(':id')
   async findOne(@Param() params: FindOneParams, @Res() apiRes: Response) {
-    const response = await this.membersService.findOne(params.id)
-    return apiRes.status(HttpStatus.OK).send(response)
+    const serviceRes = await this.membersService.findOne(params.id)
+    return apiRes.status(HttpStatus.OK).send(serviceRes)
   }
 
   @ApiOkResponse({ description: 'Member updated successfully' })
   @ApiNotFoundResponse({ description: 'Member not found' })
   @ApiBadRequestResponse({ description: 'Bad request / invalid input' })
   @Patch(':id')
-  async update(@Param() params: FindOneParams, @Body() updateMemberDto: UpdateMemberDto, @Res() apiRes: Response) {
-    const response = await this.membersService.update(params.id, updateMemberDto)
-    return apiRes.status(HttpStatus.OK).send(response)
+  async update(@Param() params: FindOneParams, @Body() updateMember: UpdateMemberDto, @Res() apiRes: Response) {
+    const serviceRes = await this.membersService.update(params.id, updateMember)
+    return apiRes.status(HttpStatus.OK).send(serviceRes)
   }
 
   @ApiOkResponse({ description: 'Member deleted successfully' })
   @ApiNotFoundResponse({ description: 'Member not found' })
   @Delete(':id')
   async remove(@Param() params: FindOneParams, @Res() apiRes: Response) {
-    const response = await this.membersService.remove(params.id)
-    return apiRes.status(HttpStatus.OK).send(response)
+    const serviceRes = await this.membersService.remove(params.id)
+    return apiRes.status(HttpStatus.OK).send(serviceRes)
   }
 }

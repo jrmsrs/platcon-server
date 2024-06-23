@@ -12,8 +12,9 @@ import { Role } from '#users/enums/role.enum'
 import { CreateUserDto } from '#users/dto/create-user.dto'
 
 import { userMock } from '#users/__mocks__/user.mock'
-import { createUserMock } from '#users/__mocks__/createUser.mock'
+import { createUserMock } from '#users/__mocks__/create-user.mock'
 import { ResponseBuilder } from '#utils/resBuilder.util'
+import { testController } from '#utils/test/testController.util'
 
 describe('UsersController', () => {
   let controller: UsersController
@@ -48,9 +49,7 @@ describe('UsersController', () => {
 
       await controller.create(createUserDto, apiRes as unknown as Response)
 
-      expect(usersService.create).toHaveBeenCalledWith(createUserDto)
-      expect(apiRes.status).toHaveBeenCalledWith(HttpStatus.CREATED)
-      expect(apiRes.send).toHaveBeenCalledWith(expectedUser)
+      testController(usersService.create, apiRes, HttpStatus.CREATED, expectedUser, [createUserDto])
     })
   })
 
@@ -63,9 +62,7 @@ describe('UsersController', () => {
 
       await controller.findAll(apiRes as unknown as Response)
 
-      expect(usersService.findAll).toHaveBeenCalled()
-      expect(apiRes.status).toHaveBeenCalledWith(HttpStatus.OK)
-      expect(apiRes.send).toHaveBeenCalledWith(expectedUsers)
+      testController(usersService.findAll, apiRes, HttpStatus.OK, expectedUsers)
     })
   })
 
@@ -79,9 +76,7 @@ describe('UsersController', () => {
 
       await controller.findOne({ id }, apiRes as unknown as Response)
 
-      expect(usersService.findOne).toHaveBeenCalledWith(id)
-      expect(apiRes.status).toHaveBeenCalledWith(HttpStatus.OK)
-      expect(apiRes.send).toHaveBeenCalledWith(expectedUser)
+      testController(usersService.findOne, apiRes, HttpStatus.OK, expectedUser, [id])
     })
   })
 
@@ -96,9 +91,7 @@ describe('UsersController', () => {
 
       await controller.update({ id }, updateUserDto, apiRes as unknown as Response)
 
-      expect(usersService.update).toHaveBeenCalledWith(id, updateUserDto)
-      expect(apiRes.status).toHaveBeenCalledWith(HttpStatus.OK)
-      expect(apiRes.send).toHaveBeenCalledWith(expectedResponse)
+      testController(usersService.update, apiRes, HttpStatus.OK, expectedResponse, [id, updateUserDto])
     })
   })
 
@@ -112,9 +105,7 @@ describe('UsersController', () => {
 
       await controller.remove({ id }, apiRes as unknown as Response)
 
-      expect(usersService.remove).toHaveBeenCalledWith(id)
-      expect(apiRes.status).toHaveBeenCalledWith(HttpStatus.OK)
-      expect(apiRes.send).toHaveBeenCalledWith(expectedResponse)
+      testController(usersService.remove, apiRes, HttpStatus.OK, expectedResponse, [id])
     })
   })
 })
