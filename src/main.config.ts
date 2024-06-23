@@ -13,6 +13,7 @@ A description`
     )
     .setVersion('0.0.1')
     .addTag('Users', 'Rotas Usuários')
+    .addTag('Members', 'Rotas Membros')
     .build()
   const document = SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('docs', app, document)

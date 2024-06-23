@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config'
 import { TypeOrmModuleOptions } from '@nestjs/typeorm'
 
 import { User } from '#users/entities/user.entity'
+import { Member } from '#members/entities/member.entity'
 
 export class DbConfig {
   static createConnection(configService: ConfigService): TypeOrmModuleOptions | Promise<TypeOrmModuleOptions> {
@@ -13,7 +14,7 @@ export class DbConfig {
       username: configService.get('DB_USERNAME'),
       password: configService.get('DB_PASSWORD'),
       database: configService.get('DB_NAME'),
-      entities: [User],
+      entities: [User, Member],
       synchronize: false,
       logging: true,
     }

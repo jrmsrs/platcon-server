@@ -9,6 +9,11 @@ export class ResponseBuilder {
     if (id) this.msg += ` id={${id}}`
     return this
   }
+  member(id?: string) {
+    this.msg += 'Member'
+    if (id) this.msg += ` id={${id}}`
+    return this
+  }
 
   // success
   updated(where?: UpdateUserDto) {

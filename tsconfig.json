@@ -21,7 +21,8 @@
       "#utils/*": ["utils/*"],
       "#test/*": ["test/*"],
       "#app/*": ["src/*"],
-      "#users/*": ["src/users/*"]
+      "#users/*": ["src/users/*"],
+      "#members/*": ["src/members/*"]
     }
   }
 }
