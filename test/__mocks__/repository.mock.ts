@@ -1,10 +1,9 @@
-import { userMock } from '#users/__mocks__/user.mock'
 import { DeleteResult, InsertResult, UpdateResult } from 'typeorm'
 
-export const mockRepository = jest.fn(() => ({
-  find: jest.fn(() => [userMock]),
-  findOne: jest.fn(() => userMock),
-  insert: jest.fn(() => ({ raw: [userMock] }) as InsertResult),
+export const mockRepository = jest.fn((obj) => ({
+  find: jest.fn(() => [obj]),
+  findOne: jest.fn(() => obj),
+  insert: jest.fn(() => ({ raw: [obj] }) as InsertResult),
   update: jest.fn(() => ({ raw: [], affected: 1 }) as UpdateResult),
   delete: jest.fn(() => ({ raw: [], affected: 1 }) as DeleteResult),
 }))

@@ -11,7 +11,7 @@ import { AppModule } from '#app/app.module'
 import { User } from '#users/entities/user.entity'
 
 import { userMock } from '#users/__mocks__/user.mock'
-import { mockRepository, mockRepositoryNotFound } from '#test/__mocks__/usersRepository.mock'
+import { mockRepository, mockRepositoryNotFound } from '#test/__mocks__/repository.mock'
 
 describe('UsersModule (e2e)', () => {
   let app: INestApplication
@@ -22,7 +22,7 @@ describe('UsersModule (e2e)', () => {
         imports: [AppModule],
       })
         .overrideProvider(getRepositoryToken(User))
-        .useValue(mockRepository())
+        .useValue(mockRepository(userMock))
         .compile()
 
       app = moduleFixture.createNestApplication()
