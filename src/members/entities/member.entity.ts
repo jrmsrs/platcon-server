@@ -9,7 +9,7 @@ export class Member {
   id: string
 
   @ApiPropertyOptional({ description: 'Member user UUID' })
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: 'uuid', nullable: true })
   user_id?: string
 
   @ApiProperty({ description: 'Member stage name' })
