@@ -4,27 +4,27 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity('members')
 export class Member {
-  @ApiProperty()
+  @ApiProperty({ description: 'Member UUID' })
   @PrimaryGeneratedColumn('uuid')
   id: string
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ description: 'Member user UUID' })
   @Column({ type: 'text', nullable: true })
   user_id?: string
 
-  @ApiProperty()
+  @ApiProperty({ description: 'Member stage name' })
   @Column({ type: 'text', unique: true })
   stage_name: string
 
-  @ApiProperty()
+  @ApiProperty({ description: 'Member description' })
   @Column({ type: 'text' })
   description: string
 
-  @ApiProperty()
+  @ApiProperty({ description: 'Member avatar (Google Docs) URI' })
   @Column({ type: 'text' })
   avatar_uri?: string
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ description: 'Member website URLs' })
   @Column({ type: 'text', array: true, nullable: true })
   website?: string[]
 }
