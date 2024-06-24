@@ -21,12 +21,12 @@ export class ResponseBuilder {
   constructor(public msg = '') {}
   // subjects
   user(id?: string) {
-    this.msg += 'User'
+    this.msg += 'user'
     if (id) this.msg += ` id={${id}}`
     return this
   }
   member(id?: string) {
-    this.msg += 'Member'
+    this.msg += 'member'
     if (id) this.msg += ` id={${id}}`
     return this
   }
@@ -69,12 +69,12 @@ export class ResponseBuilder {
       this.pre(this)
       this.msg += `with ${uniqueField} already exists`
     } else {
-      this.msg = `Request with ${this.msg} can't be completed due to a conflict with the current state of the resource`
+      this.msg = `request with ${this.msg} can't be completed due to a conflict with the current state of the resource`
     }
     return this
   }
   unexpected() {
-    this.msg = 'An unexpected error occurred while performing operation'
+    this.msg = 'an unexpected error occurred while performing operation'
     return this
   }
 
