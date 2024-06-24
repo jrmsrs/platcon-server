@@ -9,6 +9,7 @@
 
 ## docs
 
+- [API.md](API.md)
 - [Swagger](https://swagger.io/) - route `/docs`
 
 ## code quality
@@ -48,13 +49,13 @@
 - [Node.js](https://nodejs.org/)
 - [Yarn](https://yarnpkg.com/)
 
-### installation
+### install
 
 ```bash
 $ yarn install
 ```
 
-### running
+### run
 
 ```bash
 # development
@@ -72,12 +73,35 @@ $ yarn run start:prod
 ```bash
 # unit tests
 $ yarn run test
+$ yarn run test:watch
 
 # e2e tests
 $ yarn run test:e2e
 
 # test coverage
 $ yarn run test:cov
+```
+
+### add resorce
+
+```bash
+yarn nest g res {resource-name}
+yarn ts-node ./scripts/alias-path-generator.ts {resource-name}
+```
+
+### sync orm
+
+- migration to your local postgres
+  - at [./src/db.config.ts](./src/db.config.ts) change to `synchronize: true`
+
+```bash
+yarn start:dev
+```
+
+### sync API.md with App Swagger
+
+```bash
+yarn ts-node ./scripts/swagger-generator.ts # autohooked to husky pre-commit
 ```
 
 ## license
