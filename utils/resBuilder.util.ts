@@ -30,6 +30,11 @@ export class ResponseBuilder {
     if (id) this.msg += ` id={${id}}`
     return this
   }
+  channel(id?: string) {
+    this.msg += `channel`
+    if (id) this.msg += ` id={${id}}`
+    return this
+  }
 
   pre(self: this) {
     this.msg = self.msg ? `${self.msg} ` : ''

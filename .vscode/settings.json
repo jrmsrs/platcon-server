@@ -1,6 +1,9 @@
 {
   "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
   "editor.formatOnSave": true,
+  "[json]": {
+    "editor.formatOnSave": false
+  },
   "sonarlint.connectedMode.project": {
     "connectionId": "jrmsrs",
     "projectKey": "jrmsrs_platcon-server"
