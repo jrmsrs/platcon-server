@@ -9,6 +9,7 @@ import { AppService } from '#app/app.service'
 
 import { UsersModule } from '#users/users.module'
 import { MembersModule } from '#members/members.module'
+import { ChannelsModule } from '#channels/channels.module'
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { MembersModule } from '#members/members.module'
     ConfigModule.forRoot({ isGlobal: true }),
     UsersModule,
     MembersModule,
+    ChannelsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

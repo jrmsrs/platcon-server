@@ -59,9 +59,13 @@ export class ResponseBuilder {
     this.msg += 'not found'
     return this
   }
-  fkNotFound(ref: string, fk: string) {
+  fkNotFound(ref: string, fk?: string) {
     this.pre(this)
-    this.msg += `${ref} with id={${fk}} does not exist`
+    if (!fk) {
+      this.msg += `at least one of the ${ref} does not exist`
+    } else {
+      this.msg += `${ref} with id={${fk}} does not exist`
+    }
     return this
   }
   mustBe(field: string, dataType: string) {

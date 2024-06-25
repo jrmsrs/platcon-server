@@ -16,11 +16,16 @@ export class MembersRepository {
   }
 
   async findAll(): Promise<Member[]> {
-    return this.memberRepository.find()
+    return this.memberRepository.find({
+      relations: ['channels'],
+    })
   }
 
   async findOne(id: string): Promise<Member> {
-    return this.memberRepository.findOne({ where: { id } })
+    return this.memberRepository.findOne({
+      relations: ['channels'],
+      where: { id },
+    })
   }
 
   async update(id: string, data: UpdateMemberDto): Promise<UpdateResult> {
