@@ -8,8 +8,8 @@
 - [x] implement Members module
   - [x] implement Members unit tests
   - [x] implement Members e2e tests
-- [ ] implement Channels module
-  - [ ] implement Channels unit tests
+- [x] implement Channels module\*
+  - [x] implement Channels unit tests\*
   - [ ] implement Channels e2e tests
 - [ ] implement Contents module
   - [ ] implement Contents unit tests
