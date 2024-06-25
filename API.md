@@ -4,6 +4,104 @@ A description
 ## Version: 0.0.1
 
 ---
+## Channels
+Rotas Canais
+
+### /channels
+
+#### GET
+##### Summary
+
+Retrieve all channels
+
+##### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Channels retrieved successfully | [ [Channel](#channel) ] |
+
+#### POST
+##### Summary
+
+Create channel
+
+##### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| body | body | Channel data | Yes | [CreateChannelDto](#createchanneldto) |
+
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 201 | Channel created successfully | [Channel](#channel) |
+| 400 | Bad request / invalid input | [ErrorMessage](#errormessage) |
+
+### /channels/{id}
+
+#### DELETE
+##### Summary
+
+Delete channel by ID
+
+##### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | Channel UUID | Yes | string |
+
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Channel deleted successfully | [SuccessMessage](#successmessage) |
+| 404 | Channel not found | [ErrorMessage](#errormessage) |
+
+#### GET
+##### Summary
+
+Retrieve channel by ID
+
+##### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | Channel UUID | Yes | string |
+
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Channel retrieved successfully | [Channel](#channel) |
+| 404 | Channel not found | [ErrorMessage](#errormessage) |
+
+#### PATCH
+##### Summary
+
+Update channel by ID
+
+##### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | Channel UUID | Yes | string |
+| body | body | Channel data to update | Yes | [UpdateChannelDto](#updatechanneldto) |
+
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Channel updated successfully | [SuccessMessage](#successmessage) |
+| 400 | Bad request / invalid input | [ErrorMessage](#errormessage) |
+| 404 | Channel not found | [ErrorMessage](#errormessage) |
+
+---
 ## Members
 Rotas Membros
 
@@ -202,6 +300,29 @@ Update user by ID
 ---
 ### Models
 
+#### Channel
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| tags | [ string ] | Channel tags | Yes |
+| cover_uri | string | Channel cover (Google Docs) URI | Yes |
+| description | string | Channel description | Yes |
+| id | string | Channel UUID | Yes |
+| logo_uri | string | Channel logo (Google Docs) URI | Yes |
+| members | [ string ] | Channel members | No |
+| name | string | Channel name | Yes |
+
+#### CreateChannelDto
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| tags | [ string ] | Channel tags | Yes |
+| cover_uri | string | Channel cover (Google Docs) URI | No |
+| description | string | Channel description | Yes |
+| logo_uri | string | Channel logo (Google Docs) URI | No |
+| members | [ string ] | Channel members | No |
+| name | string | Channel name | Yes |
+
 #### CreateMemberDto
 
 | Name | Type | Description | Required |
@@ -245,6 +366,17 @@ Update user by ID
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | message | string | Success message | Yes |
+
+#### UpdateChannelDto
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| tags | [ string ] | Channel tags | No |
+| cover_uri | string | Channel cover (Google Docs) URI | No |
+| description | string | Channel description | No |
+| logo_uri | string | Channel logo (Google Docs) URI | No |
+| members | [ string ] | Channel members | No |
+| name | string | Channel name | No |
 
 #### UpdateMemberDto
 

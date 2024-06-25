@@ -1,6 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm'
+
+import { Channel } from '#channels/entities/channel.entity'
 
 @Entity('members')
 export class Member {
@@ -27,4 +29,13 @@ export class Member {
   @ApiPropertyOptional({ description: 'Member website URLs' })
   @Column({ type: 'text', array: true, nullable: true })
   website?: string[]
+
+  @ManyToMany(() => Channel, { cascade: ['insert', 'update'] })
+  @JoinTable({
+    synchronize: false,
+    name: 'channel_members',
+    joinColumn: { name: 'member_id' },
+    inverseJoinColumn: { name: 'channel_id' },
+  })
+  channels?: Channel[]
 }

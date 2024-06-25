@@ -14,7 +14,13 @@ A description`
   .setVersion('0.0.1')
   .addTag('Users', 'Rotas Usuários')
   .addTag('Members', 'Rotas Membros')
+  .addTag('Channels', 'Rotas Canais')
   .build()
+
+swaggerConfig.components.schemas = {
+  ...{ SuccessMessage: {}, ErrorMessage: {} },
+  ...swaggerConfig.components.schemas,
+}
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
