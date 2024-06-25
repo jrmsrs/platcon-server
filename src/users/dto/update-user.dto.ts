@@ -4,7 +4,7 @@ import { IsUUID } from 'class-validator'
 import { CreateUserDto } from '#users/dto/create-user.dto'
 
 export class FindOneParams {
-  @IsUUID()
+  @IsUUID('4')
   @ApiProperty({ description: 'User UUID' })
   id: string
 }

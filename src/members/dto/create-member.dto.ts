@@ -31,6 +31,6 @@ export class CreateMemberDto {
 
   @ApiPropertyOptional({ description: 'Member user UUID' })
   @IsOptional()
-  @IsUUID()
+  @IsUUID('4')
   user_id?: string
 }
