@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
 
 import { faker } from '@faker-js/faker'
-import { PostgresError as PgError } from 'pg-error-enum'
 
 import { UsersService } from '#users/users.service'
 import { UsersRepository } from '#users/users.repository'
@@ -9,6 +8,7 @@ import { userMock } from '#users/__mocks__/user.mock'
 import { createUserMock } from '#users/__mocks__/create-user.mock'
 import { ResponseBuilder } from '#utils/resBuilder.util'
 import { mockRepository } from '#utils/mock/repository.mock'
+import { StateConflictError, UnaffectedError, UniqueViolationError } from '#utils/error'
 
 describe('UsersService', () => {
   let service: UsersService
@@ -35,7 +35,7 @@ describe('UsersService', () => {
     })
 
     it('should throw error on creation if user already exists', async () => {
-      repository.create = jest.fn().mockRejectedValue({ code: PgError.UNIQUE_VIOLATION })
+      repository.create = jest.fn().mockRejectedValue(new UniqueViolationError())
       try {
         await service.create(createUserMock)
       } catch (error) {
@@ -94,7 +94,7 @@ describe('UsersService', () => {
     })
 
     it('should throw error on update if user already exists', async () => {
-      repository.update = jest.fn().mockRejectedValue({ code: PgError.UNIQUE_VIOLATION })
+      repository.update = jest.fn().mockRejectedValue(new UniqueViolationError())
       try {
         await service.update(userMock.id, { email: faker.internet.email() })
       } catch (error) {
@@ -120,7 +120,7 @@ describe('UsersService', () => {
 
     it('should throw error on remove if user not found', async () => {
       const invalidId = faker.string.uuid()
-      repository.remove = jest.fn().mockResolvedValue({ raw: [], affected: 0 })
+      repository.remove = jest.fn().mockRejectedValue(new UnaffectedError())
       try {
         await service.remove(invalidId)
       } catch (error) {
@@ -129,7 +129,7 @@ describe('UsersService', () => {
     })
 
     it('should throw error on remove if user has related entities', async () => {
-      repository.remove = jest.fn().mockRejectedValue({ code: PgError.FOREIGN_KEY_VIOLATION })
+      repository.remove = jest.fn().mockRejectedValue(new StateConflictError())
       try {
         await service.remove(userMock.id)
       } catch (error) {
