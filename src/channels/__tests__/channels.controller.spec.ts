@@ -8,13 +8,11 @@ import { ChannelsController } from '#channels/channels.controller'
 import { ChannelsService } from '#channels/channels.service'
 import { ChannelsRepository } from '#channels/channels.repository'
 import { Channel } from '#channels/entities/channel.entity'
-import { CreateChannelDto } from '#channels/dto/create-channel.dto'
-
-import { channelMock } from '#channels/__mocks__/channel.mock'
-import { createChannelMock } from '#channels/__mocks__/create-channel.mock'
+import { CreateChannelDto } from '#channels/dto'
+import { channelMock, createChannelMock } from '#channels/__mocks__'
+import { memberMock } from '#app/members/__mocks__'
 import { ResponseBuilder } from '#utils/resBuilder.util'
-import { testController } from '#utils/test/testController.util'
-import { memberMock } from '#app/members/__mocks__/member.mock'
+import { testController } from '#utils/test'
 
 describe('ChannelsController', () => {
   let controller: ChannelsController

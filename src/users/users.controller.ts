@@ -13,8 +13,7 @@ import {
 
 import { UsersService } from '#users/users.service'
 import { User } from '#users/entities/user.entity'
-import { CreateUserDto } from '#users/dto/create-user.dto'
-import { UpdateUserDto, FindOneParams } from '#users/dto/update-user.dto'
+import { CreateUserDto, UpdateUserDto, FindOneParams } from '#users/dto'
 import { ErrorMessage, SuccessMessage } from '#utils/resBuilder.util'
 
 @Controller('users')

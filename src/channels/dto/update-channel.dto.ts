@@ -1,7 +1,7 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger'
 import { IsUUID } from 'class-validator'
 
-import { CreateChannelDto } from '#channels/dto/create-channel.dto'
+import { CreateChannelDto } from '#channels/dto'
 
 export class FindOneParams {
   @IsUUID('4')

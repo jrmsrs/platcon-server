@@ -6,13 +6,11 @@ import { faker } from '@faker-js/faker'
 
 import { ChannelsRepository } from '#channels/channels.repository'
 import { Channel } from '#channels/entities/channel.entity'
-import { CreateChannelDto } from '#channels/dto/create-channel.dto'
-import { UpdateChannelDto } from '#channels/dto/update-channel.dto'
+import { CreateChannelDto, UpdateChannelDto } from '#channels/dto'
 import { Member } from '#members/entities/member.entity'
 
-import { channelMock } from '#channels/__mocks__/channel.mock'
-import { createChannelMock } from '#channels/__mocks__/create-channel.mock'
-import { memberMock } from '#members/__mocks__/member.mock'
+import { channelMock, createChannelMock } from '#channels/__mocks__'
+import { memberMock } from '#members/__mocks__'
 
 describe('ChannelsRepository', () => {
   let repository: ChannelsRepository

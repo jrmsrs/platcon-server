@@ -7,7 +7,7 @@ import { PostgresError as PgError } from 'pg-error-enum'
 import { Member } from '#members/entities/member.entity'
 import { CreateMemberDto } from '#members/dto/create-member.dto'
 import { UpdateMemberDto } from '#members/dto/update-member.dto'
-import { StateConflictError, UnaffectedError, UnexpectedError, UniqueViolationError } from '#utils/error'
+import { StateConflictError, UnaffectedError, UnexpectedError, UniqueViolationError } from '#utils/errors'
 
 @Injectable()
 export class MembersRepository {

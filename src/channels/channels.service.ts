@@ -1,8 +1,7 @@
 import { ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common'
 
 import { ChannelsRepository } from '#channels/channels.repository'
-import { CreateChannelDto } from '#channels/dto/create-channel.dto'
-import { UpdateChannelDto } from '#channels/dto/update-channel.dto'
+import { CreateChannelDto, UpdateChannelDto } from '#channels/dto'
 import { ResponseBuilder } from '#utils/resBuilder.util'
 import {
   FKViolationError,
@@ -10,7 +9,7 @@ import {
   UnaffectedError,
   UniqueViolationError,
   NotFoundError,
-} from '#utils/error'
+} from '#utils/errors'
 
 @Injectable()
 export class ChannelsService {

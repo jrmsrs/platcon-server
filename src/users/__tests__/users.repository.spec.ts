@@ -5,13 +5,9 @@ import { Repository, UpdateResult, DeleteResult, InsertResult } from 'typeorm'
 import { faker } from '@faker-js/faker'
 
 import { UsersRepository } from '#users/users.repository'
-import { User } from '#users/entities/user.entity'
-import { Role } from '#users/enums/role.enum'
-import { CreateUserDto } from '#users/dto/create-user.dto'
-import { UpdateUserDto } from '#users/dto/update-user.dto'
-
-import { userMock } from '#users/__mocks__/user.mock'
-import { createUserMock } from '#users/__mocks__/create-user.mock'
+import { User, UserRole } from '#users/entities/user.entity'
+import { CreateUserDto, UpdateUserDto } from '#users/dto'
+import { userMock, createUserMock } from '#users/__mocks__'
 
 describe('UsersRepository', () => {
   let repository: UsersRepository
@@ -37,7 +33,7 @@ describe('UsersRepository', () => {
       const createUserDto: CreateUserDto = createUserMock
       const user: User = {
         ...createUserMock,
-        role: Role.USER,
+        role: UserRole.USER,
         id: faker.string.uuid(),
       }
       jest.spyOn(userRepository, 'insert').mockResolvedValue({ raw: [user] } as InsertResult)

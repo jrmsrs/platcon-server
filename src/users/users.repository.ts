@@ -5,9 +5,8 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm'
 import { PostgresError as PgError } from 'pg-error-enum'
 
 import { User } from '#users/entities/user.entity'
-import { CreateUserDto } from '#users/dto/create-user.dto'
-import { UpdateUserDto } from '#users/dto/update-user.dto'
-import { StateConflictError, UnaffectedError, UnexpectedError, UniqueViolationError } from '#utils/error'
+import { CreateUserDto, UpdateUserDto } from '#users/dto'
+import { StateConflictError, UnaffectedError, UnexpectedError, UniqueViolationError } from '#utils/errors'
 
 @Injectable()
 export class UsersRepository {

@@ -8,12 +8,11 @@ import { MembersController } from '#members/members.controller'
 import { MembersService } from '#members/members.service'
 import { MembersRepository } from '#members/members.repository'
 import { Member } from '#members/entities/member.entity'
-import { CreateMemberDto } from '#members/dto/create-member.dto'
+import { CreateMemberDto } from '#members/dto'
 
-import { memberMock } from '#members/__mocks__/member.mock'
-import { createMemberMock } from '#members/__mocks__/create-member.mock'
+import { memberMock, createMemberMock } from '#members/__mocks__'
 import { ResponseBuilder } from '#utils/resBuilder.util'
-import { testController } from '#utils/test/testController.util'
+import { testController } from '#utils/test'
 
 describe('MembersController', () => {
   let controller: MembersController

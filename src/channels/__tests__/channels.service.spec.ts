@@ -4,11 +4,10 @@ import { faker } from '@faker-js/faker'
 
 import { ChannelsService } from '#channels/channels.service'
 import { ChannelsRepository } from '#channels/channels.repository'
-import { channelMock } from '#channels/__mocks__/channel.mock'
-import { createChannelMock } from '#channels/__mocks__/create-channel.mock'
+import { channelMock, createChannelMock } from '#channels/__mocks__'
 import { ResponseBuilder } from '#utils/resBuilder.util'
-import { mockRepository } from '#utils/mock/repository.mock'
-import { FKViolationError, StateConflictError, UnaffectedError, UniqueViolationError } from '#utils/error'
+import { FKViolationError, StateConflictError, UnaffectedError, UniqueViolationError } from '#utils/errors'
+import { mockRepository } from '#utils/mock'
 
 describe('ChannelsService', () => {
   let service: ChannelsService

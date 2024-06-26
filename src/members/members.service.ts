@@ -10,7 +10,7 @@ import {
   UniqueViolationError,
   NotFoundError,
   FKViolationError,
-} from '#utils/error'
+} from '#utils/errors'
 
 @Injectable()
 export class MembersService {

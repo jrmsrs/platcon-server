@@ -4,11 +4,10 @@ import { faker } from '@faker-js/faker'
 
 import { MembersService } from '#members/members.service'
 import { MembersRepository } from '#members/members.repository'
-import { memberMock } from '#members/__mocks__/member.mock'
-import { createMemberMock } from '#members/__mocks__/create-member.mock'
+import { memberMock, createMemberMock } from '#members/__mocks__'
 import { ResponseBuilder } from '#utils/resBuilder.util'
-import { mockRepository } from '#utils/mock/repository.mock'
-import { FKViolationError, StateConflictError, UnaffectedError, UniqueViolationError } from '#utils/error'
+import { FKViolationError, StateConflictError, UnaffectedError, UniqueViolationError } from '#utils/errors'
+import { mockRepository } from '#utils/mock'
 
 describe('MembersService', () => {
   let service: MembersService

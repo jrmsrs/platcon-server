@@ -2,7 +2,10 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
-import { Role } from '#users/enums/role.enum'
+export enum UserRole {
+  PRODUCER = 'producer',
+  USER = 'user',
+}
 
 @Entity('users')
 export class User {
@@ -22,9 +25,9 @@ export class User {
   @Column({ type: 'text', nullable: true })
   password?: string
 
-  @ApiProperty({ description: 'User role', enum: Role })
-  @Column({ type: 'enum', enum: Role, default: Role.USER })
-  role: Role
+  @ApiProperty({ description: 'User role', enum: UserRole })
+  @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
+  role: UserRole
 
   @ApiPropertyOptional({ description: 'User avatar (Google Docs) URI' })
   @Column({ type: 'text', nullable: true })

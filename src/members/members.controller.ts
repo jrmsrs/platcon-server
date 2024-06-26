@@ -13,8 +13,7 @@ import {
 
 import { MembersService } from '#members/members.service'
 import { Member } from '#members/entities/member.entity'
-import { CreateMemberDto } from '#members/dto/create-member.dto'
-import { UpdateMemberDto, FindOneParams } from '#members/dto/update-member.dto'
+import { CreateMemberDto, UpdateMemberDto, FindOneParams } from '#members/dto'
 import { ErrorMessage, SuccessMessage } from '#utils/resBuilder.util'
 
 @Controller('members')

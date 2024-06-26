@@ -1,7 +1,7 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger'
 import { IsUUID } from 'class-validator'
 
-import { CreateMemberDto } from '#members/dto/create-member.dto'
+import { CreateMemberDto } from '#members/dto'
 
 export class FindOneParams {
   @IsUUID('4')

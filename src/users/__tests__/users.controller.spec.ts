@@ -7,14 +7,12 @@ import { faker } from '@faker-js/faker'
 import { UsersController } from '#users/users.controller'
 import { UsersService } from '#users/users.service'
 import { UsersRepository } from '#users/users.repository'
-import { User } from '#users/entities/user.entity'
-import { Role } from '#users/enums/role.enum'
-import { CreateUserDto } from '#users/dto/create-user.dto'
+import { User, UserRole } from '#users/entities/user.entity'
+import { CreateUserDto } from '#users/dto'
 
-import { userMock } from '#users/__mocks__/user.mock'
-import { createUserMock } from '#users/__mocks__/create-user.mock'
+import { userMock, createUserMock } from '#users/__mocks__'
 import { ResponseBuilder } from '#utils/resBuilder.util'
-import { testController } from '#utils/test/testController.util'
+import { testController } from '#utils/test'
 
 describe('UsersController', () => {
   let controller: UsersController
@@ -40,7 +38,7 @@ describe('UsersController', () => {
       const createUserDto: CreateUserDto = createUserMock
       const expectedUser: User = {
         ...createUserMock,
-        role: Role.USER,
+        role: UserRole.USER,
         id: faker.string.uuid(),
       }
       const apiRes = { status: jest.fn().mockReturnThis(), send: jest.fn() }

@@ -4,11 +4,10 @@ import { faker } from '@faker-js/faker'
 
 import { UsersService } from '#users/users.service'
 import { UsersRepository } from '#users/users.repository'
-import { userMock } from '#users/__mocks__/user.mock'
-import { createUserMock } from '#users/__mocks__/create-user.mock'
+import { userMock, createUserMock } from '#users/__mocks__'
 import { ResponseBuilder } from '#utils/resBuilder.util'
-import { mockRepository } from '#utils/mock/repository.mock'
-import { StateConflictError, UnaffectedError, UniqueViolationError } from '#utils/error'
+import { mockRepository } from '#utils/mock'
+import { StateConflictError, UnaffectedError, UniqueViolationError } from '#utils/errors'
 
 describe('UsersService', () => {
   let service: UsersService

@@ -1,10 +1,9 @@
 import { ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common'
 
 import { UsersRepository } from '#users/users.repository'
-import { CreateUserDto } from '#users/dto/create-user.dto'
-import { UpdateUserDto } from '#users/dto/update-user.dto'
+import { CreateUserDto, UpdateUserDto } from '#users/dto'
 import { ResponseBuilder } from '#utils/resBuilder.util'
-import { StateConflictError, UnaffectedError, UniqueViolationError } from '#utils/error'
+import { StateConflictError, UnaffectedError, UniqueViolationError } from '#utils/errors'
 
 @Injectable()
 export class UsersService {

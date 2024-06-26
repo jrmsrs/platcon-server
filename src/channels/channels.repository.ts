@@ -5,8 +5,7 @@ import { DeleteResult, In, Repository, UpdateResult } from 'typeorm'
 import { PostgresError as PgError } from 'pg-error-enum'
 
 import { Channel } from '#channels/entities/channel.entity'
-import { CreateChannelDto } from '#channels/dto/create-channel.dto'
-import { UpdateChannelDto } from '#channels/dto/update-channel.dto'
+import { CreateChannelDto, UpdateChannelDto } from '#channels/dto'
 import { Member } from '#members/entities/member.entity'
 import {
   FKViolationError,
@@ -14,7 +13,7 @@ import {
   UnaffectedError,
   UnexpectedError,
   UniqueViolationError,
-} from '#utils/error'
+} from '#utils/errors'
 
 @Injectable()
 export class ChannelsRepository {

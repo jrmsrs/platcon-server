@@ -13,8 +13,7 @@ import {
 
 import { ChannelsService } from '#channels/channels.service'
 import { Channel } from '#channels/entities/channel.entity'
-import { CreateChannelDto } from '#channels/dto/create-channel.dto'
-import { UpdateChannelDto, FindOneParams } from '#channels/dto/update-channel.dto'
+import { CreateChannelDto, UpdateChannelDto, FindOneParams } from '#channels/dto'
 import { ErrorMessage, SuccessMessage } from '#utils/resBuilder.util'
 
 @Controller('channels')

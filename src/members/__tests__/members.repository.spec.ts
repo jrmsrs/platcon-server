@@ -6,11 +6,8 @@ import { faker } from '@faker-js/faker'
 
 import { MembersRepository } from '#members/members.repository'
 import { Member } from '#members/entities/member.entity'
-import { CreateMemberDto } from '#members/dto/create-member.dto'
-import { UpdateMemberDto } from '#members/dto/update-member.dto'
-
-import { memberMock } from '#members/__mocks__/member.mock'
-import { createMemberMock } from '#members/__mocks__/create-member.mock'
+import { CreateMemberDto, UpdateMemberDto } from '#members/dto'
+import { memberMock, createMemberMock } from '#members/__mocks__'
 
 describe('MembersRepository', () => {
   let repository: MembersRepository
