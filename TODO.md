@@ -24,6 +24,10 @@
   - [ ] unit tests
   - [ ] e2e tests
 
+## dev
+
+- [ ] decouple error handling from typeorm*
+
 ## infra
 
 - [x] implement swagger autogenerate markdown utility for api docs
