@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
 
 import { faker } from '@faker-js/faker'
-import { PostgresError as PgError } from 'pg-error-enum'
 
 import { ChannelsService } from '#channels/channels.service'
 import { ChannelsRepository } from '#channels/channels.repository'
@@ -9,6 +8,7 @@ import { channelMock } from '#channels/__mocks__/channel.mock'
 import { createChannelMock } from '#channels/__mocks__/create-channel.mock'
 import { ResponseBuilder } from '#utils/resBuilder.util'
 import { mockRepository } from '#utils/mock/repository.mock'
+import { FKViolationError, StateConflictError, UnaffectedError, UniqueViolationError } from '#utils/error'
 
 describe('ChannelsService', () => {
   let service: ChannelsService
@@ -35,7 +35,7 @@ describe('ChannelsService', () => {
     })
 
     it('should throw error on creation if channel already exists', async () => {
-      repository.create = jest.fn().mockRejectedValue({ code: PgError.UNIQUE_VIOLATION })
+      repository.create = jest.fn().mockRejectedValue(new UniqueViolationError())
       try {
         await service.create(createChannelMock)
       } catch (error) {
@@ -44,7 +44,7 @@ describe('ChannelsService', () => {
     })
 
     it('should throw error on creation if referenced member does not exist', async () => {
-      repository.create = jest.fn().mockRejectedValue({ code: PgError.FOREIGN_KEY_VIOLATION })
+      repository.create = jest.fn().mockRejectedValue(new FKViolationError())
       try {
         await service.create(createChannelMock)
       } catch (error) {
@@ -104,7 +104,7 @@ describe('ChannelsService', () => {
     })
 
     it('should throw error on update if channel already exists', async () => {
-      repository.update = jest.fn().mockRejectedValue({ code: PgError.UNIQUE_VIOLATION })
+      repository.update = jest.fn().mockRejectedValue(new UniqueViolationError())
       try {
         await service.update(channelMock.id, { name: faker.lorem.word() })
       } catch (error) {
@@ -113,7 +113,7 @@ describe('ChannelsService', () => {
     })
 
     it('should throw error on update if referenced member does not exist', async () => {
-      repository.update = jest.fn().mockRejectedValue({ code: PgError.FOREIGN_KEY_VIOLATION })
+      repository.update = jest.fn().mockRejectedValue(new FKViolationError())
       try {
         await service.update(channelMock.id, { name: faker.lorem.word() })
       } catch (error) {
@@ -139,7 +139,7 @@ describe('ChannelsService', () => {
 
     it('should throw error on remove if channel not found', async () => {
       const invalidId = faker.string.uuid()
-      repository.remove = jest.fn().mockResolvedValue({ raw: [], affected: 0 })
+      repository.remove = jest.fn().mockResolvedValue(new UnaffectedError())
       try {
         await service.remove(invalidId)
       } catch (error) {
@@ -148,7 +148,7 @@ describe('ChannelsService', () => {
     })
 
     it('should throw error on remove if channel has related entities', async () => {
-      repository.remove = jest.fn().mockRejectedValue({ code: PgError.FOREIGN_KEY_VIOLATION })
+      repository.remove = jest.fn().mockRejectedValue(new StateConflictError())
       try {
         await service.remove(channelMock.id)
       } catch (error) {
