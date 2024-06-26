@@ -1,85 +1,81 @@
 import { ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common'
 
-import { DeleteResult, UpdateResult } from 'typeorm'
-import { PostgresError as PgError } from 'pg-error-enum'
-
 import { MembersRepository } from '#members/members.repository'
 import { CreateMemberDto } from '#members/dto/create-member.dto'
 import { UpdateMemberDto } from '#members/dto/update-member.dto'
 import { ResponseBuilder } from '#utils/resBuilder.util'
-import { Member } from '#members/entities/member.entity'
+import {
+  StateConflictError,
+  UnaffectedError,
+  UniqueViolationError,
+  NotFoundError,
+  FKViolationError,
+} from '#utils/error'
 
 @Injectable()
 export class MembersService {
   constructor(private readonly membersRepository: MembersRepository) {}
 
   async create(member: CreateMemberDto) {
-    let createResult: Member
-
     try {
-      createResult = await this.membersRepository.create(member)
+      return await this.membersRepository.create(member)
     } catch (error) {
-      let msg = new ResponseBuilder().unexpected().msg
-      if (error.code === PgError.UNIQUE_VIOLATION) {
-        msg = new ResponseBuilder().member().conflict('stage_name').msg
+      if (error instanceof UniqueViolationError) {
+        throw new UnprocessableEntityException(new ResponseBuilder().member().conflict('stage_name').msg)
       }
-      if (error.code === PgError.FOREIGN_KEY_VIOLATION) {
-        msg = new ResponseBuilder().member().fkNotFound('User', member.user_id).msg
+      if (error instanceof FKViolationError) {
+        throw new UnprocessableEntityException(new ResponseBuilder().member().fkNotFound('User', member.user_id).msg)
       }
-      throw new UnprocessableEntityException(msg)
+      throw new UnprocessableEntityException(new ResponseBuilder().unexpected().msg)
     }
-
-    return createResult
   }
 
   async findAll() {
-    return this.membersRepository.findAll()
+    try {
+      return await this.membersRepository.findAll()
+    } catch (error) {
+      throw new UnprocessableEntityException(new ResponseBuilder().unexpected().msg)
+    }
   }
 
   async findOne(id: string) {
-    const member = await this.membersRepository.findOne(id)
-    if (!member) {
-      throw new NotFoundException(new ResponseBuilder().member(id).notFound().msg)
+    try {
+      return await this.membersRepository.findOne(id)
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        throw new NotFoundException(new ResponseBuilder().member(id).notFound().msg)
+      }
+      throw new UnprocessableEntityException(new ResponseBuilder().unexpected().msg)
     }
-
-    return member
   }
 
   async update(id: string, member: UpdateMemberDto) {
-    let updateResult: UpdateResult
-
     try {
-      updateResult = await this.membersRepository.update(id, member)
+      await this.membersRepository.update(id, member)
     } catch (error) {
-      let msg = new ResponseBuilder().unexpected().msg
-      if (error.code === PgError.UNIQUE_VIOLATION) {
-        msg = new ResponseBuilder().member().conflict('stage_name').msg
+      if (error instanceof UniqueViolationError) {
+        throw new UnprocessableEntityException(new ResponseBuilder().member().conflict('stage_name').msg)
       }
-      if (error.code === PgError.FOREIGN_KEY_VIOLATION) {
-        msg = new ResponseBuilder().member().fkNotFound('User', member.user_id).msg
+      if (error instanceof FKViolationError) {
+        throw new UnprocessableEntityException(new ResponseBuilder().member().fkNotFound('User', member.user_id).msg)
       }
-      throw new UnprocessableEntityException(msg)
-    }
-    if (!updateResult.affected) {
-      throw new NotFoundException(new ResponseBuilder().member(id).notFound().msg)
+      throw new UnprocessableEntityException(new ResponseBuilder().unexpected().msg)
     }
 
     return new ResponseBuilder().member(id).updated(member)
   }
 
   async remove(id: string) {
-    let deleteResult: DeleteResult
-
     try {
-      deleteResult = await this.membersRepository.remove(id)
+      await this.membersRepository.remove(id)
     } catch (error) {
-      if (error.code === PgError.FOREIGN_KEY_VIOLATION) {
+      if (error instanceof StateConflictError) {
         throw new ConflictException(new ResponseBuilder().member(id).conflict().msg)
       }
+      if (error instanceof UnaffectedError) {
+        throw new UnprocessableEntityException(new ResponseBuilder().member(id).notFound().msg)
+      }
       throw new UnprocessableEntityException(new ResponseBuilder().unexpected().msg)
-    }
-    if (!deleteResult.affected) {
-      throw new NotFoundException(new ResponseBuilder().member(id).notFound().msg)
     }
 
     return new ResponseBuilder().member(id).deleted()
