@@ -13,7 +13,7 @@
     "^.+\\.(t|j)s$": "ts-jest"
   },
   "collectCoverageFrom": [
-    "**/*.{!(module|config|e2e-spec|util),}.ts"
+    "**/*.{!(module|config|e2e-spec|util|error|entity|dto|mock|enum),}.ts"
   ],
   "coverageDirectory": "./coverage",
   "testEnvironment": "node",
