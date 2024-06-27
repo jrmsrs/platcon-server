@@ -3,11 +3,20 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { getRepositoryToken } from '@nestjs/typeorm'
 import { Repository, UpdateResult, DeleteResult, InsertResult } from 'typeorm'
 import { faker } from '@faker-js/faker'
+import { PostgresError as PgError } from 'pg-error-enum'
 
 import { UsersRepository } from '#users/users.repository'
 import { User, UserRole } from '#users/entities/user.entity'
 import { CreateUserDto, UpdateUserDto } from '#users/dto'
 import { userMock, createUserMock } from '#users/__mocks__'
+
+import {
+  NotFoundError,
+  StateConflictError,
+  UnaffectedError,
+  UnexpectedError,
+  UniqueViolationError,
+} from '#utils/errors'
 
 describe('UsersRepository', () => {
   let repository: UsersRepository
@@ -42,6 +51,28 @@ describe('UsersRepository', () => {
 
       expect(result).toEqual(user)
     })
+
+    it('should throw an error if user already exists', async () => {
+      const createUserDto: CreateUserDto = createUserMock
+      jest.spyOn(userRepository, 'insert').mockRejectedValue({ name: PgError.UNIQUE_VIOLATION })
+
+      try {
+        await repository.create(createUserDto)
+      } catch (error) {
+        expect(error).toBeInstanceOf(UniqueViolationError)
+      }
+    })
+
+    it('should throw an error if an unexpected error occurs', async () => {
+      const createUserDto: CreateUserDto = createUserMock
+      jest.spyOn(userRepository, 'insert').mockRejectedValue(new Error())
+
+      try {
+        await repository.create(createUserDto)
+      } catch (error) {
+        expect(error).toBeInstanceOf(UnexpectedError)
+      }
+    })
   })
 
   describe('findAll', () => {
@@ -52,6 +83,16 @@ describe('UsersRepository', () => {
       const result = await repository.findAll()
 
       expect(result).toEqual(users)
+    })
+
+    it('should throw an error if an unexpected error occurs', async () => {
+      jest.spyOn(userRepository, 'find').mockRejectedValue(new Error())
+
+      try {
+        await repository.findAll()
+      } catch (error) {
+        expect(error).toBeInstanceOf(UnexpectedError)
+      }
     })
   })
 
@@ -64,6 +105,28 @@ describe('UsersRepository', () => {
       const result = await repository.findOne(id)
 
       expect(result).toEqual(user)
+    })
+
+    it('should throw an error if user is not found', async () => {
+      const id = faker.string.uuid()
+      jest.spyOn(userRepository, 'findOne').mockResolvedValue(undefined)
+
+      try {
+        await repository.findOne(id)
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundError)
+      }
+    })
+
+    it('should throw an error if an unexpected error occurs', async () => {
+      const id = faker.string.uuid()
+      jest.spyOn(userRepository, 'findOne').mockRejectedValue(new Error())
+
+      try {
+        await repository.findOne(id)
+      } catch (error) {
+        expect(error).toBeInstanceOf(UnexpectedError)
+      }
     })
   })
 
@@ -78,6 +141,42 @@ describe('UsersRepository', () => {
 
       expect(result).toEqual(updateResult)
     })
+
+    it('should throw an error if user is not found', async () => {
+      const id = faker.string.uuid()
+      const updateUserDto: UpdateUserDto = { password: faker.internet.password() }
+      jest.spyOn(userRepository, 'update').mockResolvedValue({ raw: [], affected: 0 } as UpdateResult)
+
+      try {
+        await repository.update(id, updateUserDto)
+      } catch (error) {
+        expect(error).toBeInstanceOf(UnaffectedError)
+      }
+    })
+
+    it('should throw an error if user already exists', async () => {
+      const id = faker.string.uuid()
+      const updateUserDto: UpdateUserDto = { email: faker.internet.email() }
+      jest.spyOn(userRepository, 'update').mockRejectedValue({ name: PgError.UNIQUE_VIOLATION })
+
+      try {
+        await repository.update(id, updateUserDto)
+      } catch (error) {
+        expect(error).toBeInstanceOf(UniqueViolationError)
+      }
+    })
+
+    it('should throw an error if an unexpected error occurs', async () => {
+      const id = faker.string.uuid()
+      const updateUserDto: UpdateUserDto = { password: faker.internet.password() }
+      jest.spyOn(userRepository, 'update').mockRejectedValue(new Error())
+
+      try {
+        await repository.update(id, updateUserDto)
+      } catch (error) {
+        expect(error).toBeInstanceOf(UnexpectedError)
+      }
+    })
   })
 
   describe('removeUser', () => {
@@ -89,6 +188,39 @@ describe('UsersRepository', () => {
       const result = await repository.remove(id)
 
       expect(result).toEqual(deleteResult)
+    })
+
+    it('should throw an error if user is not found', async () => {
+      const id = faker.string.uuid()
+      jest.spyOn(userRepository, 'delete').mockResolvedValue({ raw: [], affected: 0 } as DeleteResult)
+
+      try {
+        await repository.remove(id)
+      } catch (error) {
+        expect(error).toBeInstanceOf(UnaffectedError)
+      }
+    })
+
+    it('should throw an error if trying to delete user with restrict constraint', async () => {
+      const id = faker.string.uuid()
+      jest.spyOn(userRepository, 'delete').mockRejectedValue({ name: PgError.FOREIGN_KEY_VIOLATION })
+
+      try {
+        await repository.remove(id)
+      } catch (error) {
+        expect(error).toBeInstanceOf(StateConflictError)
+      }
+    })
+
+    it('should throw an error if an unexpected error occurs', async () => {
+      const id = faker.string.uuid()
+      jest.spyOn(userRepository, 'delete').mockRejectedValue(new Error())
+
+      try {
+        await repository.remove(id)
+      } catch (error) {
+        expect(error).toBeInstanceOf(UnexpectedError)
+      }
     })
   })
 })
