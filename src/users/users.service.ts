@@ -3,7 +3,7 @@ import { ConflictException, Injectable, NotFoundException, UnprocessableEntityEx
 import { UsersRepository } from '#users/users.repository'
 import { CreateUserDto, UpdateUserDto } from '#users/dto'
 import { ResponseBuilder } from '#utils/resBuilder.util'
-import { StateConflictError, UnaffectedError, UniqueViolationError } from '#utils/errors'
+import { NotFoundError, StateConflictError, UnaffectedError, UniqueViolationError } from '#utils/errors'
 
 @Injectable()
 export class UsersService {
@@ -32,7 +32,7 @@ export class UsersService {
     try {
       return await this.usersRepository.findOne(id)
     } catch (error) {
-      if (error instanceof UnaffectedError) {
+      if (error instanceof NotFoundError) {
         throw new NotFoundException(new ResponseBuilder().user(id).notFound().msg)
       }
       throw new UnprocessableEntityException(new ResponseBuilder().unexpected().msg)
@@ -42,18 +42,22 @@ export class UsersService {
   async update(id: string, user: UpdateUserDto) {
     try {
       await this.usersRepository.update(id, user)
+      return new ResponseBuilder().user(id).updated(user)
     } catch (error) {
       if (error instanceof UniqueViolationError) {
         throw new ConflictException(new ResponseBuilder().user().conflict('email').msg)
       }
+      if (error instanceof UnaffectedError) {
+        throw new NotFoundException(new ResponseBuilder().user(id).notFound().msg)
+      }
       throw new UnprocessableEntityException(new ResponseBuilder().unexpected().msg)
     }
-    return new ResponseBuilder().user(id).updated(user)
   }
 
   async remove(id: string) {
     try {
       await this.usersRepository.remove(id)
+      return new ResponseBuilder().user(id).deleted()
     } catch (error) {
       if (error instanceof StateConflictError) {
         throw new ConflictException(new ResponseBuilder().user(id).conflict().msg)
@@ -63,6 +67,5 @@ export class UsersService {
       }
       throw new UnprocessableEntityException(new ResponseBuilder().unexpected().msg)
     }
-    return new ResponseBuilder().user(id).deleted()
   }
 }

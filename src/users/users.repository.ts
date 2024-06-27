@@ -6,7 +6,13 @@ import { PostgresError as PgError } from 'pg-error-enum'
 
 import { User } from '#users/entities/user.entity'
 import { CreateUserDto, UpdateUserDto } from '#users/dto'
-import { StateConflictError, UnaffectedError, UnexpectedError, UniqueViolationError } from '#utils/errors'
+import {
+  NotFoundError,
+  StateConflictError,
+  UnaffectedError,
+  UnexpectedError,
+  UniqueViolationError,
+} from '#utils/errors'
 
 @Injectable()
 export class UsersRepository {
@@ -31,17 +37,23 @@ export class UsersRepository {
 
   async findOne(id: string): Promise<User> {
     try {
-      return await this.userRepository.findOne({ where: { id } })
+      const res = await this.userRepository.findOne({ where: { id } })
+      if (!res) throw new NotFoundError()
+      return res
     } catch (error) {
+      if (error instanceof NotFoundError) throw error
       throw new UnexpectedError(error.message)
     }
   }
 
   async update(id: string, data: UpdateUserDto): Promise<UpdateResult> {
     try {
-      return await this.userRepository.update(id, data)
+      const res = await this.userRepository.update(id, data)
+      if (!res.affected) throw new UnaffectedError()
+      return res
     } catch (error) {
       if (error.name === PgError.UNIQUE_VIOLATION) throw new UniqueViolationError()
+      if (error instanceof UnaffectedError) throw error
       throw new UnexpectedError(error.message)
     }
   }

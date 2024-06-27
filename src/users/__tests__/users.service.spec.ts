@@ -7,7 +7,7 @@ import { UsersRepository } from '#users/users.repository'
 import { userMock, createUserMock } from '#users/__mocks__'
 import { ResponseBuilder } from '#utils/resBuilder.util'
 import { mockRepository } from '#utils/mock'
-import { StateConflictError, UnaffectedError, UniqueViolationError } from '#utils/errors'
+import { NotFoundError, StateConflictError, UnaffectedError, UniqueViolationError } from '#utils/errors'
 
 describe('UsersService', () => {
   let service: UsersService
@@ -57,6 +57,15 @@ describe('UsersService', () => {
       const users = await service.findAll()
       expect(users).toEqual([userMock])
     })
+
+    it('should throw error on retrieval if unexpected error occurs', async () => {
+      repository.findAll = jest.fn().mockRejectedValue(new Error())
+      try {
+        await service.findAll()
+      } catch (error) {
+        expect(error.message).toEqual(new ResponseBuilder().unexpected().msg)
+      }
+    })
   })
 
   describe('findOne', () => {
@@ -67,11 +76,20 @@ describe('UsersService', () => {
 
     it('should throw error on retrieval if user not found', async () => {
       const invalidId = faker.string.uuid()
-      repository.findOne = jest.fn().mockResolvedValue(null)
+      repository.findOne = jest.fn().mockRejectedValue(new NotFoundError())
       try {
         await service.findOne(invalidId)
       } catch (error) {
         expect(error.message).toEqual(new ResponseBuilder().user(invalidId).notFound().msg)
+      }
+    })
+
+    it('should throw error on retrieval if unexpected error occurs', async () => {
+      repository.findOne = jest.fn().mockRejectedValue(new Error())
+      try {
+        await service.findOne(userMock.id)
+      } catch (error) {
+        expect(error.message).toEqual(new ResponseBuilder().unexpected().msg)
       }
     })
   })
@@ -84,7 +102,7 @@ describe('UsersService', () => {
 
     it('should throw error on update if user not found', async () => {
       const invalidId = faker.string.uuid()
-      repository.update = jest.fn().mockResolvedValue({ raw: [], affected: 0 })
+      repository.update = jest.fn().mockRejectedValue(new UnaffectedError())
       try {
         await service.update(invalidId, { name: 'Updated User' })
       } catch (error) {

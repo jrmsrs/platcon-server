@@ -7,7 +7,8 @@
   "rootDir": ".",
   "testRegex": ".*\\.spec\\.ts$",
   "modulePathIgnorePatterns": [
-    "<rootDir>/dist"
+    "<rootDir>/dist",
+    "<rootDir>/.*/__mocks__"
   ],
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"

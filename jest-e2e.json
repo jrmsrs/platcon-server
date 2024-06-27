@@ -16,7 +16,8 @@
     ]
   },
   "modulePathIgnorePatterns": [
-    "<rootDir>/dist"
+    "<rootDir>/dist",
+    "<rootDir>/.*/__mocks__"
   ],
   "moduleNameMapper": {
     "^\\#utils/(.*)$": "<rootDir>/utils/$1",
