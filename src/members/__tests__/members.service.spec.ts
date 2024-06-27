@@ -6,7 +6,13 @@ import { MembersService } from '#members/members.service'
 import { MembersRepository } from '#members/members.repository'
 import { memberMock, createMemberMock } from '#members/__mocks__'
 import { ResponseBuilder } from '#utils/resBuilder.util'
-import { FKViolationError, StateConflictError, UnaffectedError, UniqueViolationError } from '#utils/errors'
+import {
+  NotFoundError,
+  FKViolationError,
+  StateConflictError,
+  UnaffectedError,
+  UniqueViolationError,
+} from '#utils/errors'
 import { mockRepository } from '#utils/mock'
 
 describe('MembersService', () => {
@@ -66,6 +72,15 @@ describe('MembersService', () => {
       const members = await service.findAll()
       expect(members).toEqual([memberMock])
     })
+
+    it('should throw error on retrieval if unexpected error occurs', async () => {
+      repository.findAll = jest.fn().mockRejectedValue(new Error())
+      try {
+        await service.findAll()
+      } catch (error) {
+        expect(error.message).toEqual(new ResponseBuilder().unexpected().msg)
+      }
+    })
   })
 
   describe('findOne', () => {
@@ -76,11 +91,20 @@ describe('MembersService', () => {
 
     it('should throw error on retrieval if member not found', async () => {
       const invalidId = faker.string.uuid()
-      repository.findOne = jest.fn().mockResolvedValue(null)
+      repository.findOne = jest.fn().mockRejectedValue(new NotFoundError())
       try {
         await service.findOne(invalidId)
       } catch (error) {
         expect(error.message).toEqual(new ResponseBuilder().member(invalidId).notFound().msg)
+      }
+    })
+
+    it('should throw error on retrieval if unexpected error occurs', async () => {
+      repository.findOne = jest.fn().mockRejectedValue(new Error())
+      try {
+        await service.findOne(memberMock.id)
+      } catch (error) {
+        expect(error.message).toEqual(new ResponseBuilder().unexpected().msg)
       }
     })
   })
@@ -94,7 +118,7 @@ describe('MembersService', () => {
 
     it('should throw error on update if member not found', async () => {
       const invalidId = faker.string.uuid()
-      repository.update = jest.fn().mockResolvedValue({ raw: [], affected: 0 })
+      repository.update = jest.fn().mockRejectedValue(new UnaffectedError())
       try {
         await service.update(invalidId, { stage_name: faker.person.firstName() })
       } catch (error) {

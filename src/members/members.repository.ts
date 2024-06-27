@@ -7,7 +7,13 @@ import { PostgresError as PgError } from 'pg-error-enum'
 import { Member } from '#members/entities/member.entity'
 import { CreateMemberDto } from '#members/dto/create-member.dto'
 import { UpdateMemberDto } from '#members/dto/update-member.dto'
-import { StateConflictError, UnaffectedError, UnexpectedError, UniqueViolationError } from '#utils/errors'
+import {
+  NotFoundError,
+  StateConflictError,
+  UnaffectedError,
+  UnexpectedError,
+  UniqueViolationError,
+} from '#utils/errors'
 
 @Injectable()
 export class MembersRepository {
@@ -24,7 +30,7 @@ export class MembersRepository {
 
   async findAll(): Promise<Member[]> {
     try {
-      return this.memberRepository.find({
+      return await this.memberRepository.find({
         relations: ['channels'],
       })
     } catch (error) {
@@ -34,20 +40,26 @@ export class MembersRepository {
 
   async findOne(id: string): Promise<Member> {
     try {
-      return this.memberRepository.findOne({
+      const res = await this.memberRepository.findOne({
         relations: ['channels'],
         where: { id },
       })
+      if (!res) throw new NotFoundError()
+      return res
     } catch (error) {
+      if (error instanceof NotFoundError) throw error
       throw new UnexpectedError(error.message)
     }
   }
 
   async update(id: string, data: UpdateMemberDto): Promise<UpdateResult> {
     try {
-      return await this.memberRepository.update(id, data)
+      const res = await this.memberRepository.update(id, data)
+      if (!res.affected) throw new UnaffectedError()
+      return res
     } catch (error) {
       if (error.name === PgError.UNIQUE_VIOLATION) throw new UniqueViolationError()
+      if (error instanceof UnaffectedError) throw error
       throw new UnexpectedError(error.message)
     }
   }

@@ -57,7 +57,10 @@ export class MembersService {
         throw new UnprocessableEntityException(new ResponseBuilder().member().conflict('stage_name').msg)
       }
       if (error instanceof FKViolationError) {
-        throw new UnprocessableEntityException(new ResponseBuilder().member().fkNotFound('User', member.user_id).msg)
+        throw new NotFoundException(new ResponseBuilder().member().fkNotFound('User', member.user_id).msg)
+      }
+      if (error instanceof UnaffectedError) {
+        throw new NotFoundException(new ResponseBuilder().member(id).notFound().msg)
       }
       throw new UnprocessableEntityException(new ResponseBuilder().unexpected().msg)
     }
