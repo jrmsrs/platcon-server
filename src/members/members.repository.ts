@@ -13,6 +13,7 @@ import {
   UnaffectedError,
   UnexpectedError,
   UniqueViolationError,
+  FKViolationError,
 } from '#utils/errors'
 
 @Injectable()
@@ -24,6 +25,7 @@ export class MembersRepository {
       return (await this.memberRepository.insert(data)).raw[0]
     } catch (error) {
       if (error.name === PgError.UNIQUE_VIOLATION) throw new UniqueViolationError()
+      if (error.name === PgError.FOREIGN_KEY_VIOLATION) throw new FKViolationError()
       throw new UnexpectedError(error.message)
     }
   }
@@ -59,6 +61,7 @@ export class MembersRepository {
       return res
     } catch (error) {
       if (error.name === PgError.UNIQUE_VIOLATION) throw new UniqueViolationError()
+      if (error.name === PgError.FOREIGN_KEY_VIOLATION) throw new FKViolationError()
       if (error instanceof UnaffectedError) throw error
       throw new UnexpectedError(error.message)
     }
