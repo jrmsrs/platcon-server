@@ -15,6 +15,7 @@ import {
   UnaffectedError,
   UnexpectedError,
   UniqueViolationError,
+  FKViolationError,
 } from '#utils/errors'
 
 describe('MembersRepository', () => {
@@ -52,6 +53,19 @@ describe('MembersRepository', () => {
       const result = await repository.create(createMemberDto)
 
       expect(result).toEqual(member)
+    })
+
+    it('should throw an error if referenced entity does not exist', async () => {
+      const createMemberDto: CreateMemberDto = createMemberMock
+      jest
+        .spyOn(memberRepository, 'insert')
+        .mockRejectedValue({ name: PgError.FOREIGN_KEY_VIOLATION })
+
+      try {
+        await repository.create(createMemberDto)
+      } catch (error) {
+        expect(error).toBeInstanceOf(FKViolationError)
+      }
     })
 
     it('should throw an error if member already exists', async () => {
@@ -164,6 +178,22 @@ describe('MembersRepository', () => {
         await repository.update(id, updateMemberDto)
       } catch (error) {
         expect(error).toBeInstanceOf(UnaffectedError)
+      }
+    })
+
+    it('should throw an error if referenced entity does not exist', async () => {
+      const id = faker.string.uuid()
+      const updateMemberDto: UpdateMemberDto = {
+        website: [faker.internet.url()],
+      }
+      jest
+        .spyOn(memberRepository, 'update')
+        .mockRejectedValue({ name: PgError.FOREIGN_KEY_VIOLATION })
+
+      try {
+        await repository.update(id, updateMemberDto)
+      } catch (error) {
+        expect(error).toBeInstanceOf(FKViolationError)
       }
     })
 
