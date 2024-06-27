@@ -18,14 +18,19 @@ import {
 
 @Injectable()
 export class MembersRepository {
-  constructor(@InjectRepository(Member) private readonly memberRepository: Repository<Member>) {}
+  constructor(
+    @InjectRepository(Member)
+    private readonly memberRepository: Repository<Member>
+  ) {}
 
   async create(data: CreateMemberDto): Promise<Member> {
     try {
       return (await this.memberRepository.insert(data)).raw[0]
     } catch (error) {
-      if (error.name === PgError.UNIQUE_VIOLATION) throw new UniqueViolationError()
-      if (error.name === PgError.FOREIGN_KEY_VIOLATION) throw new FKViolationError()
+      if (error.name === PgError.UNIQUE_VIOLATION)
+        throw new UniqueViolationError()
+      if (error.name === PgError.FOREIGN_KEY_VIOLATION)
+        throw new FKViolationError()
       throw new UnexpectedError(error.message)
     }
   }
@@ -60,8 +65,10 @@ export class MembersRepository {
       if (!res.affected) throw new UnaffectedError()
       return res
     } catch (error) {
-      if (error.name === PgError.UNIQUE_VIOLATION) throw new UniqueViolationError()
-      if (error.name === PgError.FOREIGN_KEY_VIOLATION) throw new FKViolationError()
+      if (error.name === PgError.UNIQUE_VIOLATION)
+        throw new UniqueViolationError()
+      if (error.name === PgError.FOREIGN_KEY_VIOLATION)
+        throw new FKViolationError()
       if (error instanceof UnaffectedError) throw error
       throw new UnexpectedError(error.message)
     }
@@ -73,7 +80,8 @@ export class MembersRepository {
       if (!res.affected) throw new UnaffectedError()
       return res
     } catch (error) {
-      if (error.name === PgError.FOREIGN_KEY_VIOLATION) throw new StateConflictError()
+      if (error.name === PgError.FOREIGN_KEY_VIOLATION)
+        throw new StateConflictError()
       if (error instanceof UnaffectedError) throw error
       throw new UnexpectedError(error.message)
     }

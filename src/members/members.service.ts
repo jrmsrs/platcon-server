@@ -26,10 +26,14 @@ export class MembersService {
       return await this.membersRepository.create(member)
     } catch (error) {
       if (error instanceof UniqueViolationError) {
-        throw new ConflictException(new ResponseBuilder().member().conflict('stage_name').msg)
+        throw new ConflictException(
+          new ResponseBuilder().member().conflict('stage_name').msg
+        )
       }
       if (error instanceof FKViolationError) {
-        throw new NotFoundException(new ResponseBuilder().member().fkNotFound('User', member.user_id).msg)
+        throw new NotFoundException(
+          new ResponseBuilder().member().fkNotFound('User', member.user_id).msg
+        )
       }
       throw new ISEException(new ResponseBuilder().unexpected().msg)
     }
@@ -48,7 +52,9 @@ export class MembersService {
       return await this.membersRepository.findOne(id)
     } catch (error) {
       if (error instanceof NotFoundError) {
-        throw new NotFoundException(new ResponseBuilder().member(id).notFound().msg)
+        throw new NotFoundException(
+          new ResponseBuilder().member(id).notFound().msg
+        )
       }
       throw new ISEException(new ResponseBuilder().unexpected().msg)
     }
@@ -60,13 +66,19 @@ export class MembersService {
       return new ResponseBuilder().member(id).updated(member)
     } catch (error) {
       if (error instanceof UniqueViolationError) {
-        throw new ConflictException(new ResponseBuilder().member().conflict('stage_name').msg)
+        throw new ConflictException(
+          new ResponseBuilder().member().conflict('stage_name').msg
+        )
       }
       if (error instanceof FKViolationError) {
-        throw new NotFoundException(new ResponseBuilder().member().fkNotFound('User', member.user_id).msg)
+        throw new NotFoundException(
+          new ResponseBuilder().member().fkNotFound('User', member.user_id).msg
+        )
       }
       if (error instanceof UnaffectedError) {
-        throw new NotFoundException(new ResponseBuilder().member(id).notFound().msg)
+        throw new NotFoundException(
+          new ResponseBuilder().member(id).notFound().msg
+        )
       }
       throw new ISEException(new ResponseBuilder().unexpected().msg)
     }
@@ -78,10 +90,14 @@ export class MembersService {
       return new ResponseBuilder().member(id).deleted()
     } catch (error) {
       if (error instanceof StateConflictError) {
-        throw new ConflictException(new ResponseBuilder().member(id).conflict().msg)
+        throw new ConflictException(
+          new ResponseBuilder().member(id).conflict().msg
+        )
       }
       if (error instanceof UnaffectedError) {
-        throw new NotFoundException(new ResponseBuilder().member(id).notFound().msg)
+        throw new NotFoundException(
+          new ResponseBuilder().member(id).notFound().msg
+        )
       }
       throw new ISEException(new ResponseBuilder().unexpected().msg)
     }

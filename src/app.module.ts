@@ -15,7 +15,8 @@ import { ChannelsModule } from '#channels/channels.module'
   imports: [
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => DbConfig.createConnection(configService),
+      useFactory: (configService: ConfigService) =>
+        DbConfig.createConnection(configService),
       inject: [ConfigService],
     }),
     ConfigModule.forRoot({ isGlobal: true }),

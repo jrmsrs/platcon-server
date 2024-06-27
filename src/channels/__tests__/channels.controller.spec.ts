@@ -21,7 +21,10 @@ describe('ChannelsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ChannelsController],
-      providers: [ChannelsService, { provide: ChannelsRepository, useValue: {} }],
+      providers: [
+        ChannelsService,
+        { provide: ChannelsRepository, useValue: {} },
+      ],
     }).compile()
 
     controller = module.get<ChannelsController>(ChannelsController)
@@ -47,7 +50,12 @@ describe('ChannelsController', () => {
 
       await controller.create(createChannelDto, apiRes as unknown as Response)
 
-      testController(channelsService.create, apiRes, HttpStatus.CREATED, expectedChannel)
+      testController(
+        channelsService.create,
+        apiRes,
+        HttpStatus.CREATED,
+        expectedChannel
+      )
     })
   })
 
@@ -60,7 +68,12 @@ describe('ChannelsController', () => {
 
       await controller.findAll(apiRes as unknown as Response)
 
-      testController(channelsService.findAll, apiRes, HttpStatus.OK, expectedChannels)
+      testController(
+        channelsService.findAll,
+        apiRes,
+        HttpStatus.OK,
+        expectedChannels
+      )
     })
   })
 
@@ -74,7 +87,13 @@ describe('ChannelsController', () => {
 
       await controller.findOne({ id }, apiRes as unknown as Response)
 
-      testController(channelsService.findOne, apiRes, HttpStatus.OK, expectedChannel, [id])
+      testController(
+        channelsService.findOne,
+        apiRes,
+        HttpStatus.OK,
+        expectedChannel,
+        [id]
+      )
     })
   })
 
@@ -82,14 +101,26 @@ describe('ChannelsController', () => {
     it('should update a channel by id', async () => {
       const id = faker.string.uuid()
       const updateChannelDto = { members: [memberMock.id] }
-      const expectedResponse = new ResponseBuilder().channel(id).updated(updateChannelDto)
+      const expectedResponse = new ResponseBuilder()
+        .channel(id)
+        .updated(updateChannelDto)
       const apiRes = { status: jest.fn().mockReturnThis(), send: jest.fn() }
 
       jest.spyOn(channelsService, 'update').mockResolvedValue(expectedResponse)
 
-      await controller.update({ id }, updateChannelDto, apiRes as unknown as Response)
+      await controller.update(
+        { id },
+        updateChannelDto,
+        apiRes as unknown as Response
+      )
 
-      testController(channelsService.update, apiRes, HttpStatus.OK, expectedResponse, [id, updateChannelDto])
+      testController(
+        channelsService.update,
+        apiRes,
+        HttpStatus.OK,
+        expectedResponse,
+        [id, updateChannelDto]
+      )
     })
   })
 
@@ -103,7 +134,13 @@ describe('ChannelsController', () => {
 
       await controller.remove({ id }, apiRes as unknown as Response)
 
-      testController(channelsService.remove, apiRes, HttpStatus.OK, expectedResponse, [id])
+      testController(
+        channelsService.remove,
+        apiRes,
+        HttpStatus.OK,
+        expectedResponse,
+        [id]
+      )
     })
   })
 })

@@ -33,7 +33,9 @@ describe('MembersRepository', () => {
     }).compile()
 
     repository = module.get<MembersRepository>(MembersRepository)
-    memberRepository = module.get<Repository<Member>>(getRepositoryToken(Member))
+    memberRepository = module.get<Repository<Member>>(
+      getRepositoryToken(Member)
+    )
   })
 
   describe('insertMember', () => {
@@ -43,7 +45,9 @@ describe('MembersRepository', () => {
         ...createMemberMock,
         id: faker.string.uuid(),
       }
-      jest.spyOn(memberRepository, 'insert').mockResolvedValue({ raw: [member] } as InsertResult)
+      jest
+        .spyOn(memberRepository, 'insert')
+        .mockResolvedValue({ raw: [member] } as InsertResult)
 
       const result = await repository.create(createMemberDto)
 
@@ -52,7 +56,9 @@ describe('MembersRepository', () => {
 
     it('should throw an error if member already exists', async () => {
       const createMemberDto: CreateMemberDto = createMemberMock
-      jest.spyOn(memberRepository, 'insert').mockRejectedValue({ name: PgError.UNIQUE_VIOLATION })
+      jest
+        .spyOn(memberRepository, 'insert')
+        .mockRejectedValue({ name: PgError.UNIQUE_VIOLATION })
 
       try {
         await repository.create(createMemberDto)
@@ -131,8 +137,13 @@ describe('MembersRepository', () => {
   describe('updateMember', () => {
     it('should update a member by id', async () => {
       const id = faker.string.uuid()
-      const updateMemberDto: UpdateMemberDto = { website: [faker.internet.url()] }
-      const updateResult: UpdateResult = { raw: [], affected: 1 } as UpdateResult
+      const updateMemberDto: UpdateMemberDto = {
+        website: [faker.internet.url()],
+      }
+      const updateResult: UpdateResult = {
+        raw: [],
+        affected: 1,
+      } as UpdateResult
       jest.spyOn(memberRepository, 'update').mockResolvedValue(updateResult)
 
       const result = await repository.update(id, updateMemberDto)
@@ -142,8 +153,12 @@ describe('MembersRepository', () => {
 
     it('should throw an error if member is not found', async () => {
       const id = faker.string.uuid()
-      const updateMemberDto: UpdateMemberDto = { website: [faker.internet.url()] }
-      jest.spyOn(memberRepository, 'update').mockResolvedValue({ raw: [], affected: 0 } as UpdateResult)
+      const updateMemberDto: UpdateMemberDto = {
+        website: [faker.internet.url()],
+      }
+      jest
+        .spyOn(memberRepository, 'update')
+        .mockResolvedValue({ raw: [], affected: 0 } as UpdateResult)
 
       try {
         await repository.update(id, updateMemberDto)
@@ -154,8 +169,12 @@ describe('MembersRepository', () => {
 
     it('should throw an error if member already exists', async () => {
       const id = faker.string.uuid()
-      const updateMemberDto: UpdateMemberDto = { website: [faker.internet.url()] }
-      jest.spyOn(memberRepository, 'update').mockRejectedValue({ name: PgError.UNIQUE_VIOLATION })
+      const updateMemberDto: UpdateMemberDto = {
+        website: [faker.internet.url()],
+      }
+      jest
+        .spyOn(memberRepository, 'update')
+        .mockRejectedValue({ name: PgError.UNIQUE_VIOLATION })
 
       try {
         await repository.update(id, updateMemberDto)
@@ -166,7 +185,9 @@ describe('MembersRepository', () => {
 
     it('should throw an error if an unexpected error occurs', async () => {
       const id = faker.string.uuid()
-      const updateMemberDto: UpdateMemberDto = { website: [faker.internet.url()] }
+      const updateMemberDto: UpdateMemberDto = {
+        website: [faker.internet.url()],
+      }
       jest.spyOn(memberRepository, 'update').mockRejectedValue(new Error())
 
       try {
@@ -180,7 +201,10 @@ describe('MembersRepository', () => {
   describe('removeMember', () => {
     it('should delete a member by id', async () => {
       const id = faker.string.uuid()
-      const deleteResult: DeleteResult = { raw: [], affected: 1 } as DeleteResult
+      const deleteResult: DeleteResult = {
+        raw: [],
+        affected: 1,
+      } as DeleteResult
       jest.spyOn(memberRepository, 'delete').mockResolvedValue(deleteResult)
 
       const result = await repository.remove(id)
@@ -190,7 +214,9 @@ describe('MembersRepository', () => {
 
     it('should throw an error if member is not found', async () => {
       const id = faker.string.uuid()
-      jest.spyOn(memberRepository, 'delete').mockResolvedValue({ raw: [], affected: 0 } as DeleteResult)
+      jest
+        .spyOn(memberRepository, 'delete')
+        .mockResolvedValue({ raw: [], affected: 0 } as DeleteResult)
 
       try {
         await repository.remove(id)
@@ -201,7 +227,9 @@ describe('MembersRepository', () => {
 
     it('should throw an error if trying to delete a member with restrict constraint', async () => {
       const id = faker.string.uuid()
-      jest.spyOn(memberRepository, 'delete').mockRejectedValue({ name: PgError.FOREIGN_KEY_VIOLATION })
+      jest
+        .spyOn(memberRepository, 'delete')
+        .mockRejectedValue({ name: PgError.FOREIGN_KEY_VIOLATION })
 
       try {
         await repository.remove(id)

@@ -7,7 +7,12 @@ import { UsersRepository } from '#users/users.repository'
 import { userMock, createUserMock } from '#users/__mocks__'
 import { ResponseBuilder } from '#utils/resBuilder.util'
 import { mockRepository } from '#utils/mock'
-import { NotFoundError, StateConflictError, UnaffectedError, UniqueViolationError } from '#utils/errors'
+import {
+  NotFoundError,
+  StateConflictError,
+  UnaffectedError,
+  UniqueViolationError,
+} from '#utils/errors'
 
 describe('UsersService', () => {
   let service: UsersService
@@ -15,7 +20,10 @@ describe('UsersService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersService, { provide: UsersRepository, useValue: mockRepository(userMock) }],
+      providers: [
+        UsersService,
+        { provide: UsersRepository, useValue: mockRepository(userMock) },
+      ],
     }).compile()
 
     service = module.get<UsersService>(UsersService)
@@ -34,11 +42,15 @@ describe('UsersService', () => {
     })
 
     it('should throw error on creation if user already exists', async () => {
-      repository.create = jest.fn().mockRejectedValue(new UniqueViolationError())
+      repository.create = jest
+        .fn()
+        .mockRejectedValue(new UniqueViolationError())
       try {
         await service.create(createUserMock)
       } catch (error) {
-        expect(error.message).toEqual(new ResponseBuilder().user().conflict('email').msg)
+        expect(error.message).toEqual(
+          new ResponseBuilder().user().conflict('email').msg
+        )
       }
     })
 
@@ -80,7 +92,9 @@ describe('UsersService', () => {
       try {
         await service.findOne(invalidId)
       } catch (error) {
-        expect(error.message).toEqual(new ResponseBuilder().user(invalidId).notFound().msg)
+        expect(error.message).toEqual(
+          new ResponseBuilder().user(invalidId).notFound().msg
+        )
       }
     })
 
@@ -96,8 +110,14 @@ describe('UsersService', () => {
 
   describe('update', () => {
     it('should update a user by id', async () => {
-      const updateResult = await service.update(userMock.id, { name: 'Updated User' })
-      expect(updateResult).toEqual(new ResponseBuilder().user(userMock.id).updated({ name: 'Updated User' }))
+      const updateResult = await service.update(userMock.id, {
+        name: 'Updated User',
+      })
+      expect(updateResult).toEqual(
+        new ResponseBuilder()
+          .user(userMock.id)
+          .updated({ name: 'Updated User' })
+      )
     })
 
     it('should throw error on update if user not found', async () => {
@@ -106,16 +126,22 @@ describe('UsersService', () => {
       try {
         await service.update(invalidId, { name: 'Updated User' })
       } catch (error) {
-        expect(error.message).toEqual(new ResponseBuilder().user(invalidId).notFound().msg)
+        expect(error.message).toEqual(
+          new ResponseBuilder().user(invalidId).notFound().msg
+        )
       }
     })
 
     it('should throw error on update if user already exists', async () => {
-      repository.update = jest.fn().mockRejectedValue(new UniqueViolationError())
+      repository.update = jest
+        .fn()
+        .mockRejectedValue(new UniqueViolationError())
       try {
         await service.update(userMock.id, { email: faker.internet.email() })
       } catch (error) {
-        expect(error.message).toEqual(new ResponseBuilder().user().conflict('email').msg)
+        expect(error.message).toEqual(
+          new ResponseBuilder().user().conflict('email').msg
+        )
       }
     })
 
@@ -132,7 +158,9 @@ describe('UsersService', () => {
   describe('remove', () => {
     it('should remove a user by id', async () => {
       const deleteResult = await service.remove(userMock.id)
-      expect(deleteResult).toEqual(new ResponseBuilder().user(userMock.id).deleted())
+      expect(deleteResult).toEqual(
+        new ResponseBuilder().user(userMock.id).deleted()
+      )
     })
 
     it('should throw error on remove if user not found', async () => {
@@ -141,7 +169,9 @@ describe('UsersService', () => {
       try {
         await service.remove(invalidId)
       } catch (error) {
-        expect(error.message).toEqual(new ResponseBuilder().user(invalidId).notFound().msg)
+        expect(error.message).toEqual(
+          new ResponseBuilder().user(invalidId).notFound().msg
+        )
       }
     })
 
@@ -150,7 +180,9 @@ describe('UsersService', () => {
       try {
         await service.remove(userMock.id)
       } catch (error) {
-        expect(error.message).toEqual(new ResponseBuilder().user(userMock.id).conflict().msg)
+        expect(error.message).toEqual(
+          new ResponseBuilder().user(userMock.id).conflict().msg
+        )
       }
     })
 

@@ -41,8 +41,12 @@ describe('ChannelsRepository', () => {
     }).compile()
 
     repository = module.get<ChannelsRepository>(ChannelsRepository)
-    channelRepository = module.get<Repository<Channel>>(getRepositoryToken(Channel))
-    memberRepository = module.get<Repository<Member>>(getRepositoryToken(Member))
+    channelRepository = module.get<Repository<Channel>>(
+      getRepositoryToken(Channel)
+    )
+    memberRepository = module.get<Repository<Member>>(
+      getRepositoryToken(Member)
+    )
   })
 
   describe('insertChannel', () => {
@@ -53,7 +57,9 @@ describe('ChannelsRepository', () => {
         id: faker.string.uuid(),
         members: [memberMock],
       }
-      jest.spyOn(memberRepository, 'findAndCount').mockResolvedValue([[memberMock], 1])
+      jest
+        .spyOn(memberRepository, 'findAndCount')
+        .mockResolvedValue([[memberMock], 1])
       jest.spyOn(channelRepository, 'create').mockReturnValue(channel)
       jest.spyOn(channelRepository, 'save').mockResolvedValue(channel)
 
@@ -64,9 +70,13 @@ describe('ChannelsRepository', () => {
 
     it('should throw an error if channel already exists', async () => {
       const createChannelDto: CreateChannelDto = createChannelMock
-      jest.spyOn(memberRepository, 'findAndCount').mockResolvedValue([[memberMock], 1])
+      jest
+        .spyOn(memberRepository, 'findAndCount')
+        .mockResolvedValue([[memberMock], 1])
       jest.spyOn(channelRepository, 'create').mockReturnValue(channelMock)
-      jest.spyOn(channelRepository, 'save').mockRejectedValue({ driverError: { code: PgError.UNIQUE_VIOLATION } })
+      jest
+        .spyOn(channelRepository, 'save')
+        .mockRejectedValue({ driverError: { code: PgError.UNIQUE_VIOLATION } })
 
       try {
         await repository.create(createChannelDto)
@@ -77,7 +87,9 @@ describe('ChannelsRepository', () => {
 
     it('should throw an error if a foreign key violation occurs', async () => {
       const createChannelDto: CreateChannelDto = createChannelMock
-      jest.spyOn(memberRepository, 'findAndCount').mockResolvedValue([[memberMock], 0])
+      jest
+        .spyOn(memberRepository, 'findAndCount')
+        .mockResolvedValue([[memberMock], 0])
 
       try {
         await repository.create(createChannelDto)
@@ -88,7 +100,9 @@ describe('ChannelsRepository', () => {
 
     it('should throw an error if an unexpected error occurs', async () => {
       const createChannelDto: CreateChannelDto = createChannelMock
-      jest.spyOn(memberRepository, 'findAndCount').mockRejectedValue(new Error())
+      jest
+        .spyOn(memberRepository, 'findAndCount')
+        .mockRejectedValue(new Error())
 
       try {
         await repository.create(createChannelDto)
@@ -161,8 +175,13 @@ describe('ChannelsRepository', () => {
         members: [memberMock],
       }
       const updateChannelDto: UpdateChannelDto = { members: [memberMock.id] }
-      const updateResult: UpdateResult = { raw: [channel], affected: 1 } as UpdateResult
-      jest.spyOn(memberRepository, 'findAndCount').mockResolvedValue([[memberMock], 1])
+      const updateResult: UpdateResult = {
+        raw: [channel],
+        affected: 1,
+      } as UpdateResult
+      jest
+        .spyOn(memberRepository, 'findAndCount')
+        .mockResolvedValue([[memberMock], 1])
       jest.spyOn(channelRepository, 'save').mockResolvedValue(channel)
       jest.spyOn(channelRepository, 'count').mockResolvedValue(1)
 
@@ -175,8 +194,12 @@ describe('ChannelsRepository', () => {
       const id = faker.string.uuid()
       const updateChannelDto: UpdateChannelDto = { members: [memberMock.id] }
       jest.spyOn(channelRepository, 'count').mockResolvedValue(1)
-      jest.spyOn(memberRepository, 'findAndCount').mockResolvedValue([[memberMock], 1])
-      jest.spyOn(channelRepository, 'save').mockRejectedValue({ driverError: { code: PgError.UNIQUE_VIOLATION } })
+      jest
+        .spyOn(memberRepository, 'findAndCount')
+        .mockResolvedValue([[memberMock], 1])
+      jest
+        .spyOn(channelRepository, 'save')
+        .mockRejectedValue({ driverError: { code: PgError.UNIQUE_VIOLATION } })
 
       try {
         await repository.update(id, updateChannelDto)
@@ -201,7 +224,9 @@ describe('ChannelsRepository', () => {
       const id = faker.string.uuid()
       const updateChannelDto: UpdateChannelDto = { members: [memberMock.id] }
       jest.spyOn(channelRepository, 'count').mockResolvedValue(1)
-      jest.spyOn(memberRepository, 'findAndCount').mockResolvedValue([[memberMock], 0])
+      jest
+        .spyOn(memberRepository, 'findAndCount')
+        .mockResolvedValue([[memberMock], 0])
 
       try {
         await repository.update(id, updateChannelDto)
@@ -226,7 +251,10 @@ describe('ChannelsRepository', () => {
   describe('removeChannel', () => {
     it('should delete a channel by id', async () => {
       const id = faker.string.uuid()
-      const deleteResult: DeleteResult = { raw: [], affected: 1 } as DeleteResult
+      const deleteResult: DeleteResult = {
+        raw: [],
+        affected: 1,
+      } as DeleteResult
       jest.spyOn(channelRepository, 'delete').mockResolvedValue(deleteResult)
 
       const result = await repository.remove(id)
@@ -236,7 +264,9 @@ describe('ChannelsRepository', () => {
 
     it('should throw an error if trying to delete a channel with restrict constraint', async () => {
       const id = faker.string.uuid()
-      jest.spyOn(channelRepository, 'delete').mockRejectedValue({ name: PgError.FOREIGN_KEY_VIOLATION })
+      jest
+        .spyOn(channelRepository, 'delete')
+        .mockRejectedValue({ name: PgError.FOREIGN_KEY_VIOLATION })
 
       try {
         await repository.remove(id)
@@ -247,7 +277,9 @@ describe('ChannelsRepository', () => {
 
     it('should throw an error if channel does not exist', async () => {
       const id = faker.string.uuid()
-      jest.spyOn(channelRepository, 'delete').mockResolvedValue({ raw: [], affected: 0 })
+      jest
+        .spyOn(channelRepository, 'delete')
+        .mockResolvedValue({ raw: [], affected: 0 })
 
       try {
         await repository.remove(id)

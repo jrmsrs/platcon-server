@@ -16,13 +16,16 @@ import {
 
 @Injectable()
 export class UsersRepository {
-  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private readonly userRepository: Repository<User>
+  ) {}
 
   async create(data: CreateUserDto): Promise<User> {
     try {
       return (await this.userRepository.insert(data)).raw[0]
     } catch (error) {
-      if (error.name === PgError.UNIQUE_VIOLATION) throw new UniqueViolationError()
+      if (error.name === PgError.UNIQUE_VIOLATION)
+        throw new UniqueViolationError()
       throw new UnexpectedError(error.message)
     }
   }
@@ -52,7 +55,8 @@ export class UsersRepository {
       if (!res.affected) throw new UnaffectedError()
       return res
     } catch (error) {
-      if (error.name === PgError.UNIQUE_VIOLATION) throw new UniqueViolationError()
+      if (error.name === PgError.UNIQUE_VIOLATION)
+        throw new UniqueViolationError()
       if (error instanceof UnaffectedError) throw error
       throw new UnexpectedError(error.message)
     }
@@ -64,7 +68,8 @@ export class UsersRepository {
       if (!res.affected) throw new UnaffectedError()
       return res
     } catch (error) {
-      if (error.name === PgError.FOREIGN_KEY_VIOLATION) throw new StateConflictError()
+      if (error.name === PgError.FOREIGN_KEY_VIOLATION)
+        throw new StateConflictError()
       if (error instanceof UnaffectedError) throw error
       throw new UnexpectedError(error.message)
     }

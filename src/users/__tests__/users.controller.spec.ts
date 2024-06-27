@@ -47,7 +47,13 @@ describe('UsersController', () => {
 
       await controller.create(createUserDto, apiRes as unknown as Response)
 
-      testController(usersService.create, apiRes, HttpStatus.CREATED, expectedUser, [createUserDto])
+      testController(
+        usersService.create,
+        apiRes,
+        HttpStatus.CREATED,
+        expectedUser,
+        [createUserDto]
+      )
     })
   })
 
@@ -74,7 +80,13 @@ describe('UsersController', () => {
 
       await controller.findOne({ id }, apiRes as unknown as Response)
 
-      testController(usersService.findOne, apiRes, HttpStatus.OK, expectedUser, [id])
+      testController(
+        usersService.findOne,
+        apiRes,
+        HttpStatus.OK,
+        expectedUser,
+        [id]
+      )
     })
   })
 
@@ -82,14 +94,26 @@ describe('UsersController', () => {
     it('should update a user by id', async () => {
       const id = faker.string.uuid()
       const updateUserDto = { password: faker.internet.password() }
-      const expectedResponse = new ResponseBuilder().user(id).updated(updateUserDto)
+      const expectedResponse = new ResponseBuilder()
+        .user(id)
+        .updated(updateUserDto)
       const apiRes = { status: jest.fn().mockReturnThis(), send: jest.fn() }
 
       jest.spyOn(usersService, 'update').mockResolvedValue(expectedResponse)
 
-      await controller.update({ id }, updateUserDto, apiRes as unknown as Response)
+      await controller.update(
+        { id },
+        updateUserDto,
+        apiRes as unknown as Response
+      )
 
-      testController(usersService.update, apiRes, HttpStatus.OK, expectedResponse, [id, updateUserDto])
+      testController(
+        usersService.update,
+        apiRes,
+        HttpStatus.OK,
+        expectedResponse,
+        [id, updateUserDto]
+      )
     })
   })
 
@@ -103,7 +127,13 @@ describe('UsersController', () => {
 
       await controller.remove({ id }, apiRes as unknown as Response)
 
-      testController(usersService.remove, apiRes, HttpStatus.OK, expectedResponse, [id])
+      testController(
+        usersService.remove,
+        apiRes,
+        HttpStatus.OK,
+        expectedResponse,
+        [id]
+      )
     })
   })
 })

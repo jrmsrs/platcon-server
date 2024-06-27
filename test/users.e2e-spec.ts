@@ -18,7 +18,9 @@ import {
   mockOrmRepositoryServerError,
 } from '#test/__mocks__/orm-repository.mock'
 
-export const build = async (mockRepository: object): Promise<INestApplication> => {
+export const build = async (
+  mockRepository: object
+): Promise<INestApplication> => {
   const moduleFixture: TestingModule = await Test.createTestingModule({
     imports: [AppModule],
   })
@@ -41,15 +43,25 @@ describe('UsersModule (e2e)', () => {
     })
 
     it('/users (GET) :: OK', () => {
-      return request(app.getHttpServer()).get('/users').expect(HttpStatus.OK).expect([userMock])
+      return request(app.getHttpServer())
+        .get('/users')
+        .expect(HttpStatus.OK)
+        .expect([userMock])
     })
 
     it(`/users/:id (GET) :: OK`, () => {
-      return request(app.getHttpServer()).get(`/users/${userMock.id}`).expect(HttpStatus.OK).expect(userMock)
+      return request(app.getHttpServer())
+        .get(`/users/${userMock.id}`)
+        .expect(HttpStatus.OK)
+        .expect(userMock)
     })
 
     it('/users (POST) :: CREATED', () => {
-      return request(app.getHttpServer()).post('/users').send(userMock).expect(HttpStatus.CREATED).expect(userMock)
+      return request(app.getHttpServer())
+        .post('/users')
+        .send(userMock)
+        .expect(HttpStatus.CREATED)
+        .expect(userMock)
     })
 
     it(`/users/:id (PATCH) :: OK`, () => {
@@ -58,7 +70,9 @@ describe('UsersModule (e2e)', () => {
         .patch(`/users/${userMock.id}`)
         .send({ name: newName })
         .expect(HttpStatus.OK)
-        .expect(new ResponseBuilder().user(userMock.id).updated({ name: newName }))
+        .expect(
+          new ResponseBuilder().user(userMock.id).updated({ name: newName })
+        )
     })
 
     it(`/users/:id (DELETE) :: OK`, () => {
@@ -79,7 +93,11 @@ describe('UsersModule (e2e)', () => {
       return request(app.getHttpServer())
         .get(`/users/${faker.lorem.word()}`)
         .expect(HttpStatus.BAD_REQUEST)
-        .expect(new ResponseBuilder().mustBe('id', 'a UUID').errorCode(HttpStatus.BAD_REQUEST))
+        .expect(
+          new ResponseBuilder()
+            .mustBe('id', 'a UUID')
+            .errorCode(HttpStatus.BAD_REQUEST)
+        )
     })
 
     it(`/users (POST) :: BAD_REQUEST - user invalid field`, () => {
@@ -87,14 +105,22 @@ describe('UsersModule (e2e)', () => {
         .post('/users')
         .send({ ...userMock, email: faker.lorem.word() })
         .expect(HttpStatus.BAD_REQUEST)
-        .expect(new ResponseBuilder().mustBe('email', 'an email').errorCode(HttpStatus.BAD_REQUEST))
+        .expect(
+          new ResponseBuilder()
+            .mustBe('email', 'an email')
+            .errorCode(HttpStatus.BAD_REQUEST)
+        )
     })
 
     it(`/users/:id (PATCH) :: BAD_REQUEST - user non uuid`, () => {
       return request(app.getHttpServer())
         .patch(`/users/${faker.lorem.word()}`)
         .expect(HttpStatus.BAD_REQUEST)
-        .expect(new ResponseBuilder().mustBe('id', 'a UUID').errorCode(HttpStatus.BAD_REQUEST))
+        .expect(
+          new ResponseBuilder()
+            .mustBe('id', 'a UUID')
+            .errorCode(HttpStatus.BAD_REQUEST)
+        )
     })
 
     it(`/users/:id (PATCH) :: BAD_REQUEST - user invalid field`, () => {
@@ -102,14 +128,22 @@ describe('UsersModule (e2e)', () => {
         .patch(`/users/${userMock.id}`)
         .send({ email: 'invalid-email' })
         .expect(HttpStatus.BAD_REQUEST)
-        .expect(new ResponseBuilder().mustBe('email', 'an email').errorCode(HttpStatus.BAD_REQUEST))
+        .expect(
+          new ResponseBuilder()
+            .mustBe('email', 'an email')
+            .errorCode(HttpStatus.BAD_REQUEST)
+        )
     })
 
     it(`/users/:id (DELETE) :: BAD_REQUEST - user invalid uuid`, () => {
       return request(app.getHttpServer())
         .delete(`/users/${faker.lorem.word()}`)
         .expect(HttpStatus.BAD_REQUEST)
-        .expect(new ResponseBuilder().mustBe('id', 'a UUID').errorCode(HttpStatus.BAD_REQUEST))
+        .expect(
+          new ResponseBuilder()
+            .mustBe('id', 'a UUID')
+            .errorCode(HttpStatus.BAD_REQUEST)
+        )
     })
   })
 
@@ -124,7 +158,12 @@ describe('UsersModule (e2e)', () => {
       return request(app.getHttpServer())
         .get(`/users/${id}`)
         .expect(HttpStatus.NOT_FOUND)
-        .expect(new ResponseBuilder().user(id).notFound().errorCode(HttpStatus.NOT_FOUND))
+        .expect(
+          new ResponseBuilder()
+            .user(id)
+            .notFound()
+            .errorCode(HttpStatus.NOT_FOUND)
+        )
     })
 
     it(`/users/:id (PATCH) :: NOT_FOUND - user not found`, () => {
@@ -133,7 +172,12 @@ describe('UsersModule (e2e)', () => {
         .patch(`/users/${id}`)
         .send({ name: faker.person.fullName() })
         .expect(HttpStatus.NOT_FOUND)
-        .expect(new ResponseBuilder().user(id).notFound().errorCode(HttpStatus.NOT_FOUND))
+        .expect(
+          new ResponseBuilder()
+            .user(id)
+            .notFound()
+            .errorCode(HttpStatus.NOT_FOUND)
+        )
     })
 
     it(`/users/:id (DELETE) :: NOT_FOUND - user not found`, () => {
@@ -141,7 +185,12 @@ describe('UsersModule (e2e)', () => {
       return request(app.getHttpServer())
         .delete(`/users/${id}`)
         .expect(HttpStatus.NOT_FOUND)
-        .expect(new ResponseBuilder().user(id).notFound().errorCode(HttpStatus.NOT_FOUND))
+        .expect(
+          new ResponseBuilder()
+            .user(id)
+            .notFound()
+            .errorCode(HttpStatus.NOT_FOUND)
+        )
     })
   })
 
@@ -156,7 +205,12 @@ describe('UsersModule (e2e)', () => {
         .post('/users')
         .send(userMock)
         .expect(HttpStatus.CONFLICT)
-        .expect(new ResponseBuilder().user().conflict('email').errorCode(HttpStatus.CONFLICT))
+        .expect(
+          new ResponseBuilder()
+            .user()
+            .conflict('email')
+            .errorCode(HttpStatus.CONFLICT)
+        )
     })
 
     it(`/users/:id (PATCH) :: CONFLICT - user already exists`, () => {
@@ -164,14 +218,24 @@ describe('UsersModule (e2e)', () => {
         .patch(`/users/${userMock.id}`)
         .send({ email: userMock.email })
         .expect(HttpStatus.CONFLICT)
-        .expect(new ResponseBuilder().user().conflict('email').errorCode(HttpStatus.CONFLICT))
+        .expect(
+          new ResponseBuilder()
+            .user()
+            .conflict('email')
+            .errorCode(HttpStatus.CONFLICT)
+        )
     })
 
     it(`/users/:id (DELETE) :: CONFLICT - user has dependencies`, () => {
       return request(app.getHttpServer())
         .delete(`/users/${userMock.id}`)
         .expect(HttpStatus.CONFLICT)
-        .expect(new ResponseBuilder().user(userMock.id).conflict().errorCode(HttpStatus.CONFLICT))
+        .expect(
+          new ResponseBuilder()
+            .user(userMock.id)
+            .conflict()
+            .errorCode(HttpStatus.CONFLICT)
+        )
     })
   })
 
@@ -185,14 +249,22 @@ describe('UsersModule (e2e)', () => {
       return request(app.getHttpServer())
         .get('/users')
         .expect(HttpStatus.INTERNAL_SERVER_ERROR)
-        .expect(new ResponseBuilder().unexpected().errorCode(HttpStatus.INTERNAL_SERVER_ERROR))
+        .expect(
+          new ResponseBuilder()
+            .unexpected()
+            .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)
+        )
     })
 
     it(`/users/:id (GET) :: ISE - server error`, () => {
       return request(app.getHttpServer())
         .get(`/users/${userMock.id}`)
         .expect(HttpStatus.INTERNAL_SERVER_ERROR)
-        .expect(new ResponseBuilder().unexpected().errorCode(HttpStatus.INTERNAL_SERVER_ERROR))
+        .expect(
+          new ResponseBuilder()
+            .unexpected()
+            .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)
+        )
     })
 
     it('/users (POST) :: ISE - server error', () => {
@@ -200,7 +272,11 @@ describe('UsersModule (e2e)', () => {
         .post('/users')
         .send(userMock)
         .expect(HttpStatus.INTERNAL_SERVER_ERROR)
-        .expect(new ResponseBuilder().unexpected().errorCode(HttpStatus.INTERNAL_SERVER_ERROR))
+        .expect(
+          new ResponseBuilder()
+            .unexpected()
+            .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)
+        )
     })
 
     it(`/users/:id (PATCH) :: ISE - server error`, () => {
@@ -208,14 +284,22 @@ describe('UsersModule (e2e)', () => {
         .patch(`/users/${userMock.id}`)
         .send({ name: faker.person.fullName() })
         .expect(HttpStatus.INTERNAL_SERVER_ERROR)
-        .expect(new ResponseBuilder().unexpected().errorCode(HttpStatus.INTERNAL_SERVER_ERROR))
+        .expect(
+          new ResponseBuilder()
+            .unexpected()
+            .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)
+        )
     })
 
     it(`/users/:id (DELETE) :: ISE - server error`, () => {
       return request(app.getHttpServer())
         .delete(`/users/${userMock.id}`)
         .expect(HttpStatus.INTERNAL_SERVER_ERROR)
-        .expect(new ResponseBuilder().unexpected().errorCode(HttpStatus.INTERNAL_SERVER_ERROR))
+        .expect(
+          new ResponseBuilder()
+            .unexpected()
+            .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)
+        )
     })
   })
 })

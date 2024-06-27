@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Res, Delete, HttpStatus } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Res,
+  Delete,
+  HttpStatus,
+} from '@nestjs/common'
 import { Response } from 'express'
 
 import {
@@ -24,9 +34,18 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @ApiCreatedResponse({ description: 'User created successfully', type: UserId })
-  @ApiBadRequestResponse({ description: 'Bad request / invalid input', type: ErrorMessage })
-  @ApiConflictResponse({ description: 'User already exists', type: ErrorMessage })
+  @ApiCreatedResponse({
+    description: 'User created successfully',
+    type: UserId,
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad request / invalid input',
+    type: ErrorMessage,
+  })
+  @ApiConflictResponse({
+    description: 'User already exists',
+    type: ErrorMessage,
+  })
   @ApiISEResponse({ description: 'Unexpected error', type: ErrorMessage })
   @ApiOperation({ summary: 'Create user' })
   @ApiBody({ description: 'User data', type: CreateUserDto })
@@ -55,22 +74,41 @@ export class UsersController {
   }
 
   @Patch(':id')
-  @ApiOkResponse({ description: 'User updated successfully', type: SuccessMessage })
-  @ApiBadRequestResponse({ description: 'Bad request / invalid input', type: ErrorMessage })
+  @ApiOkResponse({
+    description: 'User updated successfully',
+    type: SuccessMessage,
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad request / invalid input',
+    type: ErrorMessage,
+  })
   @ApiNotFoundResponse({ description: 'User not found', type: ErrorMessage })
-  @ApiConflictResponse({ description: 'User already exists', type: ErrorMessage })
+  @ApiConflictResponse({
+    description: 'User already exists',
+    type: ErrorMessage,
+  })
   @ApiISEResponse({ description: 'Unexpected error', type: ErrorMessage })
   @ApiOperation({ summary: 'Update user by ID' })
   @ApiBody({ description: 'User data to update', type: UpdateUserDto })
-  async update(@Param() params: UserId, @Body() updateUser: UpdateUserDto, @Res() apiRes: Response) {
+  async update(
+    @Param() params: UserId,
+    @Body() updateUser: UpdateUserDto,
+    @Res() apiRes: Response
+  ) {
     const serviceRes = await this.usersService.update(params.id, updateUser)
     return apiRes.status(HttpStatus.OK).send(serviceRes)
   }
 
   @Delete(':id')
-  @ApiOkResponse({ description: 'User deleted successfully', type: SuccessMessage })
+  @ApiOkResponse({
+    description: 'User deleted successfully',
+    type: SuccessMessage,
+  })
   @ApiNotFoundResponse({ description: 'User not found', type: ErrorMessage })
-  @ApiConflictResponse({ description: 'User has dependencies', type: ErrorMessage })
+  @ApiConflictResponse({
+    description: 'User has dependencies',
+    type: ErrorMessage,
+  })
   @ApiISEResponse({ description: 'Unexpected error', type: ErrorMessage })
   @ApiOperation({ summary: 'Delete user by ID' })
   async remove(@Param() params: UserId, @Res() apiRes: Response) {

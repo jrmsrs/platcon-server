@@ -46,7 +46,12 @@ describe('MembersController', () => {
 
       await controller.create(createMemberDto, apiRes as unknown as Response)
 
-      testController(membersService.create, apiRes, HttpStatus.CREATED, expectedMember)
+      testController(
+        membersService.create,
+        apiRes,
+        HttpStatus.CREATED,
+        expectedMember
+      )
     })
   })
 
@@ -59,7 +64,12 @@ describe('MembersController', () => {
 
       await controller.findAll(apiRes as unknown as Response)
 
-      testController(membersService.findAll, apiRes, HttpStatus.OK, expectedMembers)
+      testController(
+        membersService.findAll,
+        apiRes,
+        HttpStatus.OK,
+        expectedMembers
+      )
     })
   })
 
@@ -73,7 +83,13 @@ describe('MembersController', () => {
 
       await controller.findOne({ id }, apiRes as unknown as Response)
 
-      testController(membersService.findOne, apiRes, HttpStatus.OK, expectedMember, [id])
+      testController(
+        membersService.findOne,
+        apiRes,
+        HttpStatus.OK,
+        expectedMember,
+        [id]
+      )
     })
   })
 
@@ -81,14 +97,26 @@ describe('MembersController', () => {
     it('should update a member by id', async () => {
       const id = faker.string.uuid()
       const updateMemberDto = { website: [faker.internet.url()] }
-      const expectedResponse = new ResponseBuilder().member(id).updated(updateMemberDto)
+      const expectedResponse = new ResponseBuilder()
+        .member(id)
+        .updated(updateMemberDto)
       const apiRes = { status: jest.fn().mockReturnThis(), send: jest.fn() }
 
       jest.spyOn(membersService, 'update').mockResolvedValue(expectedResponse)
 
-      await controller.update({ id }, updateMemberDto, apiRes as unknown as Response)
+      await controller.update(
+        { id },
+        updateMemberDto,
+        apiRes as unknown as Response
+      )
 
-      testController(membersService.update, apiRes, HttpStatus.OK, expectedResponse, [id, updateMemberDto])
+      testController(
+        membersService.update,
+        apiRes,
+        HttpStatus.OK,
+        expectedResponse,
+        [id, updateMemberDto]
+      )
     })
   })
 
@@ -102,7 +130,13 @@ describe('MembersController', () => {
 
       await controller.remove({ id }, apiRes as unknown as Response)
 
-      testController(membersService.remove, apiRes, HttpStatus.OK, expectedResponse, [id])
+      testController(
+        membersService.remove,
+        apiRes,
+        HttpStatus.OK,
+        expectedResponse,
+        [id]
+      )
     })
   })
 })

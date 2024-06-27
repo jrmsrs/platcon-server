@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Res, Delete, HttpStatus } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Res,
+  Delete,
+  HttpStatus,
+} from '@nestjs/common'
 import { Response } from 'express'
 
 import {
@@ -24,9 +34,18 @@ export class MembersController {
   constructor(private readonly membersService: MembersService) {}
 
   @Post()
-  @ApiCreatedResponse({ description: 'Member created successfully', type: MemberId })
-  @ApiBadRequestResponse({ description: 'Bad request / invalid input', type: ErrorMessage })
-  @ApiConflictResponse({ description: 'Member already exists', type: ErrorMessage })
+  @ApiCreatedResponse({
+    description: 'Member created successfully',
+    type: MemberId,
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad request / invalid input',
+    type: ErrorMessage,
+  })
+  @ApiConflictResponse({
+    description: 'Member already exists',
+    type: ErrorMessage,
+  })
   @ApiISEResponse({ description: 'Unexpected error', type: ErrorMessage })
   @ApiOperation({ summary: 'Create member' })
   @ApiBody({ description: 'Member data', type: CreateMemberDto })
@@ -36,7 +55,10 @@ export class MembersController {
   }
 
   @Get()
-  @ApiOkResponse({ description: 'Members retrieved successfully', type: [Member] })
+  @ApiOkResponse({
+    description: 'Members retrieved successfully',
+    type: [Member],
+  })
   @ApiISEResponse({ description: 'Unexpected error', type: ErrorMessage })
   @ApiOperation({ summary: 'Retrieve all members' })
   async findAll(@Res() apiRes: Response) {
@@ -55,22 +77,41 @@ export class MembersController {
   }
 
   @Patch(':id')
-  @ApiOkResponse({ description: 'Member updated successfully', type: SuccessMessage })
-  @ApiBadRequestResponse({ description: 'Bad request / invalid input', type: ErrorMessage })
+  @ApiOkResponse({
+    description: 'Member updated successfully',
+    type: SuccessMessage,
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad request / invalid input',
+    type: ErrorMessage,
+  })
   @ApiNotFoundResponse({ description: 'Member not found', type: ErrorMessage })
-  @ApiConflictResponse({ description: 'Member already exists', type: ErrorMessage })
+  @ApiConflictResponse({
+    description: 'Member already exists',
+    type: ErrorMessage,
+  })
   @ApiISEResponse({ description: 'Unexpected error', type: ErrorMessage })
   @ApiOperation({ summary: 'Update member by ID' })
   @ApiBody({ description: 'Member data to update', type: UpdateMemberDto })
-  async update(@Param() params: MemberId, @Body() updateMember: UpdateMemberDto, @Res() apiRes: Response) {
+  async update(
+    @Param() params: MemberId,
+    @Body() updateMember: UpdateMemberDto,
+    @Res() apiRes: Response
+  ) {
     const serviceRes = await this.membersService.update(params.id, updateMember)
     return apiRes.status(HttpStatus.OK).send(serviceRes)
   }
 
   @Delete(':id')
-  @ApiOkResponse({ description: 'Member deleted successfully', type: SuccessMessage })
+  @ApiOkResponse({
+    description: 'Member deleted successfully',
+    type: SuccessMessage,
+  })
   @ApiNotFoundResponse({ description: 'Member not found', type: ErrorMessage })
-  @ApiConflictResponse({ description: 'Member has dependencies', type: ErrorMessage })
+  @ApiConflictResponse({
+    description: 'Member has dependencies',
+    type: ErrorMessage,
+  })
   @ApiISEResponse({ description: 'Unexpected error', type: ErrorMessage })
   @ApiOperation({ summary: 'Delete member by ID' })
   async remove(@Param() params: MemberId, @Res() apiRes: Response) {

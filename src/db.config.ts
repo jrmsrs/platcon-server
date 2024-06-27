@@ -7,7 +7,9 @@ import { Member } from '#members/entities/member.entity'
 import { Channel } from '#channels/entities/channel.entity'
 
 export class DbConfig {
-  static createConnection(configService: ConfigService): TypeOrmModuleOptions | Promise<TypeOrmModuleOptions> {
+  static createConnection(
+    configService: ConfigService
+  ): TypeOrmModuleOptions | Promise<TypeOrmModuleOptions> {
     return {
       type: 'postgres',
       host: configService.get('DB_HOST'),

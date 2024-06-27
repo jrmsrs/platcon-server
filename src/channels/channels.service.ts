@@ -25,10 +25,14 @@ export class ChannelsService {
       return await this.channelsRepository.create(channel)
     } catch (error) {
       if (error instanceof UniqueViolationError) {
-        throw new ConflictException(new ResponseBuilder().channel().conflict('name').msg)
+        throw new ConflictException(
+          new ResponseBuilder().channel().conflict('name').msg
+        )
       }
       if (error instanceof FKViolationError) {
-        throw new NotFoundException(new ResponseBuilder().channel().fkNotFound('Members').msg)
+        throw new NotFoundException(
+          new ResponseBuilder().channel().fkNotFound('Members').msg
+        )
       }
       throw new ISEException(new ResponseBuilder().unexpected().msg)
     }
@@ -47,7 +51,9 @@ export class ChannelsService {
       return await this.channelsRepository.findOne(id)
     } catch (error) {
       if (error instanceof NotFoundError) {
-        throw new NotFoundException(new ResponseBuilder().channel(id).notFound().msg)
+        throw new NotFoundException(
+          new ResponseBuilder().channel(id).notFound().msg
+        )
       }
       throw new ISEException(new ResponseBuilder().unexpected().msg)
     }
@@ -59,13 +65,19 @@ export class ChannelsService {
       return new ResponseBuilder().channel(id).updated(channel)
     } catch (error) {
       if (error instanceof UniqueViolationError) {
-        throw new ISEException(new ResponseBuilder().channel().conflict('name').msg)
+        throw new ISEException(
+          new ResponseBuilder().channel().conflict('name').msg
+        )
       }
       if (error instanceof FKViolationError) {
-        throw new NotFoundException(new ResponseBuilder().channel().fkNotFound('Members').msg)
+        throw new NotFoundException(
+          new ResponseBuilder().channel().fkNotFound('Members').msg
+        )
       }
       if (error instanceof UnaffectedError) {
-        throw new NotFoundException(new ResponseBuilder().channel(id).notFound().msg)
+        throw new NotFoundException(
+          new ResponseBuilder().channel(id).notFound().msg
+        )
       }
       throw new ISEException(new ResponseBuilder().unexpected().msg)
     }
@@ -77,10 +89,14 @@ export class ChannelsService {
       return new ResponseBuilder().channel(id).deleted()
     } catch (error) {
       if (error instanceof StateConflictError) {
-        throw new ConflictException(new ResponseBuilder().channel(id).conflict().msg)
+        throw new ConflictException(
+          new ResponseBuilder().channel(id).conflict().msg
+        )
       }
       if (error instanceof UnaffectedError) {
-        throw new NotFoundException(new ResponseBuilder().channel(id).notFound().msg)
+        throw new NotFoundException(
+          new ResponseBuilder().channel(id).notFound().msg
+        )
       }
       throw new ISEException(new ResponseBuilder().unexpected().msg)
     }

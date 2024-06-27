@@ -21,7 +21,10 @@ describe('ChannelsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ChannelsService, { provide: ChannelsRepository, useValue: mockRepository(channelMock) }],
+      providers: [
+        ChannelsService,
+        { provide: ChannelsRepository, useValue: mockRepository(channelMock) },
+      ],
     }).compile()
 
     service = module.get<ChannelsService>(ChannelsService)
@@ -40,11 +43,15 @@ describe('ChannelsService', () => {
     })
 
     it('should throw error on creation if channel already exists', async () => {
-      repository.create = jest.fn().mockRejectedValue(new UniqueViolationError())
+      repository.create = jest
+        .fn()
+        .mockRejectedValue(new UniqueViolationError())
       try {
         await service.create(createChannelMock)
       } catch (error) {
-        expect(error.message).toEqual(new ResponseBuilder().channel().conflict('name').msg)
+        expect(error.message).toEqual(
+          new ResponseBuilder().channel().conflict('name').msg
+        )
       }
     })
 
@@ -53,7 +60,9 @@ describe('ChannelsService', () => {
       try {
         await service.create(createChannelMock)
       } catch (error) {
-        expect(error.message).toEqual(new ResponseBuilder().channel().fkNotFound('Members').msg)
+        expect(error.message).toEqual(
+          new ResponseBuilder().channel().fkNotFound('Members').msg
+        )
       }
     })
 
@@ -95,7 +104,9 @@ describe('ChannelsService', () => {
       try {
         await service.findOne(invalidId)
       } catch (error) {
-        expect(error.message).toEqual(new ResponseBuilder().channel(invalidId).notFound().msg)
+        expect(error.message).toEqual(
+          new ResponseBuilder().channel(invalidId).notFound().msg
+        )
       }
     })
 
@@ -113,7 +124,9 @@ describe('ChannelsService', () => {
     it('should update a channel by id', async () => {
       const name = faker.lorem.word()
       const updateResult = await service.update(channelMock.id, { name: name })
-      expect(updateResult).toEqual(new ResponseBuilder().channel(channelMock.id).updated({ name: name }))
+      expect(updateResult).toEqual(
+        new ResponseBuilder().channel(channelMock.id).updated({ name: name })
+      )
     })
 
     it('should throw error on update if channel not found', async () => {
@@ -122,16 +135,22 @@ describe('ChannelsService', () => {
       try {
         await service.update(invalidId, { name: faker.lorem.word() })
       } catch (error) {
-        expect(error.message).toEqual(new ResponseBuilder().channel(invalidId).notFound().msg)
+        expect(error.message).toEqual(
+          new ResponseBuilder().channel(invalidId).notFound().msg
+        )
       }
     })
 
     it('should throw error on update if channel already exists', async () => {
-      repository.update = jest.fn().mockRejectedValue(new UniqueViolationError())
+      repository.update = jest
+        .fn()
+        .mockRejectedValue(new UniqueViolationError())
       try {
         await service.update(channelMock.id, { name: faker.lorem.word() })
       } catch (error) {
-        expect(error.message).toEqual(new ResponseBuilder().channel().conflict('name').msg)
+        expect(error.message).toEqual(
+          new ResponseBuilder().channel().conflict('name').msg
+        )
       }
     })
 
@@ -140,7 +159,9 @@ describe('ChannelsService', () => {
       try {
         await service.update(channelMock.id, { name: faker.lorem.word() })
       } catch (error) {
-        expect(error.message).toEqual(new ResponseBuilder().channel().fkNotFound('Members').msg)
+        expect(error.message).toEqual(
+          new ResponseBuilder().channel().fkNotFound('Members').msg
+        )
       }
     })
 
@@ -157,7 +178,9 @@ describe('ChannelsService', () => {
   describe('remove', () => {
     it('should remove a channel by id', async () => {
       const deleteResult = await service.remove(channelMock.id)
-      expect(deleteResult).toEqual(new ResponseBuilder().channel(channelMock.id).deleted())
+      expect(deleteResult).toEqual(
+        new ResponseBuilder().channel(channelMock.id).deleted()
+      )
     })
 
     it('should throw error on remove if channel not found', async () => {
@@ -166,7 +189,9 @@ describe('ChannelsService', () => {
       try {
         await service.remove(invalidId)
       } catch (error) {
-        expect(error.message).toEqual(new ResponseBuilder().channel(invalidId).notFound().msg)
+        expect(error.message).toEqual(
+          new ResponseBuilder().channel(invalidId).notFound().msg
+        )
       }
     })
 
@@ -175,7 +200,9 @@ describe('ChannelsService', () => {
       try {
         await service.remove(channelMock.id)
       } catch (error) {
-        expect(error.message).toEqual(new ResponseBuilder().channel(channelMock.id).conflict().msg)
+        expect(error.message).toEqual(
+          new ResponseBuilder().channel(channelMock.id).conflict().msg
+        )
       }
     })
 

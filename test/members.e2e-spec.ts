@@ -19,7 +19,9 @@ import {
   mockOrmRepositoryServerError,
 } from '#test/__mocks__/orm-repository.mock'
 
-export const build = async (mockRepository: object): Promise<INestApplication> => {
+export const build = async (
+  mockRepository: object
+): Promise<INestApplication> => {
   const moduleFixture: TestingModule = await Test.createTestingModule({
     imports: [AppModule],
   })
@@ -42,11 +44,17 @@ describe('MembersModule (e2e)', () => {
     })
 
     it('/members (GET) :: OK', () => {
-      return request(app.getHttpServer()).get('/members').expect(HttpStatus.OK).expect([memberMock])
+      return request(app.getHttpServer())
+        .get('/members')
+        .expect(HttpStatus.OK)
+        .expect([memberMock])
     })
 
     it(`/members/:id (GET) :: OK`, () => {
-      return request(app.getHttpServer()).get(`/members/${memberMock.id}`).expect(HttpStatus.OK).expect(memberMock)
+      return request(app.getHttpServer())
+        .get(`/members/${memberMock.id}`)
+        .expect(HttpStatus.OK)
+        .expect(memberMock)
     })
 
     it('/members (POST) :: CREATED', () => {
@@ -63,7 +71,9 @@ describe('MembersModule (e2e)', () => {
         .patch(`/members/${memberMock.id}`)
         .send({ name: newName })
         .expect(HttpStatus.OK)
-        .expect(new ResponseBuilder().member(memberMock.id).updated({ name: newName }))
+        .expect(
+          new ResponseBuilder().member(memberMock.id).updated({ name: newName })
+        )
     })
 
     it(`/members/:id (DELETE) :: OK`, () => {
@@ -84,7 +94,11 @@ describe('MembersModule (e2e)', () => {
       return request(app.getHttpServer())
         .get(`/members/${faker.lorem.word()}`)
         .expect(HttpStatus.BAD_REQUEST)
-        .expect(new ResponseBuilder().mustBe('id', 'a UUID').errorCode(HttpStatus.BAD_REQUEST))
+        .expect(
+          new ResponseBuilder()
+            .mustBe('id', 'a UUID')
+            .errorCode(HttpStatus.BAD_REQUEST)
+        )
     })
 
     it(`/members (POST) :: BAD_REQUEST - member invalid field`, () => {
@@ -92,14 +106,23 @@ describe('MembersModule (e2e)', () => {
         .post('/members')
         .send({ ...memberMock, website: [faker.number.int()] })
         .expect(HttpStatus.BAD_REQUEST)
-        .expect(new ResponseBuilder().each().mustBe('website', 'a URL address').errorCode(HttpStatus.BAD_REQUEST))
+        .expect(
+          new ResponseBuilder()
+            .each()
+            .mustBe('website', 'a URL address')
+            .errorCode(HttpStatus.BAD_REQUEST)
+        )
     })
 
     it(`/members/:id (PATCH) :: BAD_REQUEST - member non uuid`, () => {
       return request(app.getHttpServer())
         .patch(`/members/${faker.lorem.word()}`)
         .expect(HttpStatus.BAD_REQUEST)
-        .expect(new ResponseBuilder().mustBe('id', 'a UUID').errorCode(HttpStatus.BAD_REQUEST))
+        .expect(
+          new ResponseBuilder()
+            .mustBe('id', 'a UUID')
+            .errorCode(HttpStatus.BAD_REQUEST)
+        )
     })
 
     it(`/members/:id (PATCH) :: BAD_REQUEST - member invalid field`, () => {
@@ -107,14 +130,23 @@ describe('MembersModule (e2e)', () => {
         .patch(`/members/${memberMock.id}`)
         .send({ website: [faker.number.int] })
         .expect(HttpStatus.BAD_REQUEST)
-        .expect(new ResponseBuilder().each().mustBe('website', 'a URL address').errorCode(HttpStatus.BAD_REQUEST))
+        .expect(
+          new ResponseBuilder()
+            .each()
+            .mustBe('website', 'a URL address')
+            .errorCode(HttpStatus.BAD_REQUEST)
+        )
     })
 
     it(`/members/:id (DELETE) :: BAD_REQUEST - member invalid uuid`, () => {
       return request(app.getHttpServer())
         .delete(`/members/${faker.lorem.word()}`)
         .expect(HttpStatus.BAD_REQUEST)
-        .expect(new ResponseBuilder().mustBe('id', 'a UUID').errorCode(HttpStatus.BAD_REQUEST))
+        .expect(
+          new ResponseBuilder()
+            .mustBe('id', 'a UUID')
+            .errorCode(HttpStatus.BAD_REQUEST)
+        )
     })
   })
 
@@ -129,7 +161,12 @@ describe('MembersModule (e2e)', () => {
       return request(app.getHttpServer())
         .get(`/members/${id}`)
         .expect(HttpStatus.NOT_FOUND)
-        .expect(new ResponseBuilder().member(id).notFound().errorCode(HttpStatus.NOT_FOUND))
+        .expect(
+          new ResponseBuilder()
+            .member(id)
+            .notFound()
+            .errorCode(HttpStatus.NOT_FOUND)
+        )
     })
 
     it(`/members/:id (PATCH) :: NOT_FOUND - member not found`, () => {
@@ -138,7 +175,12 @@ describe('MembersModule (e2e)', () => {
         .patch(`/members/${id}`)
         .send({ name: faker.person.fullName() })
         .expect(HttpStatus.NOT_FOUND)
-        .expect(new ResponseBuilder().member(id).notFound().errorCode(HttpStatus.NOT_FOUND))
+        .expect(
+          new ResponseBuilder()
+            .member(id)
+            .notFound()
+            .errorCode(HttpStatus.NOT_FOUND)
+        )
     })
 
     it(`/members/:id (DELETE) :: NOT_FOUND - member not found`, () => {
@@ -146,7 +188,12 @@ describe('MembersModule (e2e)', () => {
       return request(app.getHttpServer())
         .delete(`/members/${id}`)
         .expect(HttpStatus.NOT_FOUND)
-        .expect(new ResponseBuilder().member(id).notFound().errorCode(HttpStatus.NOT_FOUND))
+        .expect(
+          new ResponseBuilder()
+            .member(id)
+            .notFound()
+            .errorCode(HttpStatus.NOT_FOUND)
+        )
     })
   })
 
@@ -161,7 +208,12 @@ describe('MembersModule (e2e)', () => {
         .post('/members')
         .send(memberMock)
         .expect(HttpStatus.CONFLICT)
-        .expect(new ResponseBuilder().member().conflict('stage_name').errorCode(HttpStatus.CONFLICT))
+        .expect(
+          new ResponseBuilder()
+            .member()
+            .conflict('stage_name')
+            .errorCode(HttpStatus.CONFLICT)
+        )
     })
 
     it(`/members/:id (PATCH) :: CONFLICT - member already exists`, () => {
@@ -169,14 +221,24 @@ describe('MembersModule (e2e)', () => {
         .patch(`/members/${memberMock.id}`)
         .send({ stage_name: memberMock.stage_name })
         .expect(HttpStatus.CONFLICT)
-        .expect(new ResponseBuilder().member().conflict('stage_name').errorCode(HttpStatus.CONFLICT))
+        .expect(
+          new ResponseBuilder()
+            .member()
+            .conflict('stage_name')
+            .errorCode(HttpStatus.CONFLICT)
+        )
     })
 
     it(`/members/:id (DELETE) :: CONFLICT - member has dependencies`, () => {
       return request(app.getHttpServer())
         .delete(`/members/${memberMock.id}`)
         .expect(HttpStatus.CONFLICT)
-        .expect(new ResponseBuilder().member(memberMock.id).conflict().errorCode(HttpStatus.CONFLICT))
+        .expect(
+          new ResponseBuilder()
+            .member(memberMock.id)
+            .conflict()
+            .errorCode(HttpStatus.CONFLICT)
+        )
     })
   })
 
@@ -192,7 +254,12 @@ describe('MembersModule (e2e)', () => {
         .post('/members')
         .send({ ...memberMock, user_id: id })
         .expect(HttpStatus.NOT_FOUND)
-        .expect(new ResponseBuilder().member().fkNotFound('User', id).errorCode(HttpStatus.NOT_FOUND))
+        .expect(
+          new ResponseBuilder()
+            .member()
+            .fkNotFound('User', id)
+            .errorCode(HttpStatus.NOT_FOUND)
+        )
     })
 
     it(`/members/:id (PATCH) :: NOT_FOUND - member has invalid fk`, () => {
@@ -201,7 +268,12 @@ describe('MembersModule (e2e)', () => {
         .patch(`/members/${memberMock.id}`)
         .send({ user_id: id })
         .expect(HttpStatus.NOT_FOUND)
-        .expect(new ResponseBuilder().member().fkNotFound('User', id).errorCode(HttpStatus.NOT_FOUND))
+        .expect(
+          new ResponseBuilder()
+            .member()
+            .fkNotFound('User', id)
+            .errorCode(HttpStatus.NOT_FOUND)
+        )
     })
   })
 
@@ -215,14 +287,22 @@ describe('MembersModule (e2e)', () => {
       return request(app.getHttpServer())
         .get('/members')
         .expect(HttpStatus.INTERNAL_SERVER_ERROR)
-        .expect(new ResponseBuilder().unexpected().errorCode(HttpStatus.INTERNAL_SERVER_ERROR))
+        .expect(
+          new ResponseBuilder()
+            .unexpected()
+            .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)
+        )
     })
 
     it(`/members/:id (GET) :: ISE - server error`, () => {
       return request(app.getHttpServer())
         .get(`/members/${memberMock.id}`)
         .expect(HttpStatus.INTERNAL_SERVER_ERROR)
-        .expect(new ResponseBuilder().unexpected().errorCode(HttpStatus.INTERNAL_SERVER_ERROR))
+        .expect(
+          new ResponseBuilder()
+            .unexpected()
+            .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)
+        )
     })
 
     it('/members (POST) :: ISE - server error', () => {
@@ -230,7 +310,11 @@ describe('MembersModule (e2e)', () => {
         .post('/members')
         .send(memberMock)
         .expect(HttpStatus.INTERNAL_SERVER_ERROR)
-        .expect(new ResponseBuilder().unexpected().errorCode(HttpStatus.INTERNAL_SERVER_ERROR))
+        .expect(
+          new ResponseBuilder()
+            .unexpected()
+            .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)
+        )
     })
 
     it(`/members/:id (PATCH) :: ISE - server error`, () => {
@@ -238,14 +322,22 @@ describe('MembersModule (e2e)', () => {
         .patch(`/members/${memberMock.id}`)
         .send({ name: faker.person.fullName() })
         .expect(HttpStatus.INTERNAL_SERVER_ERROR)
-        .expect(new ResponseBuilder().unexpected().errorCode(HttpStatus.INTERNAL_SERVER_ERROR))
+        .expect(
+          new ResponseBuilder()
+            .unexpected()
+            .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)
+        )
     })
 
     it(`/members/:id (DELETE) :: ISE - server error`, () => {
       return request(app.getHttpServer())
         .delete(`/members/${memberMock.id}`)
         .expect(HttpStatus.INTERNAL_SERVER_ERROR)
-        .expect(new ResponseBuilder().unexpected().errorCode(HttpStatus.INTERNAL_SERVER_ERROR))
+        .expect(
+          new ResponseBuilder()
+            .unexpected()
+            .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)
+        )
     })
   })
 })

@@ -1,7 +1,13 @@
 import { Member } from '#app/members/entities/member.entity'
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm'
 
 @Entity('channels')
 export class Channel {

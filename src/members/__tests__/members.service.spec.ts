@@ -21,7 +21,10 @@ describe('MembersService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [MembersService, { provide: MembersRepository, useValue: mockRepository(memberMock) }],
+      providers: [
+        MembersService,
+        { provide: MembersRepository, useValue: mockRepository(memberMock) },
+      ],
     }).compile()
 
     service = module.get<MembersService>(MembersService)
@@ -40,11 +43,15 @@ describe('MembersService', () => {
     })
 
     it('should throw error on creation if member already exists', async () => {
-      repository.create = jest.fn().mockRejectedValue(new UniqueViolationError())
+      repository.create = jest
+        .fn()
+        .mockRejectedValue(new UniqueViolationError())
       try {
         await service.create(createMemberMock)
       } catch (error) {
-        expect(error.message).toEqual(new ResponseBuilder().member().conflict('stage_name').msg)
+        expect(error.message).toEqual(
+          new ResponseBuilder().member().conflict('stage_name').msg
+        )
       }
     })
 
@@ -53,7 +60,11 @@ describe('MembersService', () => {
       try {
         await service.create(createMemberMock)
       } catch (error) {
-        expect(error.message).toEqual(new ResponseBuilder().member().fkNotFound('User', createMemberMock.user_id).msg)
+        expect(error.message).toEqual(
+          new ResponseBuilder()
+            .member()
+            .fkNotFound('User', createMemberMock.user_id).msg
+        )
       }
     })
 
@@ -95,7 +106,9 @@ describe('MembersService', () => {
       try {
         await service.findOne(invalidId)
       } catch (error) {
-        expect(error.message).toEqual(new ResponseBuilder().member(invalidId).notFound().msg)
+        expect(error.message).toEqual(
+          new ResponseBuilder().member(invalidId).notFound().msg
+        )
       }
     })
 
@@ -112,42 +125,65 @@ describe('MembersService', () => {
   describe('update', () => {
     it('should update a member by id', async () => {
       const stageName = faker.person.firstName()
-      const updateResult = await service.update(memberMock.id, { stage_name: stageName })
-      expect(updateResult).toEqual(new ResponseBuilder().member(memberMock.id).updated({ stage_name: stageName }))
+      const updateResult = await service.update(memberMock.id, {
+        stage_name: stageName,
+      })
+      expect(updateResult).toEqual(
+        new ResponseBuilder()
+          .member(memberMock.id)
+          .updated({ stage_name: stageName })
+      )
     })
 
     it('should throw error on update if member not found', async () => {
       const invalidId = faker.string.uuid()
       repository.update = jest.fn().mockRejectedValue(new UnaffectedError())
       try {
-        await service.update(invalidId, { stage_name: faker.person.firstName() })
+        await service.update(invalidId, {
+          stage_name: faker.person.firstName(),
+        })
       } catch (error) {
-        expect(error.message).toEqual(new ResponseBuilder().member(invalidId).notFound().msg)
+        expect(error.message).toEqual(
+          new ResponseBuilder().member(invalidId).notFound().msg
+        )
       }
     })
 
     it('should throw error on update if member already exists', async () => {
-      repository.update = jest.fn().mockRejectedValue(new UniqueViolationError())
+      repository.update = jest
+        .fn()
+        .mockRejectedValue(new UniqueViolationError())
       try {
-        await service.update(memberMock.id, { stage_name: faker.person.firstName() })
+        await service.update(memberMock.id, {
+          stage_name: faker.person.firstName(),
+        })
       } catch (error) {
-        expect(error.message).toEqual(new ResponseBuilder().member().conflict('stage_name').msg)
+        expect(error.message).toEqual(
+          new ResponseBuilder().member().conflict('stage_name').msg
+        )
       }
     })
 
     it('should throw error on update if referenced user does not exist', async () => {
       repository.update = jest.fn().mockRejectedValue(new FKViolationError())
       try {
-        await service.update(memberMock.id, { stage_name: faker.person.firstName() })
+        await service.update(memberMock.id, {
+          stage_name: faker.person.firstName(),
+        })
       } catch (error) {
-        expect(error.message).toEqual(new ResponseBuilder().member().fkNotFound('User', memberMock.user_id).msg)
+        expect(error.message).toEqual(
+          new ResponseBuilder().member().fkNotFound('User', memberMock.user_id)
+            .msg
+        )
       }
     })
 
     it('should throw error on update if unexpected error occurs', async () => {
       repository.update = jest.fn().mockRejectedValue(new Error())
       try {
-        await service.update(memberMock.id, { stage_name: faker.person.firstName() })
+        await service.update(memberMock.id, {
+          stage_name: faker.person.firstName(),
+        })
       } catch (error) {
         expect(error.message).toEqual(new ResponseBuilder().unexpected().msg)
       }
@@ -157,7 +193,9 @@ describe('MembersService', () => {
   describe('remove', () => {
     it('should remove a member by id', async () => {
       const deleteResult = await service.remove(memberMock.id)
-      expect(deleteResult).toEqual(new ResponseBuilder().member(memberMock.id).deleted())
+      expect(deleteResult).toEqual(
+        new ResponseBuilder().member(memberMock.id).deleted()
+      )
     })
 
     it('should throw error on remove if member not found', async () => {
@@ -166,7 +204,9 @@ describe('MembersService', () => {
       try {
         await service.remove(invalidId)
       } catch (error) {
-        expect(error.message).toEqual(new ResponseBuilder().member(invalidId).notFound().msg)
+        expect(error.message).toEqual(
+          new ResponseBuilder().member(invalidId).notFound().msg
+        )
       }
     })
 
@@ -175,7 +215,9 @@ describe('MembersService', () => {
       try {
         await service.remove(memberMock.id)
       } catch (error) {
-        expect(error.message).toEqual(new ResponseBuilder().member(memberMock.id).conflict().msg)
+        expect(error.message).toEqual(
+          new ResponseBuilder().member(memberMock.id).conflict().msg
+        )
       }
     })
 

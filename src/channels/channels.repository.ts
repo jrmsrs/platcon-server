@@ -19,8 +19,10 @@ import {
 @Injectable()
 export class ChannelsRepository {
   constructor(
-    @InjectRepository(Channel) private readonly channelRepository: Repository<Channel>,
-    @InjectRepository(Member) private readonly memberRepository: Repository<Member>
+    @InjectRepository(Channel)
+    private readonly channelRepository: Repository<Channel>,
+    @InjectRepository(Member)
+    private readonly memberRepository: Repository<Member>
   ) {}
 
   async create(data: CreateChannelDto): Promise<Channel> {
@@ -28,13 +30,16 @@ export class ChannelsRepository {
       let members: Member[]
       let membersCount: number
       if (data.members) {
-        ;[members, membersCount] = await this.memberRepository.findAndCount({ where: { id: In(data.members) } })
+        ;[members, membersCount] = await this.memberRepository.findAndCount({
+          where: { id: In(data.members) },
+        })
         if (membersCount !== data.members.length) throw new FKViolationError()
       }
       const channel = this.channelRepository.create({ ...data, members })
       return await this.channelRepository.save(channel)
     } catch (error) {
-      if (error.driverError?.code === PgError.UNIQUE_VIOLATION) throw new UniqueViolationError()
+      if (error.driverError?.code === PgError.UNIQUE_VIOLATION)
+        throw new UniqueViolationError()
       if (error instanceof FKViolationError) throw error
       throw new UnexpectedError(error.message)
     }
@@ -50,7 +55,10 @@ export class ChannelsRepository {
 
   async findOne(id: string): Promise<Channel> {
     try {
-      const res = await this.channelRepository.findOne({ where: { id }, relations: ['members'] })
+      const res = await this.channelRepository.findOne({
+        where: { id },
+        relations: ['members'],
+      })
       if (!res) throw new NotFoundError()
       return res
     } catch (error) {
@@ -61,17 +69,21 @@ export class ChannelsRepository {
 
   async update(id: string, data: UpdateChannelDto): Promise<UpdateResult> {
     try {
-      if ((await this.channelRepository.count({ where: { id } })) === 0) throw new UnaffectedError()
+      if ((await this.channelRepository.count({ where: { id } })) === 0)
+        throw new UnaffectedError()
       let members: Member[]
       let membersCount: number
       if (data.members) {
-        ;[members, membersCount] = await this.memberRepository.findAndCount({ where: { id: In(data.members) } })
+        ;[members, membersCount] = await this.memberRepository.findAndCount({
+          where: { id: In(data.members) },
+        })
         if (membersCount !== data.members.length) throw new FKViolationError()
       }
       const res = await this.channelRepository.save({ id, ...data, members })
       return { raw: [res], affected: 1 } as UpdateResult // temporary
     } catch (error) {
-      if (error.driverError?.code === PgError.UNIQUE_VIOLATION) throw new UniqueViolationError()
+      if (error.driverError?.code === PgError.UNIQUE_VIOLATION)
+        throw new UniqueViolationError()
       if (error instanceof UnaffectedError) throw error
       if (error instanceof FKViolationError) throw error
       throw new UnexpectedError(error.message)
@@ -84,7 +96,8 @@ export class ChannelsRepository {
       if (!res.affected) throw new UnaffectedError()
       return res
     } catch (error) {
-      if (error.name === PgError.FOREIGN_KEY_VIOLATION) throw new StateConflictError()
+      if (error.name === PgError.FOREIGN_KEY_VIOLATION)
+        throw new StateConflictError()
       if (error instanceof UnaffectedError) throw error
       throw new UnexpectedError(error.message)
     }
