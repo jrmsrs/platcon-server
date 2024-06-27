@@ -6,7 +6,13 @@ import { ChannelsService } from '#channels/channels.service'
 import { ChannelsRepository } from '#channels/channels.repository'
 import { channelMock, createChannelMock } from '#channels/__mocks__'
 import { ResponseBuilder } from '#utils/resBuilder.util'
-import { FKViolationError, StateConflictError, UnaffectedError, UniqueViolationError } from '#utils/errors'
+import {
+  NotFoundError,
+  FKViolationError,
+  StateConflictError,
+  UnaffectedError,
+  UniqueViolationError,
+} from '#utils/errors'
 import { mockRepository } from '#utils/mock'
 
 describe('ChannelsService', () => {
@@ -66,6 +72,15 @@ describe('ChannelsService', () => {
       const channels = await service.findAll()
       expect(channels).toEqual([channelMock])
     })
+
+    it('should throw error on retrieval if unexpected error occurs', async () => {
+      repository.findAll = jest.fn().mockRejectedValue(new Error())
+      try {
+        await service.findAll()
+      } catch (error) {
+        expect(error.message).toEqual(new ResponseBuilder().unexpected().msg)
+      }
+    })
   })
 
   describe('findOne', () => {
@@ -76,11 +91,20 @@ describe('ChannelsService', () => {
 
     it('should throw error on retrieval if channel not found', async () => {
       const invalidId = faker.string.uuid()
-      repository.findOne = jest.fn().mockResolvedValue(null)
+      repository.findOne = jest.fn().mockRejectedValue(new NotFoundError())
       try {
         await service.findOne(invalidId)
       } catch (error) {
         expect(error.message).toEqual(new ResponseBuilder().channel(invalidId).notFound().msg)
+      }
+    })
+
+    it('should throw error on retrieval if unexpected error occurs', async () => {
+      repository.findOne = jest.fn().mockRejectedValue(new Error())
+      try {
+        await service.findOne(channelMock.id)
+      } catch (error) {
+        expect(error.message).toEqual(new ResponseBuilder().unexpected().msg)
       }
     })
   })
@@ -94,7 +118,7 @@ describe('ChannelsService', () => {
 
     it('should throw error on update if channel not found', async () => {
       const invalidId = faker.string.uuid()
-      repository.update = jest.fn().mockResolvedValue({ raw: [], affected: 0 })
+      repository.update = jest.fn().mockRejectedValue(new UnaffectedError())
       try {
         await service.update(invalidId, { name: faker.lorem.word() })
       } catch (error) {
@@ -138,7 +162,7 @@ describe('ChannelsService', () => {
 
     it('should throw error on remove if channel not found', async () => {
       const invalidId = faker.string.uuid()
-      repository.remove = jest.fn().mockResolvedValue(new UnaffectedError())
+      repository.remove = jest.fn().mockRejectedValue(new UnaffectedError())
       try {
         await service.remove(invalidId)
       } catch (error) {

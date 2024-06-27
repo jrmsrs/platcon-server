@@ -89,6 +89,7 @@ describe('ChannelsRepository', () => {
       const updateResult: UpdateResult = { raw: [channel], affected: 1 } as UpdateResult
       jest.spyOn(memberRepository, 'findAndCount').mockResolvedValue([[memberMock], 1])
       jest.spyOn(channelRepository, 'save').mockResolvedValue(channel)
+      jest.spyOn(channelRepository, 'count').mockResolvedValue(1)
 
       const result = await repository.update(id, updateChannelDto)
 

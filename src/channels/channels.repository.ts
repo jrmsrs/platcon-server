@@ -8,6 +8,7 @@ import { Channel } from '#channels/entities/channel.entity'
 import { CreateChannelDto, UpdateChannelDto } from '#channels/dto'
 import { Member } from '#members/entities/member.entity'
 import {
+  NotFoundError,
   FKViolationError,
   StateConflictError,
   UnaffectedError,
@@ -41,7 +42,7 @@ export class ChannelsRepository {
 
   async findAll(): Promise<Channel[]> {
     try {
-      return this.channelRepository.find({ relations: ['members'] })
+      return await this.channelRepository.find({ relations: ['members'] })
     } catch (error) {
       throw new UnexpectedError(error.message)
     }
@@ -49,14 +50,18 @@ export class ChannelsRepository {
 
   async findOne(id: string): Promise<Channel> {
     try {
-      return this.channelRepository.findOne({ where: { id }, relations: ['members'] })
+      const res = await this.channelRepository.findOne({ where: { id }, relations: ['members'] })
+      if (!res) throw new NotFoundError()
+      return res
     } catch (error) {
+      if (error instanceof NotFoundError) throw error
       throw new UnexpectedError(error.message)
     }
   }
 
   async update(id: string, data: UpdateChannelDto): Promise<UpdateResult> {
     try {
+      if ((await this.channelRepository.count({ where: { id } })) === 0) throw new UnaffectedError()
       let members: Member[]
       let membersCount: number
       if (data.members) {
@@ -67,6 +72,7 @@ export class ChannelsRepository {
       return { raw: [res], affected: 1 } as UpdateResult // temporary
     } catch (error) {
       if (error.name === PgError.UNIQUE_VIOLATION) throw new UniqueViolationError()
+      if (error instanceof NotFoundError) throw error
       if (error instanceof FKViolationError) throw error
       throw new UnexpectedError(error.message)
     }

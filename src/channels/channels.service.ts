@@ -51,6 +51,7 @@ export class ChannelsService {
   async update(id: string, channel: UpdateChannelDto) {
     try {
       await this.channelsRepository.update(id, channel)
+      return new ResponseBuilder().channel(id).updated(channel)
     } catch (error) {
       if (error instanceof UniqueViolationError) {
         throw new UnprocessableEntityException(new ResponseBuilder().channel().conflict('name').msg)
@@ -58,15 +59,17 @@ export class ChannelsService {
       if (error instanceof FKViolationError) {
         throw new UnprocessableEntityException(new ResponseBuilder().channel().fkNotFound('Members').msg)
       }
+      if (error instanceof UnaffectedError) {
+        throw new UnprocessableEntityException(new ResponseBuilder().channel(id).notFound().msg)
+      }
       throw new UnprocessableEntityException(new ResponseBuilder().unexpected().msg)
     }
-
-    return new ResponseBuilder().channel(id).updated(channel)
   }
 
   async remove(id: string) {
     try {
       await this.channelsRepository.remove(id)
+      return new ResponseBuilder().channel(id).deleted()
     } catch (error) {
       if (error instanceof StateConflictError) {
         throw new ConflictException(new ResponseBuilder().channel(id).conflict().msg)
@@ -76,7 +79,5 @@ export class ChannelsService {
       }
       throw new UnprocessableEntityException(new ResponseBuilder().unexpected().msg)
     }
-
-    return new ResponseBuilder().channel(id).deleted()
   }
 }
