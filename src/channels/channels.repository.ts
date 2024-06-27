@@ -32,9 +32,9 @@ export class ChannelsRepository {
         if (membersCount !== data.members.length) throw new FKViolationError()
       }
       const channel = this.channelRepository.create({ ...data, members })
-      return this.channelRepository.save(channel)
+      return await this.channelRepository.save(channel)
     } catch (error) {
-      if (error.name === PgError.UNIQUE_VIOLATION) throw new UniqueViolationError()
+      if (error.driverError?.code === PgError.UNIQUE_VIOLATION) throw new UniqueViolationError()
       if (error instanceof FKViolationError) throw error
       throw new UnexpectedError(error.message)
     }
@@ -71,8 +71,8 @@ export class ChannelsRepository {
       const res = await this.channelRepository.save({ id, ...data, members })
       return { raw: [res], affected: 1 } as UpdateResult // temporary
     } catch (error) {
-      if (error.name === PgError.UNIQUE_VIOLATION) throw new UniqueViolationError()
-      if (error instanceof NotFoundError) throw error
+      if (error.driverError?.code === PgError.UNIQUE_VIOLATION) throw new UniqueViolationError()
+      if (error instanceof UnaffectedError) throw error
       if (error instanceof FKViolationError) throw error
       throw new UnexpectedError(error.message)
     }
