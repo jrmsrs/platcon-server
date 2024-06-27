@@ -1,4 +1,9 @@
-import { ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common'
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+  InternalServerErrorException as ISEException,
+} from '@nestjs/common'
 
 import { ChannelsRepository } from '#channels/channels.repository'
 import { CreateChannelDto, UpdateChannelDto } from '#channels/dto'
@@ -20,12 +25,12 @@ export class ChannelsService {
       return await this.channelsRepository.create(channel)
     } catch (error) {
       if (error instanceof UniqueViolationError) {
-        throw new UnprocessableEntityException(new ResponseBuilder().channel().conflict('name').msg)
+        throw new ConflictException(new ResponseBuilder().channel().conflict('name').msg)
       }
       if (error instanceof FKViolationError) {
-        throw new UnprocessableEntityException(new ResponseBuilder().channel().fkNotFound('Members').msg)
+        throw new NotFoundException(new ResponseBuilder().channel().fkNotFound('Members').msg)
       }
-      throw new UnprocessableEntityException(new ResponseBuilder().unexpected().msg)
+      throw new ISEException(new ResponseBuilder().unexpected().msg)
     }
   }
 
@@ -33,7 +38,7 @@ export class ChannelsService {
     try {
       return await this.channelsRepository.findAll()
     } catch (error) {
-      throw new UnprocessableEntityException(new ResponseBuilder().unexpected().msg)
+      throw new ISEException(new ResponseBuilder().unexpected().msg)
     }
   }
 
@@ -44,7 +49,7 @@ export class ChannelsService {
       if (error instanceof NotFoundError) {
         throw new NotFoundException(new ResponseBuilder().channel(id).notFound().msg)
       }
-      throw new UnprocessableEntityException(new ResponseBuilder().unexpected().msg)
+      throw new ISEException(new ResponseBuilder().unexpected().msg)
     }
   }
 
@@ -54,15 +59,15 @@ export class ChannelsService {
       return new ResponseBuilder().channel(id).updated(channel)
     } catch (error) {
       if (error instanceof UniqueViolationError) {
-        throw new UnprocessableEntityException(new ResponseBuilder().channel().conflict('name').msg)
+        throw new ISEException(new ResponseBuilder().channel().conflict('name').msg)
       }
       if (error instanceof FKViolationError) {
-        throw new UnprocessableEntityException(new ResponseBuilder().channel().fkNotFound('Members').msg)
+        throw new NotFoundException(new ResponseBuilder().channel().fkNotFound('Members').msg)
       }
       if (error instanceof UnaffectedError) {
-        throw new UnprocessableEntityException(new ResponseBuilder().channel(id).notFound().msg)
+        throw new NotFoundException(new ResponseBuilder().channel(id).notFound().msg)
       }
-      throw new UnprocessableEntityException(new ResponseBuilder().unexpected().msg)
+      throw new ISEException(new ResponseBuilder().unexpected().msg)
     }
   }
 
@@ -75,9 +80,9 @@ export class ChannelsService {
         throw new ConflictException(new ResponseBuilder().channel(id).conflict().msg)
       }
       if (error instanceof UnaffectedError) {
-        throw new UnprocessableEntityException(new ResponseBuilder().channel(id).notFound().msg)
+        throw new NotFoundException(new ResponseBuilder().channel(id).notFound().msg)
       }
-      throw new UnprocessableEntityException(new ResponseBuilder().unexpected().msg)
+      throw new ISEException(new ResponseBuilder().unexpected().msg)
     }
   }
 }

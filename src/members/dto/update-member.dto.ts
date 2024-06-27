@@ -3,7 +3,7 @@ import { IsUUID } from 'class-validator'
 
 import { CreateMemberDto } from '#members/dto'
 
-export class FindOneParams {
+export class MemberId {
   @IsUUID('4')
   @ApiProperty({ description: 'Member UUID' })
   id: string

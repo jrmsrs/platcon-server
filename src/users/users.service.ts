@@ -1,4 +1,9 @@
-import { ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common'
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+  InternalServerErrorException as ISEException,
+} from '@nestjs/common'
 
 import { UsersRepository } from '#users/users.repository'
 import { CreateUserDto, UpdateUserDto } from '#users/dto'
@@ -16,7 +21,7 @@ export class UsersService {
       if (error instanceof UniqueViolationError) {
         throw new ConflictException(new ResponseBuilder().user().conflict('email').msg)
       }
-      throw new UnprocessableEntityException(new ResponseBuilder().unexpected().msg)
+      throw new ISEException(new ResponseBuilder().unexpected().msg)
     }
   }
 
@@ -24,7 +29,7 @@ export class UsersService {
     try {
       return await this.usersRepository.findAll()
     } catch (error) {
-      throw new UnprocessableEntityException(new ResponseBuilder().unexpected().msg)
+      throw new ISEException(new ResponseBuilder().unexpected().msg)
     }
   }
 
@@ -35,7 +40,7 @@ export class UsersService {
       if (error instanceof NotFoundError) {
         throw new NotFoundException(new ResponseBuilder().user(id).notFound().msg)
       }
-      throw new UnprocessableEntityException(new ResponseBuilder().unexpected().msg)
+      throw new ISEException(new ResponseBuilder().unexpected().msg)
     }
   }
 
@@ -50,7 +55,7 @@ export class UsersService {
       if (error instanceof UnaffectedError) {
         throw new NotFoundException(new ResponseBuilder().user(id).notFound().msg)
       }
-      throw new UnprocessableEntityException(new ResponseBuilder().unexpected().msg)
+      throw new ISEException(new ResponseBuilder().unexpected().msg)
     }
   }
 
@@ -65,7 +70,7 @@ export class UsersService {
       if (error instanceof UnaffectedError) {
         throw new NotFoundException(new ResponseBuilder().user(id).notFound().msg)
       }
-      throw new UnprocessableEntityException(new ResponseBuilder().unexpected().msg)
+      throw new ISEException(new ResponseBuilder().unexpected().msg)
     }
   }
 }

@@ -24,6 +24,7 @@ Retrieve all channels
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 | Channels retrieved successfully | [ [Channel](#channel) ] |
+| 500 | Unexpected error | [ErrorMessage](#errormessage) |
 
 #### POST
 ##### Summary
@@ -40,8 +41,10 @@ Create channel
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 201 | Channel created successfully | [Channel](#channel) |
+| 201 | Channel created successfully | [ChannelId](#channelid) |
 | 400 | Bad request / invalid input | [ErrorMessage](#errormessage) |
+| 409 | Channel already exists | [ErrorMessage](#errormessage) |
+| 500 | Unexpected error | [ErrorMessage](#errormessage) |
 
 ### /channels/{id}
 
@@ -62,6 +65,8 @@ Delete channel by ID
 | ---- | ----------- | ------ |
 | 200 | Channel deleted successfully | [SuccessMessage](#successmessage) |
 | 404 | Channel not found | [ErrorMessage](#errormessage) |
+| 409 | Channel has dependencies | [ErrorMessage](#errormessage) |
+| 500 | Unexpected error | [ErrorMessage](#errormessage) |
 
 #### GET
 ##### Summary
@@ -80,6 +85,7 @@ Retrieve channel by ID
 | ---- | ----------- | ------ |
 | 200 | Channel retrieved successfully | [Channel](#channel) |
 | 404 | Channel not found | [ErrorMessage](#errormessage) |
+| 500 | Unexpected error | [ErrorMessage](#errormessage) |
 
 #### PATCH
 ##### Summary
@@ -100,6 +106,8 @@ Update channel by ID
 | 200 | Channel updated successfully | [SuccessMessage](#successmessage) |
 | 400 | Bad request / invalid input | [ErrorMessage](#errormessage) |
 | 404 | Channel not found | [ErrorMessage](#errormessage) |
+| 409 | Channel already exists | [ErrorMessage](#errormessage) |
+| 500 | Unexpected error | [ErrorMessage](#errormessage) |
 
 ---
 ## Members
@@ -122,6 +130,7 @@ Retrieve all members
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 | Members retrieved successfully | [ [Member](#member) ] |
+| 500 | Unexpected error | [ErrorMessage](#errormessage) |
 
 #### POST
 ##### Summary
@@ -138,8 +147,10 @@ Create member
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 201 | Member created successfully | [Member](#member) |
+| 201 | Member created successfully | [MemberId](#memberid) |
 | 400 | Bad request / invalid input | [ErrorMessage](#errormessage) |
+| 409 | Member already exists | [ErrorMessage](#errormessage) |
+| 500 | Unexpected error | [ErrorMessage](#errormessage) |
 
 ### /members/{id}
 
@@ -160,6 +171,8 @@ Delete member by ID
 | ---- | ----------- | ------ |
 | 200 | Member deleted successfully | [SuccessMessage](#successmessage) |
 | 404 | Member not found | [ErrorMessage](#errormessage) |
+| 409 | Member has dependencies | [ErrorMessage](#errormessage) |
+| 500 | Unexpected error | [ErrorMessage](#errormessage) |
 
 #### GET
 ##### Summary
@@ -178,6 +191,7 @@ Retrieve member by ID
 | ---- | ----------- | ------ |
 | 200 | Member retrieved successfully | [Member](#member) |
 | 404 | Member not found | [ErrorMessage](#errormessage) |
+| 500 | Unexpected error | [ErrorMessage](#errormessage) |
 
 #### PATCH
 ##### Summary
@@ -198,6 +212,8 @@ Update member by ID
 | 200 | Member updated successfully | [SuccessMessage](#successmessage) |
 | 400 | Bad request / invalid input | [ErrorMessage](#errormessage) |
 | 404 | Member not found | [ErrorMessage](#errormessage) |
+| 409 | Member already exists | [ErrorMessage](#errormessage) |
+| 500 | Unexpected error | [ErrorMessage](#errormessage) |
 
 ---
 ## Users
@@ -220,6 +236,7 @@ Retrieve all users
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
 | 200 | Users retrieved successfully | [ [User](#user) ] |
+| 500 | Unexpected error | [ErrorMessage](#errormessage) |
 
 #### POST
 ##### Summary
@@ -236,8 +253,10 @@ Create user
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 201 | User created successfully | [User](#user) |
+| 201 | User created successfully | [UserId](#userid) |
 | 400 | Bad request / invalid input | [ErrorMessage](#errormessage) |
+| 409 | User already exists | [ErrorMessage](#errormessage) |
+| 500 | Unexpected error | [ErrorMessage](#errormessage) |
 
 ### /users/{id}
 
@@ -258,6 +277,8 @@ Delete user by ID
 | ---- | ----------- | ------ |
 | 200 | User deleted successfully | [SuccessMessage](#successmessage) |
 | 404 | User not found | [ErrorMessage](#errormessage) |
+| 409 | User has dependencies | [ErrorMessage](#errormessage) |
+| 500 | Unexpected error | [ErrorMessage](#errormessage) |
 
 #### GET
 ##### Summary
@@ -276,6 +297,7 @@ Retrieve user by ID
 | ---- | ----------- | ------ |
 | 200 | User retrieved successfully | [User](#user) |
 | 404 | User not found | [ErrorMessage](#errormessage) |
+| 500 | Unexpected error | [ErrorMessage](#errormessage) |
 
 #### PATCH
 ##### Summary
@@ -296,6 +318,8 @@ Update user by ID
 | 200 | User updated successfully | [SuccessMessage](#successmessage) |
 | 400 | Bad request / invalid input | [ErrorMessage](#errormessage) |
 | 404 | User not found | [ErrorMessage](#errormessage) |
+| 409 | User already exists | [ErrorMessage](#errormessage) |
+| 500 | Unexpected error | [ErrorMessage](#errormessage) |
 
 ---
 ### Models
@@ -311,6 +335,12 @@ Update user by ID
 | logo_uri | string | Channel logo (Google Docs) URI | Yes |
 | members | [ string ] | Channel members | No |
 | name | string | Channel name | Yes |
+
+#### ChannelId
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| id | string | Channel UUID | Yes |
 
 #### CreateChannelDto
 
@@ -361,6 +391,12 @@ Update user by ID
 | user_id | string | Member user UUID | No |
 | website | [ string ] | Member website URLs | No |
 
+#### MemberId
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| id | string | Member UUID | Yes |
+
 #### SuccessMessage
 
 | Name | Type | Description | Required |
@@ -407,3 +443,9 @@ Update user by ID
 | name | string | User name | Yes |
 | password | string | User hashed password | No |
 | role | string | User role<br>*Enum:* `"producer"`, `"user"` | Yes |
+
+#### UserId
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| id | string | User UUID | Yes |

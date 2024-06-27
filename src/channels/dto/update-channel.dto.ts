@@ -3,7 +3,7 @@ import { IsUUID } from 'class-validator'
 
 import { CreateChannelDto } from '#channels/dto'
 
-export class FindOneParams {
+export class ChannelId {
   @IsUUID('4')
   @ApiProperty({ description: 'Channel UUID' })
   id: string
