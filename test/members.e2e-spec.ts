@@ -1,68 +1,46 @@
-import { Test, TestingModule } from '@nestjs/testing'
 import { HttpStatus, INestApplication } from '@nestjs/common'
 import * as request from 'supertest'
 
-import { getRepositoryToken } from '@nestjs/typeorm'
 import { faker } from '@faker-js/faker'
 
-import { mainConfig } from '#app/main.config'
+import { buildApp } from '#utils/test/e2e'
 import { ResponseBuilder } from '#utils/resBuilder.util'
-import { AppModule } from '#app/app.module'
 import { Member } from '#members/entities/member.entity'
-
-import { memberMock } from '#members/__mocks__/member.mock'
+import { memberMock } from '#members/__mocks__'
 import {
   mockOrmRepository,
-  mockOrmRepositoryConflict,
-  mockOrmRepositoryNotFound,
-  mockOrmRepositoryFKNotFound,
   mockOrmRepositoryServerError,
-} from '#test/__mocks__/orm-repository.mock'
-
-export const build = async (
-  mockRepository: object
-): Promise<INestApplication> => {
-  const moduleFixture: TestingModule = await Test.createTestingModule({
-    imports: [AppModule],
-  })
-    .overrideProvider(getRepositoryToken(Member))
-    .useValue(mockRepository)
-    .compile()
-
-  const appInstance = moduleFixture.createNestApplication()
-  mainConfig(appInstance)
-  return appInstance
-}
+  mockOrmRepositoryConflict,
+  mockOrmRepositoryFKNotFound,
+  mockOrmRepositoryNotFound,
+} from './__mocks__'
 
 describe('MembersModule (e2e)', () => {
   let app: INestApplication
 
   describe('MembersModule (e2e) happy path', () => {
     beforeEach(async () => {
-      app = await build(mockOrmRepository(memberMock))
+      app = await buildApp(mockOrmRepository(memberMock), Member)
       await app.init()
     })
 
     it('/members (GET) :: OK', () => {
       return request(app.getHttpServer())
         .get('/members')
-        .expect(HttpStatus.OK)
-        .expect([memberMock])
+        .expect(HttpStatus.OK, [memberMock])
     })
 
     it(`/members/:id (GET) :: OK`, () => {
       return request(app.getHttpServer())
         .get(`/members/${memberMock.id}`)
-        .expect(HttpStatus.OK)
-        .expect(memberMock)
+        .expect(HttpStatus.OK, memberMock)
     })
 
     it('/members (POST) :: CREATED', () => {
       return request(app.getHttpServer())
         .post('/members')
         .send(memberMock)
-        .expect(HttpStatus.CREATED)
-        .expect(memberMock)
+        .expect(HttpStatus.CREATED, memberMock)
     })
 
     it(`/members/:id (PATCH) :: OK`, () => {
@@ -70,8 +48,8 @@ describe('MembersModule (e2e)', () => {
       return request(app.getHttpServer())
         .patch(`/members/${memberMock.id}`)
         .send({ name: newName })
-        .expect(HttpStatus.OK)
         .expect(
+          HttpStatus.OK,
           new ResponseBuilder().member(memberMock.id).updated({ name: newName })
         )
     })
@@ -79,22 +57,24 @@ describe('MembersModule (e2e)', () => {
     it(`/members/:id (DELETE) :: OK`, () => {
       return request(app.getHttpServer())
         .delete(`/members/${memberMock.id}`)
-        .expect(HttpStatus.OK)
-        .expect(new ResponseBuilder().member(memberMock.id).deleted())
+        .expect(
+          HttpStatus.OK,
+          new ResponseBuilder().member(memberMock.id).deleted()
+        )
     })
   })
 
   describe('MembersModule (e2e) bad request path', () => {
     beforeEach(async () => {
-      app = await build(mockOrmRepository(memberMock))
+      app = await buildApp(mockOrmRepository(memberMock), Member)
       await app.init()
     })
 
     it(`/members/:id (GET) :: BAD_REQUEST - member invalid uuid`, () => {
       return request(app.getHttpServer())
         .get(`/members/${faker.lorem.word()}`)
-        .expect(HttpStatus.BAD_REQUEST)
         .expect(
+          HttpStatus.BAD_REQUEST,
           new ResponseBuilder()
             .mustBe('id', 'a UUID')
             .errorCode(HttpStatus.BAD_REQUEST)
@@ -105,8 +85,8 @@ describe('MembersModule (e2e)', () => {
       return request(app.getHttpServer())
         .post('/members')
         .send({ ...memberMock, website: [faker.number.int()] })
-        .expect(HttpStatus.BAD_REQUEST)
         .expect(
+          HttpStatus.BAD_REQUEST,
           new ResponseBuilder()
             .each()
             .mustBe('website', 'a URL address')
@@ -117,8 +97,8 @@ describe('MembersModule (e2e)', () => {
     it(`/members/:id (PATCH) :: BAD_REQUEST - member non uuid`, () => {
       return request(app.getHttpServer())
         .patch(`/members/${faker.lorem.word()}`)
-        .expect(HttpStatus.BAD_REQUEST)
         .expect(
+          HttpStatus.BAD_REQUEST,
           new ResponseBuilder()
             .mustBe('id', 'a UUID')
             .errorCode(HttpStatus.BAD_REQUEST)
@@ -129,8 +109,8 @@ describe('MembersModule (e2e)', () => {
       return request(app.getHttpServer())
         .patch(`/members/${memberMock.id}`)
         .send({ website: [faker.number.int] })
-        .expect(HttpStatus.BAD_REQUEST)
         .expect(
+          HttpStatus.BAD_REQUEST,
           new ResponseBuilder()
             .each()
             .mustBe('website', 'a URL address')
@@ -141,8 +121,8 @@ describe('MembersModule (e2e)', () => {
     it(`/members/:id (DELETE) :: BAD_REQUEST - member invalid uuid`, () => {
       return request(app.getHttpServer())
         .delete(`/members/${faker.lorem.word()}`)
-        .expect(HttpStatus.BAD_REQUEST)
         .expect(
+          HttpStatus.BAD_REQUEST,
           new ResponseBuilder()
             .mustBe('id', 'a UUID')
             .errorCode(HttpStatus.BAD_REQUEST)
@@ -152,7 +132,7 @@ describe('MembersModule (e2e)', () => {
 
   describe('MembersModule (e2e) not found path', () => {
     beforeEach(async () => {
-      app = await build(mockOrmRepositoryNotFound())
+      app = await buildApp(mockOrmRepositoryNotFound(), Member)
       await app.init()
     })
 
@@ -160,8 +140,8 @@ describe('MembersModule (e2e)', () => {
       const id = faker.string.uuid()
       return request(app.getHttpServer())
         .get(`/members/${id}`)
-        .expect(HttpStatus.NOT_FOUND)
         .expect(
+          HttpStatus.NOT_FOUND,
           new ResponseBuilder()
             .member(id)
             .notFound()
@@ -174,8 +154,8 @@ describe('MembersModule (e2e)', () => {
       return request(app.getHttpServer())
         .patch(`/members/${id}`)
         .send({ name: faker.person.fullName() })
-        .expect(HttpStatus.NOT_FOUND)
         .expect(
+          HttpStatus.NOT_FOUND,
           new ResponseBuilder()
             .member(id)
             .notFound()
@@ -187,8 +167,8 @@ describe('MembersModule (e2e)', () => {
       const id = faker.string.uuid()
       return request(app.getHttpServer())
         .delete(`/members/${id}`)
-        .expect(HttpStatus.NOT_FOUND)
         .expect(
+          HttpStatus.NOT_FOUND,
           new ResponseBuilder()
             .member(id)
             .notFound()
@@ -199,7 +179,7 @@ describe('MembersModule (e2e)', () => {
 
   describe('MembersModule (e2e) conflict path', () => {
     beforeEach(async () => {
-      app = await build(mockOrmRepositoryConflict())
+      app = await buildApp(mockOrmRepositoryConflict(), Member)
       await app.init()
     })
 
@@ -207,8 +187,8 @@ describe('MembersModule (e2e)', () => {
       return request(app.getHttpServer())
         .post('/members')
         .send(memberMock)
-        .expect(HttpStatus.CONFLICT)
         .expect(
+          HttpStatus.CONFLICT,
           new ResponseBuilder()
             .member()
             .conflict('stage_name')
@@ -220,8 +200,8 @@ describe('MembersModule (e2e)', () => {
       return request(app.getHttpServer())
         .patch(`/members/${memberMock.id}`)
         .send({ stage_name: memberMock.stage_name })
-        .expect(HttpStatus.CONFLICT)
         .expect(
+          HttpStatus.CONFLICT,
           new ResponseBuilder()
             .member()
             .conflict('stage_name')
@@ -232,8 +212,8 @@ describe('MembersModule (e2e)', () => {
     it(`/members/:id (DELETE) :: CONFLICT - member has dependencies`, () => {
       return request(app.getHttpServer())
         .delete(`/members/${memberMock.id}`)
-        .expect(HttpStatus.CONFLICT)
         .expect(
+          HttpStatus.CONFLICT,
           new ResponseBuilder()
             .member(memberMock.id)
             .conflict()
@@ -244,7 +224,7 @@ describe('MembersModule (e2e)', () => {
 
   describe('MembersModule (e2e) fk not found path', () => {
     beforeEach(async () => {
-      app = await build(mockOrmRepositoryFKNotFound())
+      app = await buildApp(mockOrmRepositoryFKNotFound(), Member)
       await app.init()
     })
 
@@ -253,8 +233,8 @@ describe('MembersModule (e2e)', () => {
       return request(app.getHttpServer())
         .post('/members')
         .send({ ...memberMock, user_id: id })
-        .expect(HttpStatus.NOT_FOUND)
         .expect(
+          HttpStatus.NOT_FOUND,
           new ResponseBuilder()
             .member()
             .fkNotFound('User', id)
@@ -267,8 +247,8 @@ describe('MembersModule (e2e)', () => {
       return request(app.getHttpServer())
         .patch(`/members/${memberMock.id}`)
         .send({ user_id: id })
-        .expect(HttpStatus.NOT_FOUND)
         .expect(
+          HttpStatus.NOT_FOUND,
           new ResponseBuilder()
             .member()
             .fkNotFound('User', id)
@@ -279,15 +259,15 @@ describe('MembersModule (e2e)', () => {
 
   describe('MembersModule (e2e) ISE path', () => {
     beforeEach(async () => {
-      app = await build(mockOrmRepositoryServerError())
+      app = await buildApp(mockOrmRepositoryServerError(), Member)
       await app.init()
     })
 
     it('/members (GET) :: ISE - server error', () => {
       return request(app.getHttpServer())
         .get('/members')
-        .expect(HttpStatus.INTERNAL_SERVER_ERROR)
         .expect(
+          HttpStatus.INTERNAL_SERVER_ERROR,
           new ResponseBuilder()
             .unexpected()
             .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -297,8 +277,8 @@ describe('MembersModule (e2e)', () => {
     it(`/members/:id (GET) :: ISE - server error`, () => {
       return request(app.getHttpServer())
         .get(`/members/${memberMock.id}`)
-        .expect(HttpStatus.INTERNAL_SERVER_ERROR)
         .expect(
+          HttpStatus.INTERNAL_SERVER_ERROR,
           new ResponseBuilder()
             .unexpected()
             .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -309,8 +289,8 @@ describe('MembersModule (e2e)', () => {
       return request(app.getHttpServer())
         .post('/members')
         .send(memberMock)
-        .expect(HttpStatus.INTERNAL_SERVER_ERROR)
         .expect(
+          HttpStatus.INTERNAL_SERVER_ERROR,
           new ResponseBuilder()
             .unexpected()
             .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -321,8 +301,8 @@ describe('MembersModule (e2e)', () => {
       return request(app.getHttpServer())
         .patch(`/members/${memberMock.id}`)
         .send({ name: faker.person.fullName() })
-        .expect(HttpStatus.INTERNAL_SERVER_ERROR)
         .expect(
+          HttpStatus.INTERNAL_SERVER_ERROR,
           new ResponseBuilder()
             .unexpected()
             .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -332,8 +312,8 @@ describe('MembersModule (e2e)', () => {
     it(`/members/:id (DELETE) :: ISE - server error`, () => {
       return request(app.getHttpServer())
         .delete(`/members/${memberMock.id}`)
-        .expect(HttpStatus.INTERNAL_SERVER_ERROR)
         .expect(
+          HttpStatus.INTERNAL_SERVER_ERROR,
           new ResponseBuilder()
             .unexpected()
             .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)

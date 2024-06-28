@@ -12,7 +12,7 @@ import { CreateMemberDto } from '#members/dto'
 
 import { memberMock, createMemberMock } from '#members/__mocks__'
 import { ResponseBuilder } from '#utils/resBuilder.util'
-import { testController } from '#utils/test'
+import { testController } from '#utils/test/unit'
 
 describe('MembersController', () => {
   let controller: MembersController

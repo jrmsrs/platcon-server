@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 
 import { Channel } from '#channels/entities/channel.entity'
-import { memberMock } from '#app/members/__mocks__/member.mock'
+import { memberMock } from '#app/members/__mocks__'
 
 export const channelMock: Channel = {
   id: faker.string.uuid(),

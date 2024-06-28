@@ -8,5 +8,6 @@
     "connectionId": "jrmsrs",
     "projectKey": "jrmsrs_platcon-server"
   },
-  "javascript.preferences.importModuleSpecifier": "non-relative"
+  "javascript.preferences.importModuleSpecifier": "non-relative",
+  "editor.rulers": [80]
 }

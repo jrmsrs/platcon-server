@@ -12,7 +12,7 @@ import { CreateChannelDto } from '#channels/dto'
 import { channelMock, createChannelMock } from '#channels/__mocks__'
 import { memberMock } from '#app/members/__mocks__'
 import { ResponseBuilder } from '#utils/resBuilder.util'
-import { testController } from '#utils/test'
+import { testController } from '#utils/test/unit'
 
 describe('ChannelsController', () => {
   let controller: ChannelsController

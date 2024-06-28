@@ -12,7 +12,7 @@ import { CreateUserDto } from '#users/dto'
 
 import { userMock, createUserMock } from '#users/__mocks__'
 import { ResponseBuilder } from '#utils/resBuilder.util'
-import { testController } from '#utils/test'
+import { testController } from '#utils/test/unit'
 
 describe('UsersController', () => {
   let controller: UsersController
