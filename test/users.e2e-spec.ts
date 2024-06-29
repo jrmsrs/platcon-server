@@ -19,7 +19,12 @@ describe('UsersModule (e2e)', () => {
 
   describe('UsersModule (e2e) happy path', () => {
     beforeEach(async () => {
-      app = await buildApp(mockOrmRepository(userMock), User)
+      app = await buildApp([
+        {
+          repository: mockOrmRepository(userMock),
+          entity: User,
+        },
+      ])
       await app.init()
     })
 
@@ -65,7 +70,12 @@ describe('UsersModule (e2e)', () => {
 
   describe('UsersModule (e2e) bad request path', () => {
     beforeEach(async () => {
-      app = await buildApp(mockOrmRepository(userMock), User)
+      app = await buildApp([
+        {
+          repository: mockOrmRepository(userMock),
+          entity: User,
+        },
+      ])
       await app.init()
     })
 
@@ -129,7 +139,12 @@ describe('UsersModule (e2e)', () => {
 
   describe('UsersModule (e2e) not found path', () => {
     beforeEach(async () => {
-      app = await buildApp(mockOrmRepositoryNotFound(), User)
+      app = await buildApp([
+        {
+          repository: mockOrmRepositoryNotFound(),
+          entity: User,
+        },
+      ])
       await app.init()
     })
 
@@ -176,7 +191,12 @@ describe('UsersModule (e2e)', () => {
 
   describe('UsersModule (e2e) conflict path', () => {
     beforeEach(async () => {
-      app = await buildApp(mockOrmRepositoryConflict(), User)
+      app = await buildApp([
+        {
+          repository: mockOrmRepositoryConflict(userMock),
+          entity: User,
+        },
+      ])
       await app.init()
     })
 
@@ -221,7 +241,12 @@ describe('UsersModule (e2e)', () => {
 
   describe('UsersModule (e2e) ISE path', () => {
     beforeEach(async () => {
-      app = await buildApp(mockOrmRepositoryServerError(), User)
+      app = await buildApp([
+        {
+          repository: mockOrmRepositoryServerError(),
+          entity: User,
+        },
+      ])
       await app.init()
     })
 

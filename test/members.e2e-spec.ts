@@ -20,7 +20,12 @@ describe('MembersModule (e2e)', () => {
 
   describe('MembersModule (e2e) happy path', () => {
     beforeEach(async () => {
-      app = await buildApp(mockOrmRepository(memberMock), Member)
+      app = await buildApp([
+        {
+          repository: mockOrmRepository(memberMock),
+          entity: Member,
+        },
+      ])
       await app.init()
     })
 
@@ -66,7 +71,12 @@ describe('MembersModule (e2e)', () => {
 
   describe('MembersModule (e2e) bad request path', () => {
     beforeEach(async () => {
-      app = await buildApp(mockOrmRepository(memberMock), Member)
+      app = await buildApp([
+        {
+          repository: mockOrmRepository(memberMock),
+          entity: Member,
+        },
+      ])
       await app.init()
     })
 
@@ -132,7 +142,12 @@ describe('MembersModule (e2e)', () => {
 
   describe('MembersModule (e2e) not found path', () => {
     beforeEach(async () => {
-      app = await buildApp(mockOrmRepositoryNotFound(), Member)
+      app = await buildApp([
+        {
+          repository: mockOrmRepositoryNotFound(),
+          entity: Member,
+        },
+      ])
       await app.init()
     })
 
@@ -179,7 +194,12 @@ describe('MembersModule (e2e)', () => {
 
   describe('MembersModule (e2e) conflict path', () => {
     beforeEach(async () => {
-      app = await buildApp(mockOrmRepositoryConflict(), Member)
+      app = await buildApp([
+        {
+          repository: mockOrmRepositoryConflict(memberMock),
+          entity: Member,
+        },
+      ])
       await app.init()
     })
 
@@ -224,7 +244,12 @@ describe('MembersModule (e2e)', () => {
 
   describe('MembersModule (e2e) fk not found path', () => {
     beforeEach(async () => {
-      app = await buildApp(mockOrmRepositoryFKNotFound(), Member)
+      app = await buildApp([
+        {
+          repository: mockOrmRepositoryFKNotFound(memberMock),
+          entity: Member,
+        },
+      ])
       await app.init()
     })
 
@@ -259,7 +284,12 @@ describe('MembersModule (e2e)', () => {
 
   describe('MembersModule (e2e) ISE path', () => {
     beforeEach(async () => {
-      app = await buildApp(mockOrmRepositoryServerError(), Member)
+      app = await buildApp([
+        {
+          repository: mockOrmRepositoryServerError(),
+          entity: Member,
+        },
+      ])
       await app.init()
     })
 
