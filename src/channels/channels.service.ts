@@ -65,7 +65,7 @@ export class ChannelsService {
       return new ResponseBuilder().channel(id).updated(channel)
     } catch (error) {
       if (error instanceof UniqueViolationError) {
-        throw new ISEException(
+        throw new ConflictException(
           new ResponseBuilder().channel().conflict('name').msg
         )
       }

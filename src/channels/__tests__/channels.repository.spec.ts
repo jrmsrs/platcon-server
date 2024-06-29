@@ -179,11 +179,11 @@ describe('ChannelsRepository', () => {
         raw: [channel],
         affected: 1,
       } as UpdateResult
+      jest.spyOn(channelRepository, 'findOne').mockResolvedValue(channel)
       jest
         .spyOn(memberRepository, 'findAndCount')
         .mockResolvedValue([[memberMock], 1])
       jest.spyOn(channelRepository, 'save').mockResolvedValue(channel)
-      jest.spyOn(channelRepository, 'count').mockResolvedValue(1)
 
       const result = await repository.update(id, updateChannelDto)
 
@@ -193,7 +193,7 @@ describe('ChannelsRepository', () => {
     it('should throw an error if channel already exists', async () => {
       const id = faker.string.uuid()
       const updateChannelDto: UpdateChannelDto = { members: [memberMock.id] }
-      jest.spyOn(channelRepository, 'count').mockResolvedValue(1)
+      jest.spyOn(channelRepository, 'findOne').mockResolvedValue(channelMock)
       jest
         .spyOn(memberRepository, 'findAndCount')
         .mockResolvedValue([[memberMock], 1])
@@ -211,7 +211,7 @@ describe('ChannelsRepository', () => {
     it('should throw an error if channel does not exist', async () => {
       const id = faker.string.uuid()
       const updateChannelDto: UpdateChannelDto = { members: [memberMock.id] }
-      jest.spyOn(channelRepository, 'count').mockResolvedValue(0)
+      jest.spyOn(channelRepository, 'findOne').mockResolvedValue(undefined)
 
       try {
         await repository.update(id, updateChannelDto)
@@ -223,7 +223,7 @@ describe('ChannelsRepository', () => {
     it('should throw an error if a foreign key violation occurs', async () => {
       const id = faker.string.uuid()
       const updateChannelDto: UpdateChannelDto = { members: [memberMock.id] }
-      jest.spyOn(channelRepository, 'count').mockResolvedValue(1)
+      jest.spyOn(channelRepository, 'findOne').mockResolvedValue(channelMock)
       jest
         .spyOn(memberRepository, 'findAndCount')
         .mockResolvedValue([[memberMock], 0])
@@ -238,7 +238,7 @@ describe('ChannelsRepository', () => {
     it('should throw an error if an unexpected error occurs', async () => {
       const id = faker.string.uuid()
       const updateChannelDto: UpdateChannelDto = { members: [memberMock.id] }
-      jest.spyOn(channelRepository, 'count').mockRejectedValue(new Error())
+      jest.spyOn(channelRepository, 'findOne').mockRejectedValue(new Error())
 
       try {
         await repository.update(id, updateChannelDto)

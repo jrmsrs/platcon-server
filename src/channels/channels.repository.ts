@@ -29,7 +29,7 @@ export class ChannelsRepository {
     try {
       let members: Member[]
       let membersCount: number
-      if (data.members) {
+      if (data.members?.length) {
         ;[members, membersCount] = await this.memberRepository.findAndCount({
           where: { id: In(data.members) },
         })
@@ -69,11 +69,13 @@ export class ChannelsRepository {
 
   async update(id: string, data: UpdateChannelDto): Promise<UpdateResult> {
     try {
-      if ((await this.channelRepository.count({ where: { id } })) === 0)
+      if (
+        (await this.channelRepository.findOne({ where: { id } })) === undefined
+      )
         throw new UnaffectedError()
       let members: Member[]
       let membersCount: number
-      if (data.members) {
+      if (data.members?.length) {
         ;[members, membersCount] = await this.memberRepository.findAndCount({
           where: { id: In(data.members) },
         })
