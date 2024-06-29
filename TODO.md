@@ -8,11 +8,11 @@
 - [ ] implement Members module
   - [x] implement Members unit tests
   - [x] implement Members e2e tests
-  - [ ] implement Member User OtO relation
-- [x] implement Channels module\*
+  - [ ] implement Member User OtO relation\*
+- [x] implement Channels module
   - [x] implement Channels unit tests
-  - [ ] implement Channels e2e tests\*
-- [ ] implement Contents module
+  - [x] implement Channels e2e tests
+- [ ] implement Contents module\*
   - [ ] implement Contents unit tests
   - [ ] implement Contents e2e tests
 
@@ -27,7 +27,7 @@
 
 ## dev
 
-- [ ] decouple error handling from typeorm\*
+- [x] decouple error handling from typeorm at the service layer
 
 ## infra
 
