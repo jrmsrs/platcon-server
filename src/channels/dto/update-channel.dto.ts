@@ -5,7 +5,7 @@ import { CreateChannelDto } from '#channels/dto'
 
 export class ChannelId {
   @IsUUID('4')
-  @ApiProperty({ description: 'Channel UUID' })
+  @ApiProperty({ description: 'UUID do Canal' })
   id: string
 }
 

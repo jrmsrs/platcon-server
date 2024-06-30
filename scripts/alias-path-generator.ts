@@ -20,9 +20,12 @@ export const aliasPathGenerator = (moduleName: string) => {
   const tsconfig = JSON.parse(fs.readFileSync('./tsconfig.json', 'utf-8'))
 
   // add moduleName to moduleNameMapper in jest-x.json and paths in tsconfig.json
-  jestUnit.moduleNameMapper[`^\\#${moduleName}/(.*)$`] = `<rootDir>/src/${moduleName}/$1`
-  jestCov.moduleNameMapper[`^\\#${moduleName}/(.*)$`] = `<rootDir>/src/${moduleName}/$1`
-  jestE2e.moduleNameMapper[`^\\#${moduleName}/(.*)$`] = `<rootDir>/src/${moduleName}/$1`
+  jestUnit.moduleNameMapper[`^\\#${moduleName}/(.*)$`] =
+    `<rootDir>/src/${moduleName}/$1`
+  jestCov.moduleNameMapper[`^\\#${moduleName}/(.*)$`] =
+    `<rootDir>/src/${moduleName}/$1`
+  jestE2e.moduleNameMapper[`^\\#${moduleName}/(.*)$`] =
+    `<rootDir>/src/${moduleName}/$1`
   tsconfig.compilerOptions.paths[`#${moduleName}/*`] = [`src/${moduleName}/*`]
 
   fs.writeFileSync('./jest-unit.json', JSON.stringify(jestUnit, null, 2))
@@ -33,7 +36,10 @@ export const aliasPathGenerator = (moduleName: string) => {
   // add moduleName to ResponseBuilder class in resBuilder.util.ts
   const resBuilderUtil = fs.readFileSync('./utils/resBuilder.util.ts', 'utf-8')
   const resBuilderUtilLines = resBuilderUtil.split('\n')
-  const preIndex = resBuilderUtilLines.findIndex((line) => line.includes('pre(self: this) {')) - 1
+  const preIndex =
+    resBuilderUtilLines.findIndex((line) =>
+      line.includes('pre(self: this) {')
+    ) - 1
   resBuilderUtilLines.splice(
     preIndex,
     0,

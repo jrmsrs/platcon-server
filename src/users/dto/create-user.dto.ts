@@ -9,21 +9,21 @@ import {
 } from 'class-validator'
 
 export class CreateUserDto {
-  @ApiProperty({ description: 'User name' })
+  @ApiProperty({ description: 'Nome do Usuário' })
   @IsNotEmpty()
   @IsString()
   name: string
 
-  @ApiProperty({ description: 'User email' })
+  @ApiProperty({ description: 'E-mail do Usuário' })
   @IsNotEmpty()
   @IsEmail()
   email: string
 
-  @ApiProperty({ description: 'User password' })
+  @ApiProperty({ description: 'Senha do Usuário' })
   @IsNotEmpty()
   password: string
 
-  @ApiPropertyOptional({ description: 'User avatar (Google Docs) URI' })
+  @ApiPropertyOptional({ description: 'URI (Google Docs) do avatar doUsuário' })
   @IsOptional()
   @IsString()
   @MinLength(33)

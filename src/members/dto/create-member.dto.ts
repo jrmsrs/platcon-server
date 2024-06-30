@@ -11,24 +11,24 @@ import {
 } from 'class-validator'
 
 export class CreateMemberDto {
-  @ApiProperty({ description: 'Member stage name' })
+  @ApiProperty({ description: 'Nome artístico do Membro' })
   @IsNotEmpty()
   @IsString()
   stage_name: string
 
-  @ApiProperty({ description: 'Member description' })
+  @ApiProperty({ description: 'Descrição do Membro' })
   @IsNotEmpty()
   @IsString()
   description: string
 
-  @ApiPropertyOptional({ description: 'Member avatar (Google Docs) URI' })
+  @ApiPropertyOptional({ description: 'URI (Google Docs) do avatar do Membro' })
   @IsOptional()
   @IsString()
   @MinLength(33)
   @MaxLength(33)
   avatar_uri?: string
 
-  @ApiPropertyOptional({ description: 'Member website URLs' })
+  @ApiPropertyOptional({ description: 'Redes sociais do Membro' })
   @IsOptional()
   @IsArray()
   @IsUrl(
@@ -41,7 +41,7 @@ export class CreateMemberDto {
   )
   website?: string[]
 
-  @ApiPropertyOptional({ description: 'Member user UUID' })
+  @ApiPropertyOptional({ description: 'ID do Usuário associado' })
   @IsOptional()
   @IsUUID('4')
   user_id?: string

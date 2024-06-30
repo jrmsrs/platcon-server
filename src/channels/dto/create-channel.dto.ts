@@ -10,36 +10,36 @@ import {
 } from 'class-validator'
 
 export class CreateChannelDto {
-  @ApiProperty({ description: 'Channel name' })
+  @ApiProperty({ description: 'Nome do Canal' })
   @IsNotEmpty()
   @IsString()
   name: string
 
-  @ApiProperty({ description: 'Channel description' })
+  @ApiProperty({ description: 'Descrição do Canal' })
   @IsNotEmpty()
   @IsString()
   description: string
 
-  @ApiProperty({ description: 'Channel tags' })
+  @ApiProperty({ description: 'Tags do Canal' })
   @IsArray()
   @IsNotEmpty()
   tags: string[]
 
-  @ApiPropertyOptional({ description: 'Channel logo (Google Docs) URI' })
+  @ApiPropertyOptional({ description: 'URI (Google Docs) da logo do Canal' })
   @IsOptional()
   @IsString()
   @MinLength(33)
   @MaxLength(33)
   logo_uri?: string
 
-  @ApiPropertyOptional({ description: 'Channel cover (Google Docs) URI' })
+  @ApiPropertyOptional({ description: 'URI (Google Docs) da capa do Canal' })
   @IsOptional()
   @IsString()
   @MinLength(33)
   @MaxLength(33)
   cover_uri?: string
 
-  @ApiPropertyOptional({ description: 'Channel members' })
+  @ApiPropertyOptional({ description: 'Membros do Canal' })
   @IsOptional()
   @IsArray()
   @IsUUID('4', { each: true })

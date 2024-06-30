@@ -26,7 +26,10 @@ import {
 import { ChannelsService } from '#channels/channels.service'
 import { Channel } from '#channels/entities/channel.entity'
 import { CreateChannelDto, UpdateChannelDto, ChannelId } from '#channels/dto'
-import { ErrorMessage, SuccessMessage } from '#utils/resBuilder.util'
+import {
+  swaggerErrorRes as error,
+  swaggerSuccessRes as success,
+} from '#utils/swaggerResBuilder.util'
 
 @Controller('channels')
 @ApiTags('Channels')
@@ -34,21 +37,12 @@ export class ChannelsController {
   constructor(private readonly channelsService: ChannelsService) {}
 
   @Post()
-  @ApiCreatedResponse({
-    description: 'Channel created successfully',
-    type: ChannelId,
-  })
-  @ApiBadRequestResponse({
-    description: 'Bad request / invalid input',
-    type: ErrorMessage,
-  })
-  @ApiConflictResponse({
-    description: 'Channel already exists',
-    type: ErrorMessage,
-  })
-  @ApiISEResponse({ description: 'Unexpected error', type: ErrorMessage })
-  @ApiOperation({ summary: 'Create channel' })
-  @ApiBody({ description: 'Channel data', type: CreateChannelDto })
+  @ApiOperation({ summary: 'Cadastrar Canal' })
+  @ApiCreatedResponse(success('Canal cadastrado com sucesso', ChannelId))
+  @ApiBadRequestResponse(error('Requisição / input inválido'))
+  @ApiConflictResponse(error('Canal já existe'))
+  @ApiISEResponse(error('Erro inesperado'))
+  @ApiBody({ description: 'Dados do Canal', type: CreateChannelDto })
   async create(
     @Body() createChannel: CreateChannelDto,
     @Res() apiRes: Response
@@ -58,47 +52,35 @@ export class ChannelsController {
   }
 
   @Get()
-  @ApiOkResponse({
-    description: 'Channels retrieved successfully',
-    type: [Channel],
-  })
-  @ApiISEResponse({ description: 'Unexpected error', type: ErrorMessage })
-  @ApiOperation({ summary: 'Retrieve all channels' })
+  @ApiOperation({ summary: 'Listar Canais' })
+  @ApiOkResponse(success('Canais listados com sucesso', [Channel]))
+  @ApiISEResponse(error('Erro inesperado'))
   async findAll(@Res() apiRes: Response) {
     const serviceRes = await this.channelsService.findAll()
     return apiRes.status(HttpStatus.OK).send(serviceRes)
   }
 
   @Get(':id')
-  @ApiOkResponse({
-    description: 'Channel retrieved successfully',
-    type: Channel,
-  })
-  @ApiNotFoundResponse({ description: 'Channel not found', type: ErrorMessage })
-  @ApiISEResponse({ description: 'Unexpected error', type: ErrorMessage })
-  @ApiOperation({ summary: 'Retrieve channel by ID' })
+  @ApiOperation({ summary: 'Buscar Canal por ID' })
+  @ApiOkResponse(success('Canal encontrado com sucesso', Channel))
+  @ApiNotFoundResponse(error('Canal não encontrado'))
+  @ApiISEResponse(error('Erro inesperado'))
   async findOne(@Param() params: ChannelId, @Res() apiRes: Response) {
     const serviceRes = await this.channelsService.findOne(params.id)
     return apiRes.status(HttpStatus.OK).send(serviceRes)
   }
 
   @Patch(':id')
-  @ApiOkResponse({
-    description: 'Channel updated successfully',
-    type: SuccessMessage,
+  @ApiOperation({ summary: 'Atualizar Canal por ID' })
+  @ApiOkResponse(success('Canal atualizado com sucesso'))
+  @ApiBadRequestResponse(error('Requisição / input inválido'))
+  @ApiNotFoundResponse(error('Canal não encontrado'))
+  @ApiConflictResponse(error('Canal já existe'))
+  @ApiISEResponse(error('Erro inesperado'))
+  @ApiBody({
+    description: 'Dados do Canal para atualizar',
+    type: UpdateChannelDto,
   })
-  @ApiBadRequestResponse({
-    description: 'Bad request / invalid input',
-    type: ErrorMessage,
-  })
-  @ApiNotFoundResponse({ description: 'Channel not found', type: ErrorMessage })
-  @ApiConflictResponse({
-    description: 'Channel already exists',
-    type: ErrorMessage,
-  })
-  @ApiISEResponse({ description: 'Unexpected error', type: ErrorMessage })
-  @ApiOperation({ summary: 'Update channel by ID' })
-  @ApiBody({ description: 'Channel data to update', type: UpdateChannelDto })
   async update(
     @Param() params: ChannelId,
     @Body() updateChannel: UpdateChannelDto,
@@ -112,17 +94,11 @@ export class ChannelsController {
   }
 
   @Delete(':id')
-  @ApiOkResponse({
-    description: 'Channel deleted successfully',
-    type: SuccessMessage,
-  })
-  @ApiNotFoundResponse({ description: 'Channel not found', type: ErrorMessage })
-  @ApiConflictResponse({
-    description: 'Channel has dependencies',
-    type: ErrorMessage,
-  })
-  @ApiISEResponse({ description: 'Unexpected error', type: ErrorMessage })
-  @ApiOperation({ summary: 'Delete channel by ID' })
+  @ApiOperation({ summary: 'Excluir Canal por ID' })
+  @ApiOkResponse(success('Canal excluído com sucesso'))
+  @ApiNotFoundResponse(error('Canal não encontrado'))
+  @ApiConflictResponse(error('Canal possui dependências'))
+  @ApiISEResponse(error('Erro inesperado'))
   async remove(@Param() params: ChannelId, @Res() apiRes: Response) {
     const serviceRes = await this.channelsService.remove(params.id)
     return apiRes.status(HttpStatus.OK).send(serviceRes)

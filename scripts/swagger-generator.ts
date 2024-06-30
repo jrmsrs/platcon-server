@@ -15,9 +15,11 @@ import { execFile } from 'child_process'
  *
  * it will:
  *
- * - generate swaggerv3.yaml from current application swagger using yaml.dump on SwaggerModule.createDocument
+ * - generate swaggerv3.yaml from current application swagger using yaml.dump on
+ *  SwaggerModule.createDocument
  * - convert swaggerv3.yaml to swaggerv2.yaml using api-spec-converter cli
- * - generate API.md from swaggerv2.yaml using swagger-markdown cli then remove output directory
+ * - generate API.md from swaggerv2.yaml using swagger-markdown cli then remove
+ * output directory
  */
 const generateSwaggerYaml = async () => {
   const app = (
@@ -57,14 +59,24 @@ const generateSwaggerYaml = async () => {
       swaggerYaml = stdout.substring(stdout.indexOf('\n') + 1)
       fs.writeFileSync('./scripts/output/swaggerv2.yaml', swaggerYaml)
 
-      execFile('yarn', ['swagger-markdown', '-i', './scripts/output/swaggerv2.yaml', '-o', './API.md'], (error) => {
-        if (error) {
-          console.error(`exec error: ${error}`)
-          process.exit(1)
+      execFile(
+        'yarn',
+        [
+          'swagger-markdown',
+          '-i',
+          './scripts/output/swaggerv2.yaml',
+          '-o',
+          './API.md',
+        ],
+        (error) => {
+          if (error) {
+            console.error(`exec error: ${error}`)
+            process.exit(1)
+          }
+          fs.rmSync('./scripts/output', { recursive: true })
+          process.exit(0)
         }
-        fs.rmSync('./scripts/output', { recursive: true })
-        process.exit(0)
-      })
+      )
     }
   )
 }

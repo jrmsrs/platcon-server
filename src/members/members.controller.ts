@@ -26,7 +26,10 @@ import {
 import { MembersService } from '#members/members.service'
 import { Member } from '#members/entities/member.entity'
 import { CreateMemberDto, UpdateMemberDto, MemberId } from '#members/dto'
-import { ErrorMessage, SuccessMessage } from '#utils/resBuilder.util'
+import {
+  swaggerSuccessRes as success,
+  swaggerErrorRes as error,
+} from '#utils/swaggerResBuilder.util'
 
 @Controller('members')
 @ApiTags('Members')
@@ -34,65 +37,47 @@ export class MembersController {
   constructor(private readonly membersService: MembersService) {}
 
   @Post()
-  @ApiCreatedResponse({
-    description: 'Member created successfully',
-    type: MemberId,
-  })
-  @ApiBadRequestResponse({
-    description: 'Bad request / invalid input',
-    type: ErrorMessage,
-  })
-  @ApiConflictResponse({
-    description: 'Member already exists',
-    type: ErrorMessage,
-  })
-  @ApiISEResponse({ description: 'Unexpected error', type: ErrorMessage })
-  @ApiOperation({ summary: 'Create member' })
-  @ApiBody({ description: 'Member data', type: CreateMemberDto })
+  @ApiOperation({ summary: 'Cadastrar Membro' })
+  @ApiCreatedResponse(success('Membro cadastrado com sucesso', MemberId))
+  @ApiBadRequestResponse(error('Bad request / input inválido'))
+  @ApiConflictResponse(error('Membro já existe'))
+  @ApiISEResponse(error('Erro inesperado'))
+  @ApiBody({ description: 'Dados do Membro', type: CreateMemberDto })
   async create(@Body() createMember: CreateMemberDto, @Res() apiRes: Response) {
     const serviceRes = await this.membersService.create(createMember)
     return apiRes.status(HttpStatus.CREATED).send(serviceRes)
   }
 
   @Get()
-  @ApiOkResponse({
-    description: 'Members retrieved successfully',
-    type: [Member],
-  })
-  @ApiISEResponse({ description: 'Unexpected error', type: ErrorMessage })
-  @ApiOperation({ summary: 'Retrieve all members' })
+  @ApiOperation({ summary: 'Listar Membros' })
+  @ApiOkResponse(success('Membros listados com sucesso', [Member]))
+  @ApiISEResponse(error('Erro inesperado'))
   async findAll(@Res() apiRes: Response) {
     const serviceRes = await this.membersService.findAll()
     return apiRes.status(HttpStatus.OK).send(serviceRes)
   }
 
   @Get(':id')
-  @ApiOkResponse({ description: 'Member retrieved successfully', type: Member })
-  @ApiNotFoundResponse({ description: 'Member not found', type: ErrorMessage })
-  @ApiISEResponse({ description: 'Unexpected error', type: ErrorMessage })
-  @ApiOperation({ summary: 'Retrieve member by ID' })
+  @ApiOperation({ summary: 'Buscar Membro por ID' })
+  @ApiOkResponse(success('Membro encontrado com sucesso', Member))
+  @ApiNotFoundResponse(error('Membro não encontrado'))
+  @ApiISEResponse(error('Erro inesperado'))
   async findOne(@Param() params: MemberId, @Res() apiRes: Response) {
     const serviceRes = await this.membersService.findOne(params.id)
     return apiRes.status(HttpStatus.OK).send(serviceRes)
   }
 
   @Patch(':id')
-  @ApiOkResponse({
-    description: 'Member updated successfully',
-    type: SuccessMessage,
+  @ApiOperation({ summary: 'Atualizar Membro por ID' })
+  @ApiOkResponse(success('Membro atualizado com sucesso'))
+  @ApiBadRequestResponse(error('Bad request / input inválido'))
+  @ApiNotFoundResponse(error('Membro não encontrado'))
+  @ApiConflictResponse(error('Membro já existe'))
+  @ApiISEResponse(error('Erro inesperado'))
+  @ApiBody({
+    description: 'Dados do Membro para atualizar',
+    type: UpdateMemberDto,
   })
-  @ApiBadRequestResponse({
-    description: 'Bad request / invalid input',
-    type: ErrorMessage,
-  })
-  @ApiNotFoundResponse({ description: 'Member not found', type: ErrorMessage })
-  @ApiConflictResponse({
-    description: 'Member already exists',
-    type: ErrorMessage,
-  })
-  @ApiISEResponse({ description: 'Unexpected error', type: ErrorMessage })
-  @ApiOperation({ summary: 'Update member by ID' })
-  @ApiBody({ description: 'Member data to update', type: UpdateMemberDto })
   async update(
     @Param() params: MemberId,
     @Body() updateMember: UpdateMemberDto,
@@ -103,17 +88,11 @@ export class MembersController {
   }
 
   @Delete(':id')
-  @ApiOkResponse({
-    description: 'Member deleted successfully',
-    type: SuccessMessage,
-  })
-  @ApiNotFoundResponse({ description: 'Member not found', type: ErrorMessage })
-  @ApiConflictResponse({
-    description: 'Member has dependencies',
-    type: ErrorMessage,
-  })
-  @ApiISEResponse({ description: 'Unexpected error', type: ErrorMessage })
-  @ApiOperation({ summary: 'Delete member by ID' })
+  @ApiOperation({ summary: 'Excluir Membro por ID' })
+  @ApiOkResponse(success('Membro excluído com sucesso'))
+  @ApiNotFoundResponse(error('Membro não encontrado'))
+  @ApiConflictResponse(error('Membro possui dependências'))
+  @ApiISEResponse(error('Erro inesperado'))
   async remove(@Param() params: MemberId, @Res() apiRes: Response) {
     const serviceRes = await this.membersService.remove(params.id)
     return apiRes.status(HttpStatus.OK).send(serviceRes)

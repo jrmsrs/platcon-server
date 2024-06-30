@@ -5,7 +5,7 @@ import { CreateUserDto } from '#users/dto/create-user.dto'
 
 export class UserId {
   @IsUUID('4')
-  @ApiProperty({ description: 'User UUID' })
+  @ApiProperty({ description: 'UUID do Usuário' })
   id: string
 }
 

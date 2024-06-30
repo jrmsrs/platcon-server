@@ -9,7 +9,7 @@ export const swaggerConfig = new DocumentBuilder()
   .setTitle('Platcon')
   .setDescription(
     `\
-A description`
+Plataforma de Conteúdos (Platcon) é um agregador de`
   )
   .setVersion('0.0.1')
   .addTag('Users', 'Rotas Usuários')

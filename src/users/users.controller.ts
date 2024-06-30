@@ -26,7 +26,10 @@ import {
 import { UsersService } from '#users/users.service'
 import { User } from '#users/entities/user.entity'
 import { CreateUserDto, UpdateUserDto, UserId } from '#users/dto'
-import { ErrorMessage, SuccessMessage } from '#utils/resBuilder.util'
+import {
+  swaggerSuccessRes as success,
+  swaggerErrorRes as error,
+} from '#utils/swaggerResBuilder.util'
 
 @Controller('users')
 @ApiTags('Users')
@@ -34,62 +37,47 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @ApiCreatedResponse({
-    description: 'User created successfully',
-    type: UserId,
-  })
-  @ApiBadRequestResponse({
-    description: 'Bad request / invalid input',
-    type: ErrorMessage,
-  })
-  @ApiConflictResponse({
-    description: 'User already exists',
-    type: ErrorMessage,
-  })
-  @ApiISEResponse({ description: 'Unexpected error', type: ErrorMessage })
-  @ApiOperation({ summary: 'Create user' })
-  @ApiBody({ description: 'User data', type: CreateUserDto })
+  @ApiOperation({ summary: 'Cadastrar Usuário' })
+  @ApiCreatedResponse(success('Usuário cadastrado com sucesso', UserId))
+  @ApiBadRequestResponse(error('Bad request / input inválido'))
+  @ApiConflictResponse(error('Usuário já existe'))
+  @ApiISEResponse(error('Erro inesperado'))
+  @ApiBody({ description: 'Dados do Usuário', type: CreateUserDto })
   async create(@Body() createUser: CreateUserDto, @Res() apiRes: Response) {
     const serviceRes = await this.usersService.create(createUser)
     return apiRes.status(HttpStatus.CREATED).send(serviceRes)
   }
 
   @Get()
-  @ApiOkResponse({ description: 'Users retrieved successfully', type: [User] })
-  @ApiISEResponse({ description: 'Unexpected error', type: ErrorMessage })
-  @ApiOperation({ summary: 'Retrieve all users' })
+  @ApiOperation({ summary: 'Listar Usuários' })
+  @ApiOkResponse(success('Usuários listados com sucesso', [User]))
+  @ApiISEResponse(error('Erro inesperado'))
   async findAll(@Res() apiRes: Response) {
     const serviceRes = await this.usersService.findAll()
     return apiRes.status(HttpStatus.OK).send(serviceRes)
   }
 
   @Get(':id')
-  @ApiOkResponse({ description: 'User retrieved successfully', type: User })
-  @ApiNotFoundResponse({ description: 'User not found', type: ErrorMessage })
-  @ApiISEResponse({ description: 'Unexpected error', type: ErrorMessage })
-  @ApiOperation({ summary: 'Retrieve user by ID' })
+  @ApiOperation({ summary: 'Buscar Usuário por ID' })
+  @ApiOkResponse(success('Usuário encontrado com sucesso', User))
+  @ApiNotFoundResponse(error('Usuário não encontrado'))
+  @ApiISEResponse(error('Erro inesperado'))
   async findOne(@Param() params: UserId, @Res() apiRes: Response) {
     const serviceRes = await this.usersService.findOne(params.id)
     return apiRes.status(HttpStatus.OK).send(serviceRes)
   }
 
   @Patch(':id')
-  @ApiOkResponse({
-    description: 'User updated successfully',
-    type: SuccessMessage,
+  @ApiOperation({ summary: 'Atualizar Usuário por ID' })
+  @ApiOkResponse(success('Usuário atualizado com sucesso'))
+  @ApiBadRequestResponse(error('Bad request / input inválido'))
+  @ApiNotFoundResponse(error('Usuário não encontrado'))
+  @ApiConflictResponse(error('Usuário já existe'))
+  @ApiISEResponse(error('Erro inesperado'))
+  @ApiBody({
+    description: 'Dados do Usuário para atualizar',
+    type: UpdateUserDto,
   })
-  @ApiBadRequestResponse({
-    description: 'Bad request / invalid input',
-    type: ErrorMessage,
-  })
-  @ApiNotFoundResponse({ description: 'User not found', type: ErrorMessage })
-  @ApiConflictResponse({
-    description: 'User already exists',
-    type: ErrorMessage,
-  })
-  @ApiISEResponse({ description: 'Unexpected error', type: ErrorMessage })
-  @ApiOperation({ summary: 'Update user by ID' })
-  @ApiBody({ description: 'User data to update', type: UpdateUserDto })
   async update(
     @Param() params: UserId,
     @Body() updateUser: UpdateUserDto,
@@ -100,17 +88,11 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @ApiOkResponse({
-    description: 'User deleted successfully',
-    type: SuccessMessage,
-  })
-  @ApiNotFoundResponse({ description: 'User not found', type: ErrorMessage })
-  @ApiConflictResponse({
-    description: 'User has dependencies',
-    type: ErrorMessage,
-  })
-  @ApiISEResponse({ description: 'Unexpected error', type: ErrorMessage })
-  @ApiOperation({ summary: 'Delete user by ID' })
+  @ApiOperation({ summary: 'Excluir Usuário por ID' })
+  @ApiOkResponse(success('Usuário excluído com sucesso'))
+  @ApiNotFoundResponse(error('Usuário não encontrado'))
+  @ApiConflictResponse(error('Usuário possui dependências'))
+  @ApiISEResponse(error('Erro inesperado'))
   async remove(@Param() params: UserId, @Res() apiRes: Response) {
     const serviceRes = await this.usersService.remove(params.id)
     return apiRes.status(HttpStatus.OK).send(serviceRes)

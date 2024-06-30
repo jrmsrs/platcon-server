@@ -5,7 +5,7 @@ import { CreateMemberDto } from '#members/dto'
 
 export class MemberId {
   @IsUUID('4')
-  @ApiProperty({ description: 'Member UUID' })
+  @ApiProperty({ description: 'UUID do Membro' })
   id: string
 }
 
