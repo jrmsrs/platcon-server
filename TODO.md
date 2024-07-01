@@ -8,7 +8,7 @@
 - [ ] implement Members module
   - [x] implement Members unit tests
   - [x] implement Members e2e tests
-  - [ ] implement Member User OtO relation\*
+  - [x] implement Member User OtO relation
 - [x] implement Channels module
   - [x] implement Channels unit tests
   - [x] implement Channels e2e tests

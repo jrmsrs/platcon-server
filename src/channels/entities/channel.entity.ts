@@ -15,7 +15,7 @@ export class Channel {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
-  @ManyToMany(() => Member, { cascade: ['insert', 'update'] })
+  @ManyToMany(() => Member)
   @JoinTable({
     synchronize: false,
     name: 'channel_members',

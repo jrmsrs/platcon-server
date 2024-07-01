@@ -9,5 +9,5 @@
     "projectKey": "jrmsrs_platcon-server"
   },
   "javascript.preferences.importModuleSpecifier": "non-relative",
-  "editor.rulers": [80]
+  "editor.rulers": [80, 120]
 }

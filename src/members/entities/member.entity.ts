@@ -3,22 +3,21 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import {
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm'
 
 import { Channel } from '#channels/entities/channel.entity'
+import { User } from '#users/entities/user.entity'
 
 @Entity('members')
 export class Member {
   @ApiProperty({ description: 'Member UUID' })
   @PrimaryGeneratedColumn('uuid')
   id: string
-
-  @ApiPropertyOptional({ description: 'Member user UUID' })
-  @Column({ type: 'uuid', nullable: true })
-  user_id?: string
 
   @ApiProperty({ description: 'Member stage name' })
   @Column({ type: 'text', unique: true })
@@ -36,7 +35,12 @@ export class Member {
   @Column({ type: 'text', array: true, nullable: true })
   website?: string[]
 
-  @ManyToMany(() => Channel, { cascade: ['insert', 'update'] })
+  @ApiPropertyOptional({ description: 'Member user' })
+  @OneToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
+  user?: User
+
+  @ManyToMany(() => Channel)
   @JoinTable({
     synchronize: false,
     name: 'channel_members',

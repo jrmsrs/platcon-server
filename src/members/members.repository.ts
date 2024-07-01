@@ -25,7 +25,11 @@ export class MembersRepository {
 
   async create(data: CreateMemberDto): Promise<Member> {
     try {
-      return (await this.memberRepository.insert(data)).raw[0]
+      const { user_id, ...procData } = {
+        ...data,
+        user: data.user_id ? { id: data.user_id } : undefined,
+      }
+      return (await this.memberRepository.insert(procData)).raw[0]
     } catch (error) {
       if (error.code === PgError.UNIQUE_VIOLATION)
         throw new UniqueViolationError()
@@ -38,7 +42,10 @@ export class MembersRepository {
   async findAll(): Promise<Member[]> {
     try {
       return await this.memberRepository.find({
-        relations: ['channels'],
+        relations: {
+          channels: true,
+          user: true,
+        },
       })
     } catch (error) {
       throw new UnexpectedError(error.message)
@@ -48,7 +55,10 @@ export class MembersRepository {
   async findOne(id: string): Promise<Member> {
     try {
       const res = await this.memberRepository.findOne({
-        relations: ['channels'],
+        relations: {
+          channels: true,
+          user: true,
+        },
         where: { id },
       })
       if (!res) throw new NotFoundError()
@@ -61,7 +71,11 @@ export class MembersRepository {
 
   async update(id: string, data: UpdateMemberDto): Promise<UpdateResult> {
     try {
-      const res = await this.memberRepository.update(id, data)
+      const { user_id, ...procData } = {
+        ...data,
+        user: data.user_id ? { id: data.user_id } : undefined,
+      }
+      const res = await this.memberRepository.update(id, procData)
       if (!res.affected) throw new UnaffectedError()
       return res
     } catch (error) {
