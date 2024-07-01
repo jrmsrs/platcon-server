@@ -266,7 +266,7 @@ describe('ChannelsRepository', () => {
       const id = faker.string.uuid()
       jest
         .spyOn(channelRepository, 'delete')
-        .mockRejectedValue({ name: PgError.FOREIGN_KEY_VIOLATION })
+        .mockRejectedValue({ code: PgError.FOREIGN_KEY_VIOLATION })
 
       try {
         await repository.remove(id)

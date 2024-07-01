@@ -7,9 +7,9 @@ export const mockOrmRepositoryFKNotFound = jest.fn((obj) => ({
   create: jest.fn(() => obj),
   save: jest.fn(() => obj),
   insert: jest.fn(() => {
-    throw { name: PgError.FOREIGN_KEY_VIOLATION }
+    throw { code: PgError.FOREIGN_KEY_VIOLATION }
   }),
   update: jest.fn(() => {
-    throw { name: PgError.FOREIGN_KEY_VIOLATION }
+    throw { code: PgError.FOREIGN_KEY_VIOLATION }
   }),
 }))

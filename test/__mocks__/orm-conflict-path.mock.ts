@@ -10,12 +10,12 @@ export const mockOrmRepositoryConflict = jest.fn((obj) => ({
     throw { driverError: { code: PgError.UNIQUE_VIOLATION } }
   }),
   insert: jest.fn(() => {
-    throw { name: PgError.UNIQUE_VIOLATION }
+    throw { code: PgError.UNIQUE_VIOLATION }
   }),
   update: jest.fn(() => {
-    throw { name: PgError.UNIQUE_VIOLATION }
+    throw { code: PgError.UNIQUE_VIOLATION }
   }),
   delete: jest.fn(() => {
-    throw { name: PgError.FOREIGN_KEY_VIOLATION }
+    throw { code: PgError.FOREIGN_KEY_VIOLATION }
   }),
 }))

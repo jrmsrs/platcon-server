@@ -27,9 +27,9 @@ export class MembersRepository {
     try {
       return (await this.memberRepository.insert(data)).raw[0]
     } catch (error) {
-      if (error.name === PgError.UNIQUE_VIOLATION)
+      if (error.code === PgError.UNIQUE_VIOLATION)
         throw new UniqueViolationError()
-      if (error.name === PgError.FOREIGN_KEY_VIOLATION)
+      if (error.code === PgError.FOREIGN_KEY_VIOLATION)
         throw new FKViolationError()
       throw new UnexpectedError(error.message)
     }
@@ -65,9 +65,9 @@ export class MembersRepository {
       if (!res.affected) throw new UnaffectedError()
       return res
     } catch (error) {
-      if (error.name === PgError.UNIQUE_VIOLATION)
+      if (error.code === PgError.UNIQUE_VIOLATION)
         throw new UniqueViolationError()
-      if (error.name === PgError.FOREIGN_KEY_VIOLATION)
+      if (error.code === PgError.FOREIGN_KEY_VIOLATION)
         throw new FKViolationError()
       if (error instanceof UnaffectedError) throw error
       throw new UnexpectedError(error.message)
@@ -80,7 +80,7 @@ export class MembersRepository {
       if (!res.affected) throw new UnaffectedError()
       return res
     } catch (error) {
-      if (error.name === PgError.FOREIGN_KEY_VIOLATION)
+      if (error.code === PgError.FOREIGN_KEY_VIOLATION)
         throw new StateConflictError()
       if (error instanceof UnaffectedError) throw error
       throw new UnexpectedError(error.message)

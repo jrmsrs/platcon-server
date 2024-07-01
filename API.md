@@ -388,7 +388,7 @@ Atualizar Usuário por ID
 | description | string | Member description | Yes |
 | id | string | Member UUID | Yes |
 | stage_name | string | Member stage name | Yes |
-| user_id | string | Member user UUID | No |
+| user | [User](#user) | Member user | No |
 | website | [ string ] | Member website URLs | No |
 
 #### MemberId

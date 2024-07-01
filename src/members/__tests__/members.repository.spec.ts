@@ -59,7 +59,7 @@ describe('MembersRepository', () => {
       const createMemberDto: CreateMemberDto = createMemberMock
       jest
         .spyOn(memberRepository, 'insert')
-        .mockRejectedValue({ name: PgError.FOREIGN_KEY_VIOLATION })
+        .mockRejectedValue({ code: PgError.FOREIGN_KEY_VIOLATION })
 
       try {
         await repository.create(createMemberDto)
@@ -72,7 +72,7 @@ describe('MembersRepository', () => {
       const createMemberDto: CreateMemberDto = createMemberMock
       jest
         .spyOn(memberRepository, 'insert')
-        .mockRejectedValue({ name: PgError.UNIQUE_VIOLATION })
+        .mockRejectedValue({ code: PgError.UNIQUE_VIOLATION })
 
       try {
         await repository.create(createMemberDto)
@@ -188,7 +188,7 @@ describe('MembersRepository', () => {
       }
       jest
         .spyOn(memberRepository, 'update')
-        .mockRejectedValue({ name: PgError.FOREIGN_KEY_VIOLATION })
+        .mockRejectedValue({ code: PgError.FOREIGN_KEY_VIOLATION })
 
       try {
         await repository.update(id, updateMemberDto)
@@ -204,7 +204,7 @@ describe('MembersRepository', () => {
       }
       jest
         .spyOn(memberRepository, 'update')
-        .mockRejectedValue({ name: PgError.UNIQUE_VIOLATION })
+        .mockRejectedValue({ code: PgError.UNIQUE_VIOLATION })
 
       try {
         await repository.update(id, updateMemberDto)
@@ -259,7 +259,7 @@ describe('MembersRepository', () => {
       const id = faker.string.uuid()
       jest
         .spyOn(memberRepository, 'delete')
-        .mockRejectedValue({ name: PgError.FOREIGN_KEY_VIOLATION })
+        .mockRejectedValue({ code: PgError.FOREIGN_KEY_VIOLATION })
 
       try {
         await repository.remove(id)

@@ -98,7 +98,7 @@ export class ChannelsRepository {
       if (!res.affected) throw new UnaffectedError()
       return res
     } catch (error) {
-      if (error.name === PgError.FOREIGN_KEY_VIOLATION)
+      if (error.code === PgError.FOREIGN_KEY_VIOLATION)
         throw new StateConflictError()
       if (error instanceof UnaffectedError) throw error
       throw new UnexpectedError(error.message)

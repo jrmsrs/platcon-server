@@ -58,7 +58,7 @@ describe('UsersRepository', () => {
       const createUserDto: CreateUserDto = createUserMock
       jest
         .spyOn(userRepository, 'insert')
-        .mockRejectedValue({ name: PgError.UNIQUE_VIOLATION })
+        .mockRejectedValue({ code: PgError.UNIQUE_VIOLATION })
 
       try {
         await repository.create(createUserDto)
@@ -172,7 +172,7 @@ describe('UsersRepository', () => {
       const updateUserDto: UpdateUserDto = { email: faker.internet.email() }
       jest
         .spyOn(userRepository, 'update')
-        .mockRejectedValue({ name: PgError.UNIQUE_VIOLATION })
+        .mockRejectedValue({ code: PgError.UNIQUE_VIOLATION })
 
       try {
         await repository.update(id, updateUserDto)
@@ -227,7 +227,7 @@ describe('UsersRepository', () => {
       const id = faker.string.uuid()
       jest
         .spyOn(userRepository, 'delete')
-        .mockRejectedValue({ name: PgError.FOREIGN_KEY_VIOLATION })
+        .mockRejectedValue({ code: PgError.FOREIGN_KEY_VIOLATION })
 
       try {
         await repository.remove(id)
