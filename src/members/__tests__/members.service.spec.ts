@@ -165,15 +165,13 @@ describe('MembersService', () => {
     })
 
     it('should throw error on update if referenced user does not exist', async () => {
+      const user_id = faker.string.uuid()
       repository.update = jest.fn().mockRejectedValue(new FKViolationError())
       try {
-        await service.update(memberMock.id, {
-          stage_name: faker.person.firstName(),
-        })
+        await service.update(memberMock.id, { user_id })
       } catch (error) {
         expect(error.message).toEqual(
-          new ResponseBuilder().member().fkNotFound('User', memberMock.user_id)
-            .msg
+          new ResponseBuilder().member().fkNotFound('User', user_id).msg
         )
       }
     })

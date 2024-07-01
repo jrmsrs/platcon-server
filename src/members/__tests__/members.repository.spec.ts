@@ -17,6 +17,7 @@ import {
   UniqueViolationError,
   FKViolationError,
 } from '#utils/errors'
+import { userMock } from '#app/users/__mocks__'
 
 describe('MembersRepository', () => {
   let repository: MembersRepository
@@ -51,6 +52,25 @@ describe('MembersRepository', () => {
         .mockResolvedValue({ raw: [member] } as InsertResult)
 
       const result = await repository.create(createMemberDto)
+
+      expect(result).toEqual(member)
+    })
+
+    it('should insert a new member with a user id', async () => {
+      const createMemberDto: CreateMemberDto = createMemberMock
+      const member: Member = {
+        ...createMemberMock,
+        id: faker.string.uuid(),
+        user: userMock,
+      }
+      jest
+        .spyOn(memberRepository, 'insert')
+        .mockResolvedValue({ raw: [member] } as InsertResult)
+
+      const result = await repository.create({
+        ...createMemberDto,
+        user_id: userMock.id,
+      })
 
       expect(result).toEqual(member)
     })
@@ -153,6 +173,22 @@ describe('MembersRepository', () => {
       const id = faker.string.uuid()
       const updateMemberDto: UpdateMemberDto = {
         website: [faker.internet.url()],
+      }
+      const updateResult: UpdateResult = {
+        raw: [],
+        affected: 1,
+      } as UpdateResult
+      jest.spyOn(memberRepository, 'update').mockResolvedValue(updateResult)
+
+      const result = await repository.update(id, updateMemberDto)
+
+      expect(result).toEqual(updateResult)
+    })
+
+    it('should update a member by id with a user id', async () => {
+      const id = faker.string.uuid()
+      const updateMemberDto: UpdateMemberDto = {
+        user_id: userMock.id,
       }
       const updateResult: UpdateResult = {
         raw: [],

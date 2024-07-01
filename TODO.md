@@ -5,7 +5,7 @@
 - [x] implement Users module
   - [x] implement Users unit tests
   - [x] implement Users e2e tests
-- [ ] implement Members module
+- [x] implement Members module
   - [x] implement Members unit tests
   - [x] implement Members e2e tests
   - [x] implement Member User OtO relation
