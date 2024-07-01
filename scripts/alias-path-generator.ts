@@ -1,15 +1,19 @@
 import * as fs from 'fs'
 
 /**
- * helper function to generate alias path for module in project after adding new module
+ * helper function to generate alias path for module in project after adding
+ * new module
  *
  * command-line: `ts-node ./scripts/alias-path-generator.ts MODULENAME`
  *
  * it will:
  *
- * - add `"^\\#MODULENAME/(.*)$": "<rootDir>/src/MODULENAME/$1"` to jest moduleNameMapper (files ./jest-unit.json, ./jest-cov.json, ./jest-e2e.json)
+ * - add `"^\\#MODULENAME/(.*)$": "<rootDir>/src/MODULENAME/$1"` to jest
+ *   moduleNameMapper (files ./jest-unit.json, ./jest-cov.json,
+ *   ./jest-e2e.json)
  * - add `"#MODULENAME/*": ["src/MODULENAME/*"]` to tsconfig.json
- * - add MODULENAME() method to ResponseBuilder class two lines before pre() method
+ * - add MODULENAME() method to ResponseBuilder class two lines before pre()
+ *   method
  *
  * @param moduleName module (directory) name
  */
