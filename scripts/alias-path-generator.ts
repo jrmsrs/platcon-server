@@ -21,6 +21,7 @@ export const aliasPathGenerator = (moduleName: string) => {
   const jestUnit = JSON.parse(fs.readFileSync('./jest-unit.json', 'utf-8'))
   const jestCov = JSON.parse(fs.readFileSync('./jest-cov.json', 'utf-8'))
   const jestE2e = JSON.parse(fs.readFileSync('./jest-e2e.json', 'utf-8'))
+  const jestE2eCov = JSON.parse(fs.readFileSync('./jest-e2ecov.json', 'utf-8'))
   const tsconfig = JSON.parse(fs.readFileSync('./tsconfig.json', 'utf-8'))
 
   // add moduleName to moduleNameMapper in jest-x.json and paths in tsconfig.json
@@ -30,11 +31,14 @@ export const aliasPathGenerator = (moduleName: string) => {
     `<rootDir>/src/${moduleName}/$1`
   jestE2e.moduleNameMapper[`^\\#${moduleName}/(.*)$`] =
     `<rootDir>/src/${moduleName}/$1`
+  jestE2eCov.moduleNameMapper[`^\\#${moduleName}/(.*)$`] =
+    `<rootDir>/src/${moduleName}/$1`
   tsconfig.compilerOptions.paths[`#${moduleName}/*`] = [`src/${moduleName}/*`]
 
   fs.writeFileSync('./jest-unit.json', JSON.stringify(jestUnit, null, 2))
   fs.writeFileSync('./jest-cov.json', JSON.stringify(jestCov, null, 2))
   fs.writeFileSync('./jest-e2e.json', JSON.stringify(jestE2e, null, 2))
+  fs.writeFileSync('./jest-e2ecov.json', JSON.stringify(jestE2eCov, null, 2))
   fs.writeFileSync('./tsconfig.json', JSON.stringify(tsconfig, null, 2))
 
   // add moduleName to ResponseBuilder class in resBuilder.util.ts

@@ -19,6 +19,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --config ./jest-unit.json --runInBand",
     "test:e2e": "jest --config ./jest-e2e.json --maxWorkers=50% --silent",
     "test:e2ecov": "jest --config ./jest-e2ecov.json --coverage --maxWorkers=50% --silent",
+    "resgen": "yarn nest g res && yarn ts-node ./scripts/alias-path-generator.ts --",
     "prepare": "husky install"
   },
   "dependencies": {

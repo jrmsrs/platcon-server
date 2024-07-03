@@ -85,8 +85,7 @@ $ yarn run test:cov
 ### add resorce
 
 ```bash
-yarn nest g res {resource-name}
-yarn ts-node ./scripts/alias-path-generator.ts {resource-name}
+yarn resgen {resource-name}
 ```
 
 ### sync orm
