@@ -10,6 +10,7 @@ import { AppService } from '#app/app.service'
 import { UsersModule } from '#users/users.module'
 import { MembersModule } from '#members/members.module'
 import { ChannelsModule } from '#channels/channels.module'
+import { ContentsModule } from '#contents/contents.module'
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ChannelsModule } from '#channels/channels.module'
     UsersModule,
     MembersModule,
     ChannelsModule,
+    ContentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

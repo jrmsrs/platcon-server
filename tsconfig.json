@@ -40,6 +40,9 @@
       ],
       "#channels/*": [
         "src/channels/*"
+      ],
+      "#contents/*": [
+        "src/contents/*"
       ]
     }
   }

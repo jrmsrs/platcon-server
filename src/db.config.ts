@@ -5,6 +5,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm'
 import { User } from '#users/entities/user.entity'
 import { Member } from '#members/entities/member.entity'
 import { Channel } from '#channels/entities/channel.entity'
+import { Content } from './contents/entities/content.entity'
 
 export class DbConfig {
   static createConnection(
@@ -17,7 +18,7 @@ export class DbConfig {
       username: configService.get('DB_USERNAME'),
       password: configService.get('DB_PASSWORD'),
       database: configService.get('DB_NAME'),
-      entities: [User, Member, Channel],
+      entities: [User, Member, Channel, Content],
       synchronize: false,
       logging: true,
     }

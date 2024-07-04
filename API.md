@@ -110,6 +110,111 @@ Atualizar Canal por ID
 | 500 | Erro inesperado | [ErrorMessage](#errormessage) |
 
 ---
+## default
+
+### /contents
+
+#### GET
+##### Summary
+
+Listar Conteúdos
+
+##### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Conteúdos listados com sucesso | [ [Content](#content) ] |
+| 500 | Erro inesperado | [ErrorMessage](#errormessage) |
+
+#### POST
+##### Summary
+
+Cadastrar Conteúdo
+
+##### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| body | body | Dados do Conteúdo | Yes | [CreateContentDto](#createcontentdto) |
+
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 201 | Conteúdo cadastrado com sucesso | [ContentId](#contentid) |
+| 400 | Bad request / input inválido | [ErrorMessage](#errormessage) |
+| 409 | Conteúdo já existe | [ErrorMessage](#errormessage) |
+| 500 | Erro inesperado | [ErrorMessage](#errormessage) |
+
+### /contents/{id}
+
+#### DELETE
+##### Summary
+
+Excluir Conteúdo por ID
+
+##### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | UUID do Conteúdo | Yes | string |
+
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Conteúdo excluído com sucesso | [SuccessMessage](#successmessage) |
+| 404 | Conteúdo não encontrado | [ErrorMessage](#errormessage) |
+| 409 | Conteúdo possui dependências | [ErrorMessage](#errormessage) |
+| 500 | Erro inesperado | [ErrorMessage](#errormessage) |
+
+#### GET
+##### Summary
+
+Buscar Conteúdo por ID
+
+##### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | UUID do Conteúdo | Yes | string |
+
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Conteúdo encontrado com sucesso | [Content](#content) |
+| 404 | Conteúdo não encontrado | [ErrorMessage](#errormessage) |
+| 500 | Erro inesperado | [ErrorMessage](#errormessage) |
+
+#### PATCH
+##### Summary
+
+Atualizar Conteúdo por ID
+
+##### Parameters
+
+| Name | Located in | Description | Required | Schema |
+| ---- | ---------- | ----------- | -------- | ------ |
+| id | path | UUID do Conteúdo | Yes | string |
+| body | body | Dados do Conteúdo para atualizar | Yes | [UpdateContentDto](#updatecontentdto) |
+
+##### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Conteúdo atualizado com sucesso | [SuccessMessage](#successmessage) |
+| 400 | Bad request / input inválido | [ErrorMessage](#errormessage) |
+| 404 | Conteúdo não encontrado | [ErrorMessage](#errormessage) |
+| 409 | Conteúdo já existe | [ErrorMessage](#errormessage) |
+| 500 | Erro inesperado | [ErrorMessage](#errormessage) |
+
+---
 ## Members
 Rotas Membros
 
@@ -329,6 +434,7 @@ Atualizar Usuário por ID
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | tags | [ string ] | Channel tags | Yes |
+| contents | [ [Content](#content) ] | Content channel | Yes |
 | cover_uri | string | Channel cover (Google Docs) URI | Yes |
 | description | string | Channel description | Yes |
 | id | string | Channel UUID | Yes |
@@ -342,6 +448,22 @@ Atualizar Usuário por ID
 | ---- | ---- | ----------- | -------- |
 | id | string | UUID do Canal | Yes |
 
+#### Content
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| channel | [Channel](#channel) | Content channel | Yes |
+| description | string | Content description | Yes |
+| id | string | Content UUID | Yes |
+| thumb_uri | string | Content thumb (Google Docs) URI | Yes |
+| title | string | Content title | Yes |
+
+#### ContentId
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| id | string | UUID do Conteúdo | Yes |
+
 #### CreateChannelDto
 
 | Name | Type | Description | Required |
@@ -352,6 +474,15 @@ Atualizar Usuário por ID
 | logo_uri | string | URI (Google Docs) da logo do Canal | No |
 | members | [ string ] | Membros do Canal | No |
 | name | string | Nome do Canal | Yes |
+
+#### CreateContentDto
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| channel_id | string | ID do Canal associado | No |
+| description | string | Descrição do Conteúdo | Yes |
+| thumb_uri | string | URI (Google Docs) da thumb do Conteúdo | No |
+| title | string | Título do Conteúdo | Yes |
 
 #### CreateMemberDto
 
@@ -413,6 +544,15 @@ Atualizar Usuário por ID
 | logo_uri | string | URI (Google Docs) da logo do Canal | No |
 | members | [ string ] | Membros do Canal | No |
 | name | string | Nome do Canal | No |
+
+#### UpdateContentDto
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| channel_id | string | ID do Canal associado | No |
+| description | string | Descrição do Conteúdo | No |
+| thumb_uri | string | URI (Google Docs) da thumb do Conteúdo | No |
+| title | string | Título do Conteúdo | No |
 
 #### UpdateMemberDto
 
