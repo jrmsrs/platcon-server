@@ -47,7 +47,9 @@ export class ChannelsRepository {
 
   async findAll(): Promise<Channel[]> {
     try {
-      return await this.channelRepository.find({ relations: ['members'] })
+      return await this.channelRepository.find({
+        relations: ['members', 'contents'],
+      })
     } catch (error) {
       throw new UnexpectedError(error.message)
     }
@@ -57,7 +59,7 @@ export class ChannelsRepository {
     try {
       const res = await this.channelRepository.findOne({
         where: { id },
-        relations: ['members'],
+        relations: ['members', 'contents'],
       })
       if (!res) throw new NotFoundError()
       return res

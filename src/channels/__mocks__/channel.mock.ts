@@ -9,4 +9,5 @@ export const channelMock: Channel = {
   name: faker.person.firstName(),
   description: faker.lorem.sentence(),
   tags: [faker.lorem.word()],
+  contents: [],
 }

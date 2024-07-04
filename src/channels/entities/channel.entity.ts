@@ -1,11 +1,14 @@
+import { Content } from '#app/contents/entities/content.entity'
 import { Member } from '#app/members/entities/member.entity'
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 
 import {
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm'
 
@@ -24,6 +27,11 @@ export class Channel {
   })
   @ApiPropertyOptional({ description: 'Channel members' })
   members?: Member[]
+
+  @ApiProperty({ description: 'Content channel', type: () => [Content] })
+  @OneToMany(() => Content, (content) => content.channel)
+  @JoinColumn({ name: 'channel_id' })
+  contents: Content[]
 
   @ApiProperty({ description: 'Channel name' })
   @Column({ type: 'text', unique: true })
