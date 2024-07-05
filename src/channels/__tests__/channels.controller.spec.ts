@@ -43,6 +43,7 @@ describe('ChannelsController', () => {
         ...createChannelMock,
         id: faker.string.uuid(),
         members: [],
+        contents: [],
       }
       const apiRes = { status: jest.fn().mockReturnThis(), send: jest.fn() }
 

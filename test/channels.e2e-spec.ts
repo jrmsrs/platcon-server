@@ -19,6 +19,7 @@ import { memberMock } from '#app/members/__mocks__'
 
 describe('ChannelsModule (e2e)', () => {
   let app: INestApplication
+  delete channelMock.contents[0].channel
 
   describe('ChannelsModule (e2e) happy path', () => {
     beforeEach(async () => {

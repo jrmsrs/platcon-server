@@ -56,6 +56,7 @@ describe('ChannelsRepository', () => {
         ...createChannelMock,
         id: faker.string.uuid(),
         members: [memberMock],
+        contents: [],
       }
       jest
         .spyOn(memberRepository, 'findAndCount')

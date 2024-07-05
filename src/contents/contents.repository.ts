@@ -27,7 +27,7 @@ export class ContentsRepository {
     try {
       const { channel_id, ...procData } = {
         ...data,
-        channel: data.channel_id ? { id: data.channel_id } : undefined,
+        channel: { id: data.channel_id },
       }
       return (await this.contentRepository.insert(procData)).raw[0]
     } catch (error) {

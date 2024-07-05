@@ -12,9 +12,14 @@
 - [x] implement Channels module
   - [x] implement Channels unit tests
   - [x] implement Channels e2e tests
-- [ ] implement Contents module\*
-  - [ ] implement Contents unit tests
+- [x] implement Contents module\*
+  - [x] implement Contents unit tests\*
   - [ ] implement Contents e2e tests
+  - [x] implement Content Channel MtO relation\*
+- [ ] implement ContentBody module
+  - [ ] implement ContentBody unit tests
+  - [ ] implement ContentBody e2e tests
+  - [ ] implement ContentBody Content MtO relation
 
 ## features
 
