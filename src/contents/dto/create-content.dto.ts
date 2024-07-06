@@ -9,7 +9,7 @@ import {
   ValidateNested,
 } from 'class-validator'
 import { Type } from 'class-transformer'
-import { CreateContentBodyDto } from './create-contentbody.dto'
+import { CreateContentBodyDto } from '.'
 
 export class CreateContentDto {
   @ApiProperty({ description: 'Título do Conteúdo' })
