@@ -8,7 +8,9 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm'
+import { ContentBody } from './content-body.entity'
 
 @Entity('contents')
 export class Content {
@@ -32,4 +34,9 @@ export class Content {
   @ManyToOne(() => Channel, (channel) => channel.contents)
   @JoinColumn({ name: 'channel_id' })
   channel: Channel
+
+  @ApiProperty({ description: 'Content body', type: () => Channel })
+  @OneToMany(() => ContentBody, (body) => body.content)
+  @JoinColumn({ name: 'content_id' })
+  body: ContentBody[]
 }

@@ -44,6 +44,7 @@ describe('ContentsController', () => {
         ...createContentMock,
         id: faker.string.uuid(),
         channel: channelMock,
+        body: [],
       }
       const apiRes = { status: jest.fn().mockReturnThis(), send: jest.fn() }
 

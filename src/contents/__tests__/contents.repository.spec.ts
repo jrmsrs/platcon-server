@@ -18,6 +18,7 @@ import {
   FKViolationError,
 } from '#utils/errors'
 import { channelMock } from '#app/channels/__mocks__'
+import { ContentBody } from '../entities/content-body.entity'
 
 describe('ContentsRepository', () => {
   let repository: ContentsRepository
@@ -29,6 +30,10 @@ describe('ContentsRepository', () => {
         ContentsRepository,
         {
           provide: getRepositoryToken(Content),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(ContentBody),
           useClass: Repository,
         },
       ],
@@ -47,6 +52,7 @@ describe('ContentsRepository', () => {
         ...createContentMock,
         id: faker.string.uuid(),
         channel: channelMock,
+        body: [],
       }
       jest
         .spyOn(contentRepository, 'insert')

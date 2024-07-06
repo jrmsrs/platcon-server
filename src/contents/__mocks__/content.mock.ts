@@ -8,4 +8,5 @@ export const contentMock: Content = {
   title: faker.person.firstName(),
   description: faker.lorem.sentence(),
   channel: channelMock,
+  body: [],
 }

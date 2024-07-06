@@ -452,6 +452,7 @@ Atualizar Usuário por ID
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
+| body | [Channel](#channel) | Content body | Yes |
 | channel | [Channel](#channel) | Content channel | Yes |
 | description | string | Content description | Yes |
 | id | string | Content UUID | Yes |
@@ -475,10 +476,18 @@ Atualizar Usuário por ID
 | members | [ string ] | Membros do Canal | No |
 | name | string | Nome do Canal | Yes |
 
+#### CreateContentBodyDto
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| type | string | Tipo do Corpo | Yes |
+| value | string | Conteúdo do Corpo | Yes |
+
 #### CreateContentDto
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
+| body | [ [CreateContentBodyDto](#createcontentbodydto) ] | Corpo do Conteúdo | Yes |
 | channel_id | string | ID do Canal associado | No |
 | description | string | Descrição do Conteúdo | Yes |
 | thumb_uri | string | URI (Google Docs) da thumb do Conteúdo | No |
@@ -549,6 +558,7 @@ Atualizar Usuário por ID
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
+| body | [ [CreateContentBodyDto](#createcontentbodydto) ] | Corpo do Conteúdo | No |
 | channel_id | string | ID do Canal associado | No |
 | description | string | Descrição do Conteúdo | No |
 | thumb_uri | string | URI (Google Docs) da thumb do Conteúdo | No |

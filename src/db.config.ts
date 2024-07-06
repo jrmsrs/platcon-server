@@ -6,6 +6,7 @@ import { User } from '#users/entities/user.entity'
 import { Member } from '#members/entities/member.entity'
 import { Channel } from '#channels/entities/channel.entity'
 import { Content } from './contents/entities/content.entity'
+import { ContentBody } from './contents/entities/content-body.entity'
 
 export class DbConfig {
   static createConnection(
@@ -18,7 +19,7 @@ export class DbConfig {
       username: configService.get('DB_USERNAME'),
       password: configService.get('DB_PASSWORD'),
       database: configService.get('DB_NAME'),
-      entities: [User, Member, Channel, Content],
+      entities: [User, Member, Channel, Content, ContentBody],
       synchronize: false,
       logging: true,
     }
