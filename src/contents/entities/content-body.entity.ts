@@ -34,5 +34,5 @@ export class ContentBody {
   @ApiProperty({ description: 'ContentBody content', type: () => Channel })
   @ManyToOne(() => Content, (content) => content.body)
   @JoinColumn({ name: 'content_id' })
-  content: Channel
+  content?: Channel
 }

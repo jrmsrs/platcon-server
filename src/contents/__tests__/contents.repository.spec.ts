@@ -8,7 +8,12 @@ import { PostgresError as PgError } from 'pg-error-enum'
 import { ContentsRepository } from '#contents/contents.repository'
 import { Content } from '#contents/entities/content.entity'
 import { CreateContentDto, UpdateContentDto } from '#contents/dto'
-import { contentMock, createContentMock } from '#contents/__mocks__'
+import {
+  contentBodyMock,
+  contentMock,
+  createContentBodyMock,
+  createContentMock,
+} from '#contents/__mocks__'
 import {
   NotFoundError,
   StateConflictError,
@@ -23,6 +28,7 @@ import { ContentBody } from '../entities/content-body.entity'
 describe('ContentsRepository', () => {
   let repository: ContentsRepository
   let contentRepository: Repository<Content>
+  let bodyRepository: Repository<ContentBody>
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -43,20 +49,27 @@ describe('ContentsRepository', () => {
     contentRepository = module.get<Repository<Content>>(
       getRepositoryToken(Content)
     )
+    bodyRepository = module.get<Repository<ContentBody>>(
+      getRepositoryToken(ContentBody)
+    )
   })
 
   describe('insertContent', () => {
     it('should insert a new content', async () => {
-      const createContentDto: CreateContentDto = createContentMock
+      const createContentDto: CreateContentDto = {
+        ...createContentMock,
+        body: [createContentBodyMock],
+      }
       const content: Content = {
         ...createContentMock,
         id: faker.string.uuid(),
         channel: channelMock,
-        body: [],
+        body: [contentBodyMock],
       }
       jest
         .spyOn(contentRepository, 'insert')
         .mockResolvedValue({ raw: [content] } as InsertResult)
+      jest.spyOn(bodyRepository, 'insert').mockResolvedValue({} as InsertResult)
 
       const result = await repository.create(createContentDto)
 
@@ -161,12 +174,15 @@ describe('ContentsRepository', () => {
       const id = faker.string.uuid()
       const updateContentDto: UpdateContentDto = {
         description: faker.lorem.sentence(),
+        body: [createContentBodyMock],
       }
       const updateResult: UpdateResult = {
         raw: [],
         affected: 1,
       } as UpdateResult
       jest.spyOn(contentRepository, 'update').mockResolvedValue(updateResult)
+      jest.spyOn(bodyRepository, 'delete').mockResolvedValue({} as DeleteResult)
+      jest.spyOn(bodyRepository, 'insert').mockResolvedValue({} as InsertResult)
 
       const result = await repository.update(id, updateContentDto)
 

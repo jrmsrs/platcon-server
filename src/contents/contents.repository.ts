@@ -48,9 +48,7 @@ export class ContentsRepository {
               content: { id: createContentRes.id },
             })
           )
-        ).catch((error) => {
-          throw new UnexpectedError(error.message)
-        })
+        )
       }
       return createContentRes
     } catch (error) {
@@ -113,9 +111,7 @@ export class ContentsRepository {
               content: { id },
             })
           )
-        ).catch((error) => {
-          throw new UnexpectedError(error.message)
-        })
+        )
         res.affected++
       }
       if (!res.affected) throw new UnaffectedError()

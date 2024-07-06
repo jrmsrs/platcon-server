@@ -13,19 +13,18 @@
   - [x] unit tests
   - [x] e2e tests
 - [x] implement Contents module\*
-  - [x] unit tests\*
-  - [ ] e2e tests
-  - [x] Content Channel MtO relation\*
-- [ ] implement ContentBody module
-  - [ ] unit tests
-  - [ ] e2e tests
-  - [ ] Content MtO relation
+  - [x] unit tests
+  - [ ] e2e tests\*
+  - [x] Content Channel MtO relation
+  - [x] Content Body entity
+  - [x] Content Body OtM relation
 
 ## features
 
 - [ ] implement auth
 - [ ] implement data pagination
 - [ ] implement roles and permissions
+- [ ] refactor cruds
 
 ## dev
 
