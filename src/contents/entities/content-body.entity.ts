@@ -19,19 +19,18 @@ export enum ContentType {
 
 @Entity('content_body')
 export class ContentBody {
-  @ApiProperty({ description: 'ContentBody UUID' })
+  @ApiProperty({ description: 'UUID do Corpo' })
   @PrimaryGeneratedColumn('uuid')
   id: string
 
-  @ApiProperty({ description: 'ContentBody type' })
+  @ApiProperty({ description: 'Tipo do Corpo' })
   @Column({ type: 'enum', enum: ContentType, default: ContentType.TEXT })
   type: ContentType
 
-  @ApiProperty({ description: 'ContentBody content' })
+  @ApiProperty({ description: 'Conteúdo do Corpo' })
   @Column({ type: 'text' })
   value: string
 
-  @ApiProperty({ description: 'ContentBody content', type: () => Channel })
   @ManyToOne(() => Content, (content) => content.body)
   @JoinColumn({ name: 'content_id' })
   content?: Channel

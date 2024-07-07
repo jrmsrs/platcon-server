@@ -15,27 +15,27 @@ import { User } from '#users/entities/user.entity'
 
 @Entity('members')
 export class Member {
-  @ApiProperty({ description: 'Member UUID' })
+  @ApiProperty({ description: 'UUID do Membro' })
   @PrimaryGeneratedColumn('uuid')
   id: string
 
-  @ApiProperty({ description: 'Member stage name' })
+  @ApiProperty({ description: 'Nome artístico do Membro' })
   @Column({ type: 'text', unique: true })
   stage_name: string
 
-  @ApiProperty({ description: 'Member description' })
+  @ApiProperty({ description: 'Descrição do Membro' })
   @Column({ type: 'text' })
   description: string
 
-  @ApiProperty({ description: 'Member avatar (Google Docs) URI' })
+  @ApiProperty({ description: 'URI (Google Docs) do avatar do Membro' })
   @Column({ type: 'text' })
   avatar_uri?: string
 
-  @ApiPropertyOptional({ description: 'Member website URLs' })
+  @ApiPropertyOptional({ description: 'Redes sociais do Membro' })
   @Column({ type: 'text', array: true, nullable: true })
   website?: string[]
 
-  @ApiPropertyOptional({ description: 'Member user' })
+  @ApiPropertyOptional({ description: 'ID do Usuário associado' })
   @OneToOne(() => User)
   @JoinColumn({ name: 'user_id' })
   user?: User

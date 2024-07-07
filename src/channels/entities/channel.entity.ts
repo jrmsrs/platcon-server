@@ -14,10 +14,11 @@ import {
 
 @Entity('channels')
 export class Channel {
-  @ApiProperty({ description: 'Channel UUID' })
+  @ApiProperty({ description: 'UUID do Canal' })
   @PrimaryGeneratedColumn('uuid')
   id: string
 
+  @ApiPropertyOptional({ description: 'Membros do Canal' })
   @ManyToMany(() => Member)
   @JoinTable({
     synchronize: false,
@@ -25,31 +26,30 @@ export class Channel {
     joinColumn: { name: 'channel_id' },
     inverseJoinColumn: { name: 'member_id' },
   })
-  @ApiPropertyOptional({ description: 'Channel members' })
   members?: Member[]
 
-  @ApiProperty({ description: 'Content channel', type: () => [Content] })
+  @ApiProperty({ description: 'Conteúdos do Canal', type: () => [Content] })
   @OneToMany(() => Content, (content) => content.channel)
   @JoinColumn({ name: 'channel_id' })
   contents: Content[]
 
-  @ApiProperty({ description: 'Channel name' })
+  @ApiProperty({ description: 'Nome do Canal' })
   @Column({ type: 'text', unique: true })
   name: string
 
-  @ApiProperty({ description: 'Channel description' })
+  @ApiProperty({ description: 'Descrição do Canal' })
   @Column({ type: 'text' })
   description: string
 
-  @ApiProperty({ description: 'Channel tags' })
+  @ApiProperty({ description: 'Tags do Canal' })
   @Column({ type: 'text', array: true })
   tags?: string[]
 
-  @ApiProperty({ description: 'Channel logo (Google Docs) URI' })
+  @ApiProperty({ description: 'URI (Google Docs) da logo do Canal' })
   @Column({ name: 'logo_img_uri', type: 'text' })
   logo_uri?: string
 
-  @ApiProperty({ description: 'Channel cover (Google Docs) URI' })
+  @ApiProperty({ description: 'URI (Google Docs) da capa do Canal' })
   @Column({ name: 'cover_img_uri', type: 'text' })
   cover_uri?: string
 }

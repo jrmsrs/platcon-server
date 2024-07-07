@@ -2,18 +2,18 @@ import { HttpStatus, Type } from '@nestjs/common'
 import { ApiProperty } from '@nestjs/swagger'
 
 class ErrorMessage {
-  @ApiProperty({ description: 'Error message', type: String })
+  @ApiProperty({ description: 'Mensagem do Erro', type: String })
   message: string | string[]
 
-  @ApiProperty({ description: 'Error type' })
+  @ApiProperty({ description: 'Tipo do Erro' })
   error: string
 
-  @ApiProperty({ description: 'HTTP status code' })
+  @ApiProperty({ description: 'Código (HTTP) do Erro' })
   statusCode: HttpStatus
 }
 
 class SuccessMessage {
-  @ApiProperty({ description: 'Success message', type: String })
+  @ApiProperty({ description: 'Mensagem do Sucesso', type: String })
   message: string
 }
 

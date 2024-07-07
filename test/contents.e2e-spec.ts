@@ -271,14 +271,6 @@ describe('ContentsModule (e2e)', () => {
           repository: mockOrmRepositoryServerError(),
           entity: Content,
         },
-        {
-          repository: mockOrmRepository(channelMock),
-          entity: Channel,
-        },
-        {
-          repository: mockOrmRepository(contentBodyMock),
-          entity: ContentBody,
-        },
       ])
       await app.init()
     })
@@ -323,7 +315,7 @@ describe('ContentsModule (e2e)', () => {
     it(`/contents/:id (PATCH) :: ISE - server error`, () => {
       return request(app.getHttpServer())
         .patch(`/contents/${contentMock.id}`)
-        .send({ name: faker.person.fullName() })
+        .send({ title: faker.lorem.sentence(3) })
         .expect(
           HttpStatus.INTERNAL_SERVER_ERROR,
           new ResponseBuilder()

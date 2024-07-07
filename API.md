@@ -433,14 +433,14 @@ Atualizar Usuário por ID
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| tags | [ string ] | Channel tags | Yes |
-| contents | [ [Content](#content) ] | Content channel | Yes |
-| cover_uri | string | Channel cover (Google Docs) URI | Yes |
-| description | string | Channel description | Yes |
-| id | string | Channel UUID | Yes |
-| logo_uri | string | Channel logo (Google Docs) URI | Yes |
-| members | [ string ] | Channel members | No |
-| name | string | Channel name | Yes |
+| tags | [ string ] | Tags do Canal | Yes |
+| contents | [ [Content](#content) ] | Conteúdos do Canal | Yes |
+| cover_uri | string | URI (Google Docs) da capa do Canal | Yes |
+| description | string | Descrição do Canal | Yes |
+| id | string | UUID do Canal | Yes |
+| logo_uri | string | URI (Google Docs) da logo do Canal | Yes |
+| members | [ string ] | Membros do Canal | No |
+| name | string | Nome do Canal | Yes |
 
 #### ChannelId
 
@@ -452,12 +452,12 @@ Atualizar Usuário por ID
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| body | [Channel](#channel) | Content body | Yes |
-| channel | [Channel](#channel) | Content channel | Yes |
-| description | string | Content description | Yes |
-| id | string | Content UUID | Yes |
-| thumb_uri | string | Content thumb (Google Docs) URI | Yes |
-| title | string | Content title | Yes |
+| body | [Channel](#channel) | Corpo do Conteúdo | Yes |
+| channel | [Channel](#channel) | Canal do Conteúdo | Yes |
+| description | string | Descrição do Conteúdo | Yes |
+| id | string | UUID do Conteúdo | Yes |
+| thumb_uri | string | URI (Google Docs) da thumb do Conteúdo | Yes |
+| title | string | Título do Conteúdo | Yes |
 
 #### ContentId
 
@@ -516,20 +516,20 @@ Atualizar Usuário por ID
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| error | string | Error type | Yes |
-| message | string | Error message | Yes |
-| statusCode | number | HTTP status code | Yes |
+| error | string | Tipo do Erro | Yes |
+| message | string | Mensagem do Erro | Yes |
+| statusCode | number | Código (HTTP) do Erro | Yes |
 
 #### Member
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| avatar_uri | string | Member avatar (Google Docs) URI | Yes |
-| description | string | Member description | Yes |
-| id | string | Member UUID | Yes |
-| stage_name | string | Member stage name | Yes |
-| user | [User](#user) | Member user | No |
-| website | [ string ] | Member website URLs | No |
+| avatar_uri | string | URI (Google Docs) do avatar do Membro | Yes |
+| description | string | Descrição do Membro | Yes |
+| id | string | UUID do Membro | Yes |
+| stage_name | string | Nome artístico do Membro | Yes |
+| user | [User](#user) | ID do Usuário associado | No |
+| website | [ string ] | Redes sociais do Membro | No |
 
 #### MemberId
 
@@ -541,7 +541,7 @@ Atualizar Usuário por ID
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| message | string | Success message | Yes |
+| message | string | Mensagem do Sucesso | Yes |
 
 #### UpdateChannelDto
 
@@ -587,12 +587,12 @@ Atualizar Usuário por ID
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| avatar_uri | string | User avatar (Google Docs) URI | No |
-| email | string | User email | Yes |
-| id | string | User UUID | Yes |
-| name | string | User name | Yes |
-| password | string | User hashed password | No |
-| role | string | User role<br>*Enum:* `"producer"`, `"user"` | Yes |
+| avatar_uri | string | URI (Google Docs) do avatar doUsuário | No |
+| email | string | E-mail do Usuário | Yes |
+| id | string | UUID do Usuário | Yes |
+| name | string | Nome do Usuário | Yes |
+| password | string | Senha encriptada do Usuário | No |
+| role | string | Cargo do Usuário<br>*Enum:* `"producer"`, `"user"` | Yes |
 
 #### UserId
 
