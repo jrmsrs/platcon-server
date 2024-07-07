@@ -12,9 +12,9 @@
 - [x] implement Channels module
   - [x] unit tests
   - [x] e2e tests
-- [x] implement Contents module\*
+- [x] implement Contents module
   - [x] unit tests
-  - [x] e2e tests\*
+  - [x] e2e tests
   - [x] Content Channel MtO relation
   - [x] Content Body entity
   - [x] Content Body OtM relation
@@ -25,6 +25,7 @@
 - [ ] implement data pagination
 - [ ] implement roles and permissions
 - [ ] implement in-memory repository
+  - [ ] refactor e2e tests to use in-memory repository
 - [ ] implement cache
 - [ ] refactor cruds
 

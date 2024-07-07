@@ -17,6 +17,7 @@ import {
   mockOrmRepositoryServerError,
   mockOrmRepositoryConflict,
   mockOrmRepositoryNotFound,
+  mockOrmRepositoryFKNotFound,
 } from './__mocks__'
 import { ContentBody } from '#app/contents/entities/content-body.entity'
 import { channelMock } from '#app/channels/__mocks__'
@@ -76,12 +77,12 @@ describe('ContentsModule (e2e)', () => {
       const newTitle = faker.lorem.sentence(3)
       return request(app.getHttpServer())
         .patch(`/contents/${contentMock.id}`)
-        .send({ title: newTitle })
+        .send({ title: newTitle, body: [createContentBodyMock] })
         .expect(
           HttpStatus.OK,
           new ResponseBuilder()
             .content(contentMock.id)
-            .updated({ title: newTitle })
+            .updated({ title: newTitle, body: [createContentBodyMock] })
         )
     })
 
@@ -260,6 +261,49 @@ describe('ContentsModule (e2e)', () => {
             .content(contentMock.id)
             .conflict()
             .errorCode(HttpStatus.CONFLICT)
+        )
+    })
+  })
+
+  describe('ContentsModule (e2e) fk not found path', () => {
+    beforeEach(async () => {
+      app = await buildApp([
+        {
+          repository: mockOrmRepositoryFKNotFound(contentMock),
+          entity: Content,
+        },
+      ])
+      await app.init()
+    })
+
+    it(`/contents (POST) :: NOT_FOUND - content has invalid fk`, () => {
+      const channel_id = faker.string.uuid()
+      return request(app.getHttpServer())
+        .post('/contents')
+        .send({ ...contentMock, channel_id })
+        .expect(
+          HttpStatus.NOT_FOUND,
+          new ResponseBuilder()
+            .content()
+            .fkNotFound('Channel', channel_id)
+            .errorCode(HttpStatus.NOT_FOUND)
+        )
+    })
+
+    it(`/contents/:id (PATCH) :: NOT_FOUND - content has invalid fk`, () => {
+      const channel_id = faker.string.uuid()
+      return request(app.getHttpServer())
+        .patch(`/contents/${contentMock.id}`)
+        .send({
+          title: faker.lorem.sentence(3),
+          channel_id,
+        })
+        .expect(
+          HttpStatus.NOT_FOUND,
+          new ResponseBuilder()
+            .content()
+            .fkNotFound('Channel', channel_id)
+            .errorCode(HttpStatus.NOT_FOUND)
         )
     })
   })
