@@ -4,5 +4,5 @@
 yarn format && yarn lint && yarn test
 
 # Generate API.md then git add
-yarn ts-node -P ./tsconfig.json ./scripts/swagger-generator.ts
+yarn swaggergen
 git add ./API.md

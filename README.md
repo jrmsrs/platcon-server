@@ -104,7 +104,7 @@ yarn start:dev
 ### sync API.md with App Swagger
 
 ```bash
-yarn ts-node ./scripts/swagger-generator.ts # autohooked to husky pre-commit
+yarn swaggergen # autohooked to husky pre-commit
 ```
 
 ## license

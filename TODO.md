@@ -21,7 +21,7 @@
 
 ## features
 
-- [ ] implement auth
+- [ ] implement auth\*
 - [ ] implement data pagination
 - [ ] implement roles and permissions
 - [ ] implement in-memory repository

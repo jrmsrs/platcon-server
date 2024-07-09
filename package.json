@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./jest-e2e.json --maxWorkers=50% --silent",
     "test:e2ecov": "jest --config ./jest-e2ecov.json --coverage --maxWorkers=50% --silent",
     "resgen": "yarn nest g res && yarn ts-node ./scripts/alias-path-generator.ts --",
+    "swaggergen": "yarn ts-node -P ./tsconfig.json ./scripts/swagger-generator.ts",
     "prepare": "husky install"
   },
   "dependencies": {
